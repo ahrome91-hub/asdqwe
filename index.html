@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Учёт клиентов</title>
+    <title>Учёт клиентов — CRM</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js">
+    </script>
     <style>
         * {
             box-sizing: border-box;
@@ -27,6 +32,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
         }
         h1 span {
             background: #2563eb;
@@ -35,6 +41,24 @@
             padding: 2px 12px;
             border-radius: 20px;
             font-weight: 400;
+        }
+        .status-badge {
+            font-size: 13px;
+            font-weight: 400;
+            background: #e2e8f0;
+            padding: 2px 14px;
+            border-radius: 20px;
+            color: #1e293b;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            background: #22c55e;
         }
         .toolbar {
             display: flex;
@@ -99,6 +123,13 @@
         .btn-outline:hover {
             background: #f1f5f9;
         }
+        .btn-warning {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+        }
         .table-wrap {
             background: #fff;
             border-radius: 12px;
@@ -135,28 +166,28 @@
         tr:hover td {
             background: #f8fafc;
         }
-        tr.status-soglasovano {
+        tr.status-согласовано {
             background: #f0fdf4;
         }
-        tr.status-soglasovano td:first-child {
+        tr.status-согласовано td:first-child {
             border-left: 4px solid #22c55e;
         }
-        tr.status-otkaz {
+        tr.status-отказ {
             background: #fef2f2;
         }
-        tr.status-otkaz td:first-child {
+        tr.status-отказ td:first-child {
             border-left: 4px solid #ef4444;
         }
-        tr.status-vrabote {
+        tr.status-вработе {
             background: #fffbeb;
         }
-        tr.status-vrabote td:first-child {
+        tr.status-вработе td:first-child {
             border-left: 4px solid #f59e0b;
         }
-        tr.status-otpravleno {
+        tr.status-отправлено {
             background: #eff6ff;
         }
-        tr.status-otpravleno td:first-child {
+        tr.status-отправлено td:first-child {
             border-left: 4px solid #3b82f6;
         }
         .badge {
@@ -166,23 +197,23 @@
             font-size: 12px;
             font-weight: 500;
         }
-        .badge-soglasovano {
+        .badge-согласовано {
             background: #dcfce7;
             color: #166534;
         }
-        .badge-otkaz {
+        .badge-отказ {
             background: #fee2e2;
             color: #991b1b;
         }
-        .badge-vrabote {
+        .badge-вработе {
             background: #fef3c7;
             color: #92400e;
         }
-        .badge-otpravleno {
+        .badge-отправлено {
             background: #dbeafe;
             color: #1e40af;
         }
-        .badge-chernovik {
+        .badge-черновик {
             background: #f1f5f9;
             color: #475569;
         }
@@ -229,13 +260,6 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .btn-sm-edit {
-            background: #e2e8f0;
-            color: #1e293b;
-        }
-        .btn-sm-edit:hover {
-            background: #cbd5e1;
-        }
         .btn-sm-del {
             background: #fee2e2;
             color: #991b1b;
@@ -259,14 +283,28 @@
             padding: 60px 20px;
             color: #94a3b8;
         }
-        .empty-state svg {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 12px;
-            opacity: 0.4;
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
         }
-        .empty-state p {
-            font-size: 16px;
+        .online-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
         }
         @media (max-width: 640px) {
             .toolbar {
@@ -288,6 +326,10 @@
         <h1>
             📋 Учёт клиентов и коммерческих предложений
             <span id="countBadge">0</span>
+            <span class="status-badge" id="connectionStatus">
+                <span class="dot" id="statusDot"></span>
+                <span id="statusText">Подключение...</span>
+            </span>
         </h1>
 
         <div class="toolbar">
@@ -303,7 +345,7 @@
             <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
             <button class="btn btn-success" onclick="exportCSV()">📤 Экспорт CSV</button>
             <button class="btn btn-outline" onclick="importCSV()">📥 Импорт CSV</button>
-            <button class="btn btn-danger" onclick="resetData()">🔄 Сбросить к примеру</button>
+            <button class="btn btn-warning" onclick="resetData()">🔄 Сбросить к примеру</button>
         </div>
 
         <div class="table-wrap">
@@ -318,11 +360,15 @@
                         <th style="width:130px;">Статус</th>
                         <th style="width:80px;">Согласен</th>
                         <th style="min-width:160px;">Комментарий</th>
-                        <th style="width:100px;">Действия</th>
+                        <th style="width:80px;">Действия</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <!-- строки генерируются скриптом -->
+                    <tr>
+                        <td colspan="9">
+                            <div class="loading">⏳ Загрузка данных...</div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -337,52 +383,105 @@
     <input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleImport(event)" />
 
     <script>
-        // ---------- ДАННЫЕ ПО УМОЛЧАНИЮ (пример) ----------
-        const DEFAULT_DATA = [
-            { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Требуют доп. согласование' },
-            { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле' },
-            { client: 'ООО Ромашка', proposal: 'Поставка оборудования', amount: 1500000, date: '2026-01-15', status: 'Отправлено', agreed: false, comment: 'Ждём ответа' },
-            { client: 'АО СтройИнвест', proposal: 'Строительные материалы', amount: 3200000, date: '2026-01-18', status: 'Согласовано', agreed: true, comment: 'Договор подписан' },
-            { client: 'ООО Техносервис', proposal: 'Обслуживание ПО', amount: 890000, date: '2026-01-20', status: 'Черновик', agreed: false, comment: 'Правки от клиента' }
-        ];
+        // ============================================================
+        // 1. НАСТРОЙКИ FIREBASE (ЗАМЕНИТЕ НА СВОИ)
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyB7Z_4RfFiyBlA8Qb5Wbq-krS2VNbB1mJ8",
+            authDomain: "crm-44b7d.firebaseapp.com",
+            databaseURL: "https://crm-44b7d-default-rtdb.firebaseio.com",
+            projectId: "crm-44b7d",
+            storageBucket: "crm-44b7d.appspot.com",
+            messagingSenderId: "428938950522",
+            appId: "1:428938950522:web:9d7f3e6b8d9f2d9e8f7d6c"
+        };
 
+        // ИНИЦИАЛИЗАЦИЯ FIREBASE
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const dataRef = db.ref('crmData');
+
+        // ============================================================
+        // 2. ДАННЫЕ И СОСТОЯНИЕ
+        // ============================================================
         let data = [];
         let nextId = 1;
+        let isLoading = true;
 
-        // ---------- ЗАГРУЗКА / СОХРАНЕНИЕ ----------
-        function loadData() {
-            const saved = localStorage.getItem('crmTableData');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if (Array.isArray(parsed) && parsed.length) {
-                        data = parsed;
-                        nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
-                        render();
-                        return;
-                    }
-                } catch (_) {}
+        const DEFAULT_DATA = [
+            { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10',
+                status: 'В работе', agreed: true, comment: 'Требуют доп. согласование' },
+            { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12',
+                status: 'Отказ', agreed: false, comment: 'Нашли дешевле' },
+            { client: 'ООО Ромашка', proposal: 'Поставка оборудования', amount: 1500000, date: '2026-01-15',
+                status: 'Отправлено', agreed: false, comment: 'Ждём ответа' },
+            { client: 'АО СтройИнвест', proposal: 'Строительные материалы', amount: 3200000, date: '2026-01-18',
+                status: 'Согласовано', agreed: true, comment: 'Договор подписан' },
+            { client: 'ООО Техносервис', proposal: 'Обслуживание ПО', amount: 890000, date: '2026-01-20',
+                status: 'Черновик', agreed: false, comment: 'Правки от клиента' }
+        ];
+
+        // ============================================================
+        // 3. СЛУШАЕМ ИЗМЕНЕНИЯ ИЗ FIREBASE (РЕАЛЬНОЕ ВРЕМЯ)
+        // ============================================================
+        dataRef.on('value', (snapshot) => {
+            const val = snapshot.val();
+            if (val) {
+                // Конвертируем объект в массив
+                const arr = Object.values(val);
+                if (arr.length > 0) {
+                    data = arr;
+                    nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
+                    isLoading = false;
+                    render();
+                    updateConnectionStatus(true);
+                    return;
+                }
             }
-            data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
-            nextId = data.length + 1;
-            render();
-            saveData();
-        }
+            // Если данных нет — загружаем пример
+            if (isLoading) {
+                resetData();
+            }
+            isLoading = false;
+            updateConnectionStatus(true);
+        }, (error) => {
+            console.error('Ошибка Firebase:', error);
+            updateConnectionStatus(false);
+            // Показываем ошибку, но не ломаем интерфейс
+            if (data.length === 0) {
+                data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
+                nextId = data.length + 1;
+                render();
+            }
+        });
 
+        // ============================================================
+        // 4. СОХРАНЕНИЕ В FIREBASE
+        // ============================================================
         function saveData() {
-            localStorage.setItem('crmTableData', JSON.stringify(data));
-            updateCounters();
+            // Превращаем массив в объект с ключами
+            const obj = {};
+            data.forEach(row => {
+                obj[row.id] = row;
+            });
+            dataRef.set(obj).catch(err => {
+                console.error('Ошибка сохранения:', err);
+                alert('Не удалось сохранить данные. Проверьте подключение к интернету.');
+            });
         }
 
+        // ============================================================
+        // 5. ОТОБРАЖЕНИЕ ТАБЛИЦЫ
+        // ============================================================
         function render() {
             const tbody = document.getElementById('tableBody');
             const filterText = document.getElementById('filterInput').value.toLowerCase().trim();
             const filterStatus = document.getElementById('filterStatus').value;
 
             const filtered = data.filter(row => {
-                const matchText = row.client.toLowerCase().includes(filterText) ||
-                    row.proposal.toLowerCase().includes(filterText) ||
-                    row.comment.toLowerCase().includes(filterText);
+                const matchText = (row.client || '').toLowerCase().includes(filterText) ||
+                    (row.proposal || '').toLowerCase().includes(filterText) ||
+                    (row.comment || '').toLowerCase().includes(filterText);
                 const matchStatus = filterStatus === '' || row.status === filterStatus;
                 return matchText && matchStatus;
             });
@@ -392,30 +491,33 @@
                     <tr>
                         <td colspan="9">
                             <div class="empty-state">
-                                <p>Нет записей по вашему фильтру</p>
+                                <p>📭 Нет записей по вашему фильтру</p>
+                                <p style="font-size:13px;margin-top:6px;">Нажмите «➕ Добавить», чтобы создать новую запись</p>
                             </div>
                         </td>
                     </tr>
                 `;
                 document.getElementById('countBadge').textContent = data.length;
+                updateCounters();
                 return;
             }
 
             let html = '';
             filtered.forEach((row, idx) => {
-                const statusClass = row.status.toLowerCase().replace(/ /g, '');
+                const statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
                 const badgeClass = `badge-${statusClass}`;
                 const agreedChecked = row.agreed ? 'checked' : '';
+                const statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
                 html += `
                     <tr class="status-${statusClass}">
                         <td>${idx + 1}</td>
-                        <td><input type="text" value="${escapeHtml(row.client)}" onchange="updateField(${row.id}, 'client', this.value)" /></td>
-                        <td><input type="text" value="${escapeHtml(row.proposal)}" onchange="updateField(${row.id}, 'proposal', this.value)" /></td>
-                        <td><input type="number" value="${row.amount}" onchange="updateField(${row.id}, 'amount', Number(this.value))" /></td>
-                        <td><input type="date" value="${row.date}" onchange="updateField(${row.id}, 'date', this.value)" /></td>
+                        <td><input type="text" value="${escapeHtml(row.client || '')}" onchange="updateField(${row.id}, 'client', this.value)" /></td>
+                        <td><input type="text" value="${escapeHtml(row.proposal || '')}" onchange="updateField(${row.id}, 'proposal', this.value)" /></td>
+                        <td><input type="number" value="${row.amount || 0}" onchange="updateField(${row.id}, 'amount', Number(this.value))" /></td>
+                        <td><input type="date" value="${row.date || ''}" onchange="updateField(${row.id}, 'date', this.value)" /></td>
                         <td>
                             <select onchange="updateField(${row.id}, 'status', this.value)">
-                                ${['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'].map(s =>
+                                ${statusOptions.map(s =>
                                     `<option value="${s}" ${s === row.status ? 'selected' : ''}>${s}</option>`
                                 ).join('')}
                             </select>
@@ -423,7 +525,7 @@
                         <td class="td-checkbox">
                             <input type="checkbox" ${agreedChecked} onchange="updateField(${row.id}, 'agreed', this.checked)" />
                         </td>
-                        <td><input type="text" value="${escapeHtml(row.comment)}" onchange="updateField(${row.id}, 'comment', this.value)" /></td>
+                        <td><input type="text" value="${escapeHtml(row.comment || '')}" onchange="updateField(${row.id}, 'comment', this.value)" /></td>
                         <td>
                             <div class="actions">
                                 <button class="btn-sm btn-sm-del" onclick="deleteRow(${row.id})">🗑</button>
@@ -447,15 +549,19 @@
 
         function escapeHtml(text) {
             if (!text) return '';
-            return text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
-        // ---------- ДЕЙСТВИЯ ----------
+        // ============================================================
+        // 6. ДЕЙСТВИЯ С ДАННЫМИ
+        // ============================================================
         function updateField(id, field, value) {
             const row = data.find(r => r.id === id);
             if (row) {
                 row[field] = value;
                 saveData();
+                // Не перерисовываем всю таблицу, чтобы сохранить фокус
+                // Но для обновления фильтров и счётчиков — render()
                 render();
             }
         }
@@ -481,7 +587,7 @@
             data.push(newRow);
             saveData();
             render();
-            // прокрутка к новой строке
+            // Прокрутка к новой строке
             const tbody = document.getElementById('tableBody');
             const lastRow = tbody.lastElementChild;
             if (lastRow) lastRow.scrollIntoView({ behavior: 'smooth' });
@@ -495,18 +601,20 @@
             render();
         }
 
-        // ---------- ЭКСПОРТ / ИМПОРТ CSV ----------
+        // ============================================================
+        // 7. ЭКСПОРТ / ИМПОРТ CSV
+        // ============================================================
         function exportCSV() {
             if (!data.length) return alert('Нет данных для экспорта');
             const headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен', 'Комментарий'];
             const rows = data.map(r => [
-                `"${r.client}"`,
-                `"${r.proposal}"`,
-                r.amount,
-                r.date,
-                r.status,
+                `"${r.client || ''}"`,
+                `"${r.proposal || ''}"`,
+                r.amount || 0,
+                r.date || '',
+                r.status || 'Черновик',
                 r.agreed ? 'Да' : 'Нет',
-                `"${r.comment}"`
+                `"${r.comment || ''}"`
             ]);
             const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
             const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -571,7 +679,7 @@
             if (!data.length) return alert('Нет данных');
             let tsv = 'Клиент\tКП\tСумма\tДата\tСтатус\tСогласен\tКомментарий\n';
             data.forEach(r => {
-                tsv += `${r.client}\t${r.proposal}\t${r.amount}\t${r.date}\t${r.status}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment}\n`;
+                tsv += `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\n`;
             });
             navigator.clipboard.writeText(tsv).then(() => {
                 alert('Таблица скопирована в буфер обмена (TSV-формат)');
@@ -580,12 +688,36 @@
             });
         }
 
-        // ---------- ИНИЦИАЛИЗАЦИЯ ----------
-        loadData();
+        // ============================================================
+        // 8. СТАТУС ПОДКЛЮЧЕНИЯ
+        // ============================================================
+        function updateConnectionStatus(online) {
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+            if (online) {
+                dot.style.background = '#22c55e';
+                text.textContent = 'Онлайн (Firebase)';
+            } else {
+                dot.style.background = '#ef4444';
+                text.textContent = 'Офлайн (изменения не сохранятся)';
+            }
+        }
 
-        // фильтры
+        // ============================================================
+        // 9. ФИЛЬТРЫ
+        // ============================================================
         document.getElementById('filterInput').addEventListener('input', render);
         document.getElementById('filterStatus').addEventListener('change', render);
+
+        // ============================================================
+        // 10. ПЕРВИЧНАЯ ЗАГРУЗКА
+        // ============================================================
+        // Firebase уже слушает изменения, но если данных нет — загрузим пример
+        setTimeout(() => {
+            if (data.length === 0) {
+                resetData();
+            }
+        }, 2000);
     </script>
 </body>
 </html>
