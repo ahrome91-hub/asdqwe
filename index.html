@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>📊 CRM: Коммерческие предложения</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            padding: 20px;
+            color: #1e293b;
+        }
+        .app {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .header h1 {
+            font-weight: 600;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header h1 small {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+        .stats-badge {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .stats-badge span {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
+        }
+        .stats-badge strong {
+            color: #60a5fa;
+        }
+        .toolbar {
+            padding: 16px 32px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-success { background: #22c55e; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-purple { background: #8b5cf6; color: white; }
+        .btn-outline { background: transparent; color: #475569; border: 1px solid #cbd5e1; }
+        .btn-outline:hover { background: #f1f5f9; }
+        .btn-import { background: #0ea5e9; color: white; }
+        
+        .search-box {
+            padding: 8px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            flex: 1;
+            min-width: 150px;
+            transition: border-color 0.2s;
+        }
+        .search-box:focus { outline: none; border-color: #3b82f6; }
+        
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-group select {
+            padding: 7px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 0 0 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 800px;
+        }
+        thead {
+            background: #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+        th:hover { background: #e2e8f0; }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        tr:hover td { background: #f8fafc; }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-draft { background: #e2e8f0; color: #475569; }
+        .status-sent { background: #dbeafe; color: #1d4ed8; }
+        .status-work { background: #fef3c7; color: #92400e; }
+        .status-approved { background: #dcfce7; color: #166534; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+        
+        .checkbox-custom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .checkbox-custom input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #22c55e;
+            cursor: pointer;
+        }
+        .checkbox-label {
+            font-size: 13px;
+        }
+        .checkbox-yes { color: #166534; font-weight: 600; }
+        .checkbox-no { color: #991b1b; font-weight: 600; }
+        
+        .td-editable {
+            background: white;
+            transition: background 0.15s;
+        }
+        .td-editable:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: -2px;
+            background: #f0f7ff;
+        }
+        .td-editable:hover { background: #fafdff; }
+        
+        .row-actions {
+            display: flex;
+            gap: 4px;
+        }
+        .row-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 16px;
+            opacity: 0.5;
+            transition: 0.2s;
+        }
+        .row-actions button:hover { opacity: 1; background: #f1f5f9; }
+        .row-actions .delete:hover { color: #ef4444; background: #fee2e2; }
+        .row-actions .duplicate:hover { color: #22c55e; background: #dcfce7; }
+        
+        .footer-stats {
+            padding: 16px 32px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 13px;
+            color: #475569;
+        }
+        .footer-stats strong { color: #0f172a; }
+        
+        .import-area {
+            padding: 20px 32px;
+            background: #f0f9ff;
+            border-bottom: 1px solid #bae6fd;
+            display: none;
+        }
+        .import-area.active { display: block; }
+        .import-area textarea {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            border: 2px dashed #7dd3fc;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            resize: vertical;
+        }
+        .import-area textarea:focus { outline: none; border-color: #3b82f6; }
+        .import-area .hint {
+            font-size: 12px;
+            color: #0284c7;
+            margin-top: 6px;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0f172a;
+            color: white;
+            padding: 16px 28px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #166534; }
+        .toast.error { background: #991b1b; }
+        
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: stretch; }
+            .stats-badge { justify-content: center; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .filter-group { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <!-- ШАПКА -->
+    <div class="header">
+        <h1>
+            📊 Коммерческие предложения
+            <small>CRM-таблица</small>
+        </h1>
+        <div class="stats-badge">
+            <span>Всего: <strong id="totalCount">0</strong></span>
+            <span>Сумма: <strong id="totalSum">0 ₽</strong></span>
+            <span>✅ Согласны: <strong id="yesCount">0</strong></span>
+            <span>❌ Не согласны: <strong id="noCount">0</strong></span>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ ИМПОРТА -->
+    <div class="import-area" id="importArea">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-weight:600; color:#0284c7;">📥 Импорт CSV (добавление клиентов)</span>
+            <button class="btn btn-outline" onclick="toggleImport()">✖ Закрыть</button>
+        </div>
+        <textarea id="importText" placeholder='Вставьте CSV данные с заголовками:
+Клиент,Коммерческое_предложение,Сумма,Дата_отправки,Статус,Согласен,Комментарий
+ООО Пример,Тестовое КП,100000,2026-01-01,Черновик,Нет,Тест'></textarea>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <button class="btn btn-import" onclick="importCSV()">📤 Импортировать</button>
+            <button class="btn btn-outline" onclick="document.getElementById('importFileInput').click()">📂 Загрузить файл</button>
+            <input type="file" id="importFileInput" accept=".csv" style="display:none" onchange="importFile(event)">
+            <span class="hint">💡 Заголовки должны совпадать: Клиент,Коммерческое_предложение,Сумма,Дата_отправки,Статус,Согласен,Комментарий</span>
+        </div>
+    </div>
+
+    <!-- ТУЛБАР -->
+    <div class="toolbar">
+        <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
+        <button class="btn btn-success" onclick="exportCSV()">💾 Экспорт CSV</button>
+        <button class="btn btn-import" onclick="toggleImport()">📥 Импорт</button>
+        <button class="btn btn-warning" onclick="clearAll()">🗑 Очистить всё</button>
+        <input class="search-box" id="searchInput" placeholder="🔍 Поиск по всем полям..." oninput="applyFilters()">
+        <div class="filter-group">
+            <select id="statusFilter" onchange="applyFilters()">
+                <option value="">Все статусы</option>
+                <option value="Черновик">📄 Черновик</option>
+                <option value="Отправлено">✉️ Отправлено</option>
+                <option value="В работе">⚙️ В работе</option>
+                <option value="Согласовано">✅ Согласовано</option>
+                <option value="Отказ">❌ Отказ</option>
+            </select>
+            <select id="agreeFilter" onchange="applyFilters()">
+                <option value="">Все</option>
+                <option value="Да">✅ Согласны</option>
+                <option value="Нет">❌ Не согласны</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- ТАБЛИЦА -->
+    <div class="table-wrapper">
+        <table>
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- ФУТЕР -->
+    <div class="footer-stats">
+        <span>📋 Строк: <strong id="footerRows">0</strong></span>
+        <span>💰 Общая сумма: <strong id="footerSum">0 ₽</strong></span>
+        <span>✅ Согласны: <strong id="footerYes">0</strong> | ❌ Нет: <strong id="footerNo">0</strong></span>
+        <span>⚡ Последнее обновление: <span id="lastUpdate">-</span></span>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ==========================================
+// ДАННЫЕ (пример)
+// ==========================================
+let headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен', 'Комментарий'];
+let data = [
+    ['ООО Ромашка', 'Поставка оборудования', '1500000', '2026-01-15', 'Отправлено', 'Нет', 'Ждем ответа'],
+    ['ИП Иванов', 'Ремонтные работы', '450000', '2026-01-10', 'В работе', 'Да', 'Требуют доп. согласование'],
+    ['ООО Техносервис', 'Обслуживание ПО', '890000', '2026-01-20', 'Черновик', 'Нет', 'Правки от клиента'],
+    ['АО СтройИнвест', 'Строительные материалы', '3200000', '2026-01-18', 'Согласовано', 'Да', 'Договор подписан'],
+    ['ООО ЛогистикПро', 'Транспортные услуги', '670000', '2026-01-12', 'Отказ', 'Нет', 'Нашли дешевле'],
+];
+let filterData = [...data];
+let nextId = data.length + 1;
+
+// ==========================================
+// ОСНОВНЫЕ ФУНКЦИИ
+// ==========================================
+
+function renderTable() {
+    applyFilters();
+}
+
+function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const status = document.getElementById('statusFilter').value;
+    const agree = document.getElementById('agreeFilter').value;
+    
+    filterData = data.filter(row => {
+        // Поиск
+        if (search && !row.some(cell => String(cell).toLowerCase().includes(search))) {
+            return false;
+        }
+        // Статус
+        if (status && row[4] !== status) return false;
+        // Согласие
+        if (agree && row[5] !== agree) return false;
+        return true;
+    });
+    
+    renderTableBody();
+    updateStats();
+}
+
+function renderTableBody() {
+    // Голова
+    let thead = document.getElementById('tableHead');
+    let html = '<tr>';
+    headers.forEach((h, i) => {
+        html += `<th onclick="sortTable(${i})">${h} <span id="sort-${i}"></span></th>`;
+    });
+    html += '<th style="width:80px;text-align:center;">Действия</th>';
+    html += '</tr>';
+    thead.innerHTML = html;
+    
+    // Тело
+    let tbody = document.getElementById('tableBody');
+    if (filterData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#94a3b8;font-size:16px;">
+            📭 Нет данных. Добавьте строку или импортируйте CSV.
+        </td></tr>`;
+        return;
+    }
+    
+    html = '';
+    filterData.forEach((row, idx) => {
+        const realIndex = data.indexOf(row);
+        html += `<tr data-index="${realIndex}">`;
+        row.forEach((cell, ci) => {
+            if (ci === 5) { // Чекбокс "Согласен"
+                const isYes = cell === 'Да';
+                html += `<td style="min-width:100px;">
+                    <label class="checkbox-custom">
+                        <input type="checkbox" ${isYes ? 'checked' : ''} 
+                               onchange="toggleAgree(${realIndex}, this.checked)">
+                        <span class="checkbox-label ${isYes ? 'checkbox-yes' : 'checkbox-no'}">
+                            ${isYes ? '✅ Согласен' : '❌ Не согласен'}
+                        </span>
+                    </label>
+                </td>`;
+            } else if (ci === 4) { // Статус с цветом
+                const statusMap = {
+                    'Черновик': 'status-draft',
+                    'Отправлено': 'status-sent',
+                    'В работе': 'status-work',
+                    'Согласовано': 'status-approved',
+                    'Отказ': 'status-rejected'
+                };
+                html += `<td>
+                    <span class="status-badge ${statusMap[cell] || 'status-draft'}">${cell}</span>
+                </td>`;
+            } else {
+                html += `<td class="td-editable" contenteditable="true" 
+                           oninput="cellEdit(${realIndex}, ${ci}, this.innerText)"
+                           onfocus="this.style.outline='2px solid #3b82f6'"
+                           onblur="this.style.outline='none'">${cell}</td>`;
+            }
+        });
+        html += `<td class="row-actions">
+            <button onclick="duplicateRow(${realIndex})" title="Дублировать">📋</button>
+            <button onclick="deleteRow(${realIndex})" class="delete" title="Удалить">🗑</button>
+        </td>`;
+        html += '</tr>';
+    });
+    tbody.innerHTML = html;
+    document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+}
+
+// ==========================================
+// РЕДАКТИРОВАНИЕ
+// ==========================================
+
+function cellEdit(rowIdx, colIdx, value) {
+    if (data[rowIdx]) {
+        data[rowIdx][colIdx] = value;
+        updateStats();
+    }
+}
+
+function toggleAgree(rowIdx, checked) {
+    if (data[rowIdx]) {
+        data[rowIdx][5] = checked ? 'Да' : 'Нет';
+        updateStats();
+        renderTableBody(); // Обновляем чекбоксы
+        showToast(checked ? '✅ Статус изменён на "Согласен"' : '❌ Статус изменён на "Не согласен"', 'success');
+    }
+}
+
+// ==========================================
+// ДОБАВЛЕНИЕ / УДАЛЕНИЕ СТРОК
+// ==========================================
+
+function addRow() {
+    const newRow = headers.map(() => '');
+    newRow[0] = `Новый клиент ${nextId}`;
+    newRow[4] = 'Черновик';
+    newRow[5] = 'Нет';
+    data.push(newRow);
+    nextId++;
+    renderTable();
+    showToast('➕ Добавлена новая строка', 'success');
+    // Скролл вниз
+    setTimeout(() => {
+        const tbody = document.getElementById('tableBody');
+        if (tbody.lastElementChild) {
+            tbody.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, 100);
+}
+
+function deleteRow(index) {
+    if (data.length <= 1) {
+        showToast('❌ Нельзя удалить последнюю строку', 'error');
+        return;
+    }
+    if (confirm(`Удалить клиента "${data[index][0]}"?`)) {
+        data.splice(index, 1);
+        renderTable();
+        showToast('🗑 Строка удалена', 'success');
+    }
+}
+
+function duplicateRow(index) {
+    if (data[index]) {
+        const newRow = [...data[index]];
+        newRow[0] = `${data[index][0]} (копия)`;
+        data.splice(index + 1, 0, newRow);
+        renderTable();
+        showToast('📋 Строка скопирована', 'success');
+    }
+}
+
+function clearAll() {
+    if (confirm('Удалить ВСЕ данные? Это действие необратимо!')) {
+        data = [];
+        headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен', 'Комментарий'];
+        renderTable();
+        showToast('🗑 Все данные очищены', 'error');
+    }
+}
+
+// ==========================================
+// СОРТИРОВКА
+// ==========================================
+
+let sortState = { col: -1, asc: true };
+
+function sortTable(col) {
+    if (sortState.col === col) {
+        sortState.asc = !sortState.asc;
+    } else {
+        sortState.col = col;
+        sortState.asc = true;
+    }
+    data.sort((a, b) => {
+        const va = a[col] || '';
+        const vb = b[col] || '';
+        const cmp = String(va).localeCompare(String(vb), undefined, { numeric: true });
+        return sortState.asc ? cmp : -cmp;
+    });
+    // Обновляем стрелки
+    document.querySelectorAll('[id^="sort-"]').forEach(el => el.textContent = '');
+    if (sortState.col >= 0) {
+        document.getElementById(`sort-${sortState.col}`).textContent = sortState.asc ? '▲' : '▼';
+    }
+    renderTable();
+    showToast('↕ Таблица отсортирована', 'success');
+}
+
+// ==========================================
+// СТАТИСТИКА
+// ==========================================
+
+function updateStats() {
+    const total = data.length;
+    let sum = 0, yes = 0, no = 0;
+    data.forEach(row => {
+        const num = parseFloat(row[2]);
+        if (!isNaN(num)) sum += num;
+        if (row[5] === 'Да') yes++;
+        if (row[5] === 'Нет') no++;
+    });
+    document.getElementById('totalCount').textContent = total;
+    document.getElementById('totalSum').textContent = `${sum.toLocaleString()} ₽`;
+    document.getElementById('yesCount').textContent = yes;
+    document.getElementById('noCount').textContent = no;
+    document.getElementById('footerRows').textContent = filterData.length;
+    document.getElementById('footerSum').textContent = `${sum.toLocaleString()} ₽`;
+    document.getElementById('footerYes').textContent = yes;
+    document.getElementById('footerNo').textContent = no;
+}
+
+// ==========================================
+// ИМПОРТ CSV
+// ==========================================
+
+function toggleImport() {
+    const area = document.getElementById('importArea');
+    area.classList.toggle('active');
+    if (area.classList.contains('active')) {
+        document.getElementById('importText').focus();
+    }
+}
+
+function importCSV() {
+    const text = document.getElementById('importText').value.trim();
+    if (!text) {
+        showToast('❌ Вставьте CSV данные', 'error');
+        return;
+    }
+    try {
+        const lines = text.split('\n').filter(line => line.trim());
+        if (lines.length < 2) {
+            showToast('❌ Нужен заголовок + минимум 1 строка данных', 'error');
+            return;
+        }
+        const csvHeaders = lines[0].split(',').map(h => h.trim());
+        // Проверяем соответствие заголовков
+        const expected = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен', 'Комментарий'];
+        const match = expected.every(h => csvHeaders.includes(h));
+        if (!match) {
+            showToast('❌ Заголовки не совпадают. Нужно: Клиент,Коммерческое_предложение,Сумма,Дата_отправки,Статус,Согласен,Комментарий', 'error');
+            return;
+        }
+        let added = 0;
+        for (let i = 1; i < lines.length; i++) {
+            const vals = lines[i].split(',').map(v => v.trim());
+            const newRow = expected.map(h => {
+                const idx = csvHeaders.indexOf(h);
+                return idx >= 0 && idx < vals.length ? vals[idx] : '';
+            });
+            // Валидация
+            if (newRow[0] && newRow[0] !== 'Клиент') {
+                data.push(newRow);
+                added++;
+            }
+        }
+        renderTable();
+        document.getElementById('importText').value = '';
+        showToast(`✅ Импортировано ${added} клиентов`, 'success');
+    } catch (e) {
+        showToast('❌ Ошибка импорта: ' + e.message, 'error');
+    }
+}
+
+function importFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('importText').value = e.target.result;
+        importCSV();
+    };
+    reader.readAsText(file);
+    event.target.value = ''; // Сброс
+}
+
+// ==========================================
+// ЭКСПОРТ CSV
+// ==========================================
+
+function exportCSV() {
+    let csv = headers.join(',') + '\n';
+    data.forEach(row => {
+        csv += row.join(',') + '\n';
+    });
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Коммерческие_предложения_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('💾 CSV экспортирован', 'success');
+}
+
+// ==========================================
+// TOAST УВЕДОМЛЕНИЯ
+// ==========================================
+
+function showToast(message, type = '') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast ' + type;
+    setTimeout(() => toast.classList.add('show'), 10);
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ==========================================
+// ИНИЦИАЛИЗАЦИЯ
+// ==========================================
+
+renderTable();
+showToast('🚀 Готово! Таблица загружена', 'success');
+
+// Автосохранение в localStorage
+setInterval(() => {
+    try {
+        const save = { headers, data, nextId };
+        localStorage.setItem('crm_data', JSON.stringify(save));
+    } catch(e) {}
+}, 5000);
+
+// Восстановление из localStorage
+try {
+    const saved = localStorage.getItem('crm_data');
+    if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.data && parsed.data.length > 0) {
+            data = parsed.data;
+            headers = parsed.headers || headers;
+            nextId = parsed.nextId || data.length + 1;
+            renderTable();
+            showToast('💾 Данные восстановлены из кэша', 'success');
+        }
+    }
+} catch(e) {}
+</script>
+
+</body>
+</html>
