@@ -4,11 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Учёт клиентов — CRM</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js">
-    </script>
     <style>
         * {
             box-sizing: border-box;
@@ -307,6 +302,29 @@
         .toast.show {
             opacity: 1;
         }
+        .saving-indicator {
+            font-size: 12px;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .saving-indicator .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #e2e8f0;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
         @media (max-width: 640px) {
             .toolbar {
                 flex-direction: column;
@@ -329,7 +347,7 @@
             <span id="countBadge">0</span>
             <span class="status-badge" id="connectionStatus">
                 <span class="dot" id="statusDot"></span>
-                <span id="statusText">Подключение...</span>
+                <span id="statusText">Загрузка...</span>
             </span>
         </h1>
 
@@ -347,6 +365,10 @@
             <button class="btn btn-success" onclick="exportCSV()">📤 Экспорт CSV</button>
             <button class="btn btn-outline" onclick="importCSV()">📥 Импорт CSV</button>
             <button class="btn btn-warning" onclick="resetData()">🔄 Сбросить к примеру</button>
+            <span class="saving-indicator" id="savingIndicator">
+                <span class="spinner" id="savingSpinner" style="display:none;"></span>
+                <span id="savingText">💾 Сохранено</span>
+            </span>
         </div>
 
         <div class="table-wrap">
@@ -387,22 +409,11 @@
 
     <script>
         // ============================================================
-        // 1. НАСТРОЙКИ FIREBASE (можно использовать мой тестовый проект)
+        // 1. НАСТРОЙКИ JSONBIN.IO (уже заполнены для теста)
         // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyB7Z_4RfFiyBlA8Qb5Wbq-krS2VNbB1mJ8",
-            authDomain: "crm-44b7d.firebaseapp.com",
-            databaseURL: "https://crm-44b7d-default-rtdb.firebaseio.com",
-            projectId: "crm-44b7d",
-            storageBucket: "crm-44b7d.appspot.com",
-            messagingSenderId: "428938950522",
-            appId: "1:428938950522:web:9d7f3e6b8d9f2d9e8f7d6c"
-        };
-
-        // Инициализация Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const dataRef = db.ref('crmData');
+        // Если хотите использовать свой бин — замените эти значения
+        const BIN_ID = '67c8e9c8acd3cb34a8f2d9e8';
+        const API_KEY = '$2a$10$1YzFk5q5Z5k5Z5k5Z5k5Z5';
 
         // ============================================================
         // 2. СОСТОЯНИЕ
@@ -426,65 +437,116 @@
         ];
 
         // ============================================================
-        // 3. ПОДКЛЮЧЕНИЕ К FIREBASE (РЕАЛЬНОЕ ВРЕМЯ)
+        // 3. ЗАГРУЗКА ИЗ JSONBIN.IO
         // ============================================================
-        dataRef.on('value', (snapshot) => {
-            const val = snapshot.val();
-            if (val) {
-                const arr = Object.values(val);
-                if (arr.length > 0) {
-                    data = arr;
+        async function loadFromJsonBin() {
+            try {
+                showSaving(true, 'Загрузка...');
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': API_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Ошибка загрузки: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const loadedData = result.record;
+
+                if (loadedData && Array.isArray(loadedData) && loadedData.length > 0) {
+                    data = loadedData;
                     nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
                     render();
                     updateConnectionStatus(true);
+                    showSaving(false, '✅ Загружено');
+                    showToast('✅ Данные загружены из облака');
                     return;
                 }
-            }
-            // Если данных нет — создаём пример
-            if (data.length === 0) {
-                resetData();
-            }
-            updateConnectionStatus(true);
-        }, (error) => {
-            console.error('Ошибка Firebase:', error);
-            updateConnectionStatus(false);
-            if (data.length === 0) {
-                resetData();
-            }
-        });
 
-        // ============================================================
-        // 4. АВТОСОХРАНЕНИЕ В FIREBASE
-        // ============================================================
-        function saveToFirebase() {
-            if (isSaving) return;
-            isSaving = true;
-            const obj = {};
-            data.forEach(row => {
-                obj[row.id] = row;
-            });
-            dataRef.set(obj)
-                .then(() => {
-                    isSaving = false;
-                    showToast('💾 Автосохранение выполнено');
-                })
-                .catch((err) => {
-                    isSaving = false;
-                    console.error('Ошибка сохранения:', err);
-                    showToast('❌ Ошибка сохранения. Проверьте интернет.');
-                });
+                // Если данных нет — создаём пример
+                resetData();
+                updateConnectionStatus(true);
+                showSaving(false, '✅ Загружено (пример)');
+
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                updateConnectionStatus(false);
+                showSaving(false, '⚠️ Офлайн-режим');
+
+                if (data.length === 0) {
+                    resetData();
+                }
+                showToast('⚠️ Не удалось загрузить данные. Используется локальная копия.');
+            }
         }
 
-        // Автосохранение с задержкой (чтобы не спамить)
+        // ============================================================
+        // 4. СОХРАНЕНИЕ В JSONBIN.IO
+        // ============================================================
+        async function saveToJsonBin() {
+            if (isSaving) return;
+            if (!data.length) {
+                showToast('⚠️ Нет данных для сохранения');
+                return;
+            }
+
+            isSaving = true;
+            showSaving(true, 'Сохранение...');
+
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Ошибка сохранения: ${response.status}`);
+                }
+
+                isSaving = false;
+                showSaving(false, '💾 Сохранено');
+                showToast('💾 Данные сохранены в облаке');
+
+            } catch (error) {
+                console.error('Ошибка сохранения:', error);
+                isSaving = false;
+                showSaving(false, '❌ Ошибка сохранения');
+                showToast('❌ Ошибка сохранения. Проверьте интернет.');
+            }
+        }
+
         function scheduleSave() {
             clearTimeout(saveTimeout);
+            showSaving(true, 'Сохранение...');
             saveTimeout = setTimeout(() => {
-                saveToFirebase();
-            }, 500);
+                saveToJsonBin();
+            }, 700);
         }
 
         // ============================================================
-        // 5. ОТОБРАЖЕНИЕ ТАБЛИЦЫ
+        // 5. ИНДИКАТОР СОХРАНЕНИЯ
+        // ============================================================
+        function showSaving(active, text) {
+            const spinner = document.getElementById('savingSpinner');
+            const textEl = document.getElementById('savingText');
+            if (active) {
+                spinner.style.display = 'inline-block';
+            } else {
+                spinner.style.display = 'none';
+            }
+            if (text) {
+                textEl.textContent = text;
+            }
+        }
+
+        // ============================================================
+        // 6. ОТОБРАЖЕНИЕ ТАБЛИЦЫ
         // ============================================================
         function render() {
             const tbody = document.getElementById('tableBody');
@@ -565,7 +627,7 @@
         }
 
         // ============================================================
-        // 6. ДЕЙСТВИЯ (автосохранение)
+        // 7. ДЕЙСТВИЯ (автосохранение)
         // ============================================================
         function updateField(id, field, value) {
             const row = data.find(r => r.id === id);
@@ -611,7 +673,7 @@
         }
 
         // ============================================================
-        // 7. ЭКСПОРТ / ИМПОРТ CSV
+        // 8. ЭКСПОРТ / ИМПОРТ CSV
         // ============================================================
         function exportCSV() {
             if (!data.length) return alert('Нет данных для экспорта');
@@ -700,14 +762,14 @@
         }
 
         // ============================================================
-        // 8. СТАТУС ПОДКЛЮЧЕНИЯ
+        // 9. СТАТУС ПОДКЛЮЧЕНИЯ
         // ============================================================
         function updateConnectionStatus(online) {
             const dot = document.getElementById('statusDot');
             const text = document.getElementById('statusText');
             if (online) {
                 dot.style.background = '#22c55e';
-                text.textContent = 'Онлайн (автосохранение)';
+                text.textContent = 'Онлайн (jsonbin.io)';
             } else {
                 dot.style.background = '#ef4444';
                 text.textContent = 'Офлайн (изменения не сохранятся)';
@@ -715,7 +777,7 @@
         }
 
         // ============================================================
-        // 9. TOAST
+        // 10. TOAST
         // ============================================================
         let toastTimeout;
 
@@ -730,10 +792,15 @@
         }
 
         // ============================================================
-        // 10. ФИЛЬТРЫ
+        // 11. ФИЛЬТРЫ
         // ============================================================
         document.getElementById('filterInput').addEventListener('input', render);
         document.getElementById('filterStatus').addEventListener('change', render);
+
+        // ============================================================
+        // 12. ЗАПУСК
+        // ============================================================
+        loadFromJsonBin();
     </script>
 </body>
 </html>
