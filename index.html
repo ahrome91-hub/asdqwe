@@ -604,49 +604,50 @@
 
     <script>
         // ================================================================
-        // 🔥 ВАШИ ДАННЫЕ ИЗ JSONBIN.IO
+        // ВАШИ ДАННЫЕ ИЗ JSONBIN.IO
         // ================================================================
-        const BIN_ID = '6a34730dda38895dfeda3121';
-        const API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
+        var BIN_ID = '6a34730dda38895dfeda3121';
+        var API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
 
         // ================================================================
-        // 2. СОСТОЯНИЕ
+        // СОСТОЯНИЕ
         // ================================================================
-        let data = [];
-        let nextId = 1;
-        let isSaving = false;
-        let saveTimeout = null;
-        let isOnline = false;
+        var data = [];
+        var nextId = 1;
+        var isSaving = false;
+        var saveTimeout = null;
+        var isOnline = false;
 
-        const DEFAULT_DATA = [
-            { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10',
-                status: 'В работе', agreed: true, comment: 'Требуют доп. согласование', phone: '+7 912 345-67-89' },
-            { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12',
-                status: 'Отказ', agreed: false, comment: 'Нашли дешевле', phone: '+7 912 345-67-90' },
-            { client: 'ООО Ромашка', proposal: 'Поставка оборудования', amount: 1500000, date: '2026-01-15',
-                status: 'Отправлено', agreed: false, comment: 'Ждём ответа', phone: '+7 912 345-67-91' },
-            { client: 'АО СтройИнвест', proposal: 'Строительные материалы', amount: 3200000, date: '2026-01-18',
-                status: 'Согласовано', agreed: true, comment: 'Договор подписан', phone: '+7 912 345-67-92' },
-            { client: 'ООО Техносервис', proposal: 'Обслуживание ПО', amount: 890000, date: '2026-01-20',
-                status: 'Черновик', agreed: false, comment: 'Правки от клиента', phone: '+7 912 345-67-93' }
+        var DEFAULT_DATA = [
+            { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Требуют доп. согласование', phone: '+7 912 345-67-89' },
+            { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', phone: '+7 912 345-67-90' },
+            { client: 'ООО Ромашка', proposal: 'Поставка оборудования', amount: 1500000, date: '2026-01-15', status: 'Отправлено', agreed: false, comment: 'Ждём ответа', phone: '+7 912 345-67-91' },
+            { client: 'АО СтройИнвест', proposal: 'Строительные материалы', amount: 3200000, date: '2026-01-18', status: 'Согласовано', agreed: true, comment: 'Договор подписан', phone: '+7 912 345-67-92' },
+            { client: 'ООО Техносервис', proposal: 'Обслуживание ПО', amount: 890000, date: '2026-01-20', status: 'Черновик', agreed: false, comment: 'Правки от клиента', phone: '+7 912 345-67-93' }
         ];
 
         // ================================================================
-        // 3. ЗАГРУЗКА ИЗ JSONBIN.IO
+        // ЗАГРУЗКА ИЗ JSONBIN.IO
         // ================================================================
         async function loadFromCloud() {
             try {
                 setStatus('loading', 'Загрузка...');
-                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest', {
                     headers: { 'X-Master-Key': API_KEY }
                 });
-                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
-                const result = await resp.json();
-                const loaded = result.record;
+                
+                if (!resp.ok) {
+                    var errorText = await resp.text();
+                    console.error('Ошибка загрузки:', resp.status, errorText);
+                    throw new Error('Ошибка ' + resp.status + ': ' + errorText);
+                }
+                
+                var result = await resp.json();
+                var loaded = result.record;
 
                 if (loaded && Array.isArray(loaded) && loaded.length > 0) {
                     data = loaded;
-                    nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
+                    nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
                     isOnline = true;
                     setStatus('online', 'Онлайн ✅');
                     render();
@@ -666,7 +667,7 @@
         }
 
         // ================================================================
-        // 4. СОХРАНЕНИЕ В JSONBIN.IO
+        // СОХРАНЕНИЕ В JSONBIN.IO
         // ================================================================
         async function saveToCloud() {
             if (isSaving || !data.length || !isOnline) return;
@@ -674,7 +675,7 @@
             showSaving(true, 'Сохранение...');
 
             try {
-                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -682,7 +683,12 @@
                     },
                     body: JSON.stringify(data)
                 });
-                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
+                
+                if (!resp.ok) {
+                    var errorText = await resp.text();
+                    console.error('Ошибка сохранения:', resp.status, errorText);
+                    throw new Error('Ошибка ' + resp.status + ': ' + errorText);
+                }
 
                 isSaving = false;
                 isOnline = true;
@@ -690,12 +696,12 @@
                 showSaving(false, '💾 Сохранено');
                 showToast('💾 Данные сохранены в облаке', 'success');
             } catch (e) {
-                console.error(e);
+                console.error('Ошибка сохранения:', e);
                 isSaving = false;
                 isOnline = false;
                 setStatus('offline', 'Офлайн ❌');
                 showSaving(false, '❌ Ошибка');
-                showToast('❌ Ошибка сохранения. Проверьте интернет.', 'error');
+                showToast('❌ Ошибка сохранения: ' + e.message, 'error');
             }
         }
 
@@ -710,11 +716,11 @@
         }
 
         // ================================================================
-        // 5. ИНДИКАТОРЫ
+        // ИНДИКАТОРЫ
         // ================================================================
         function setStatus(type, text) {
-            const dot = document.getElementById('statusDot');
-            const el = document.getElementById('statusText');
+            var dot = document.getElementById('statusDot');
+            var el = document.getElementById('statusText');
             dot.className = 'dot';
             if (type === 'online') { dot.classList.add('online'); }
             else if (type === 'offline') { dot.classList.add('offline'); }
@@ -728,63 +734,47 @@
         }
 
         // ================================================================
-        // 6. РЕНДЕР
+        // РЕНДЕР
         // ================================================================
         function render() {
-            const tbody = document.getElementById('tableBody');
-            const filterText = document.getElementById('filterInput').value.toLowerCase().trim();
-            const filterStatus = document.getElementById('filterStatus').value;
+            var tbody = document.getElementById('tableBody');
+            var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
+            var filterStatus = document.getElementById('filterStatus').value;
 
-            const filtered = data.filter(row => {
-                const matchText = (row.client || '').toLowerCase().includes(filterText) ||
-                    (row.proposal || '').toLowerCase().includes(filterText) ||
-                    (row.comment || '').toLowerCase().includes(filterText) ||
-                    (row.phone || '').toLowerCase().includes(filterText);
+            var filtered = data.filter(function(row) {
+                var matchText = (row.client || '').toLowerCase().indexOf(filterText) !== -1 ||
+                    (row.proposal || '').toLowerCase().indexOf(filterText) !== -1 ||
+                    (row.comment || '').toLowerCase().indexOf(filterText) !== -1 ||
+                    (row.phone || '').toLowerCase().indexOf(filterText) !== -1;
                 return filterStatus === '' || row.status === filterStatus;
             });
 
             if (!filtered.length) {
-                tbody.innerHTML = `
-                    <tr><td colspan="10">
-                        <div class="empty-state">
-                            <span class="emoji">📭</span>
-                            <p>Нет записей</p>
-                            <p style="font-size:12px;color:#374151;margin-top:4px;">Нажмите «➕ Добавить» или импортируйте CSV</p>
-                        </div>
-                    </td></tr>
-                `;
+                tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><span class="emoji">📭</span><p>Нет записей</p><p style="font-size:12px;color:#374151;margin-top:4px;">Нажмите «➕ Добавить» или импортируйте CSV</p></div></td></tr>';
                 document.getElementById('countBadge').textContent = data.length;
                 updateCounters();
                 return;
             }
 
-            let html = '';
-            const statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
-            filtered.forEach((row, idx) => {
-                const statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
-                const agreedChecked = row.agreed ? 'checked' : '';
-                html += `
-                    <tr class="status-${statusClass}">
-                        <td>${idx + 1}</td>
-                        <td><input class="table-input" type="text" value="${escapeHtml(row.client || '')}" onchange="updateField(${row.id}, 'client', this.value)" /></td>
-                        <td><input class="table-input" type="text" value="${escapeHtml(row.proposal || '')}" onchange="updateField(${row.id}, 'proposal', this.value)" /></td>
-                        <td><input class="table-input" type="number" value="${row.amount || 0}" onchange="updateField(${row.id}, 'amount', Number(this.value))" /></td>
-                        <td><input class="table-input" type="date" value="${row.date || ''}" onchange="updateField(${row.id}, 'date', this.value)" /></td>
-                        <td>
-                            <select class="table-select" onchange="updateField(${row.id}, 'status', this.value)">
-                                ${statusOptions.map(s =>
-                                    `<option value="${s}" ${s === row.status ? 'selected' : ''}>${s}</option>`
-                                ).join('')}
-                            </select>
-                        </td>
-                        <td class="td-checkbox">
-                            <input type="checkbox" ${agreedChecked} onchange="updateField(${row.id}, 'agreed', this.checked)" />
-                        </td>
-                        <td><input class="table-input" type="text" value="${escapeHtml(row.comment || '')}" onchange="updateField(${row.id}, 'comment', this.value)" /></td>
-                        <td><input class="table-input" type="text" value="${escapeHtml(row.phone || '')}" onchange="updateField(${row.id}, 'phone', this.value)" /></td>
-                        <td><button class="btn-sm-del" onclick="deleteRow(${row.id})">🗑</button></td>
-                    </tr>
-                `;
+            var html = '';
+            var statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
+            filtered.forEach(function(row, idx) {
+                var statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
+                var agreedChecked = row.agreed ? 'checked' : '';
+                html += '<tr class="status-' + statusClass + '">' +
+                    '<td>' + (idx + 1) + '</td>' +
+                    '<td><input class="table-input" type="text" value="' + escapeHtml(row.client || '') + '" onchange="updateField(' + row.id + ', \'client\', this.value)" /></td>' +
+                    '<td><input class="table-input" type="text" value="' + escapeHtml(row.proposal || '') + '" onchange="updateField(' + row.id + ', \'proposal\', this.value)" /></td>' +
+                    '<td><input class="table-input" type="number" value="' + (row.amount || 0) + '" onchange="updateField(' + row.id + ', \'amount\', Number(this.value))" /></td>' +
+                    '<td><input class="table-input" type="date" value="' + (row.date || '') + '" onchange="updateField(' + row.id + ', \'date\', this.value)" /></td>' +
+                    '<td><select class="table-select" onchange="updateField(' + row.id + ', \'status\', this.value)">' +
+                    statusOptions.map(function(s) { return '<option value="' + s + '" ' + (s === row.status ? 'selected' : '') + '>' + s + '</option>'; }).join('') +
+                    '</select></td>' +
+                    '<td class="td-checkbox"><input type="checkbox" ' + agreedChecked + ' onchange="updateField(' + row.id + ', \'agreed\', this.checked)" /></td>' +
+                    '<td><input class="table-input" type="text" value="' + escapeHtml(row.comment || '') + '" onchange="updateField(' + row.id + ', \'comment\', this.value)" /></td>' +
+                    '<td><input class="table-input" type="text" value="' + escapeHtml(row.phone || '') + '" onchange="updateField(' + row.id + ', \'phone\', this.value)" /></td>' +
+                    '<td><button class="btn-sm-del" onclick="deleteRow(' + row.id + ')">🗑</button></td>' +
+                    '</tr>';
             });
 
             tbody.innerHTML = html;
@@ -794,7 +784,7 @@
 
         function updateCounters() {
             document.getElementById('rowCounter').textContent = data.length;
-            document.getElementById('agreedCounter').textContent = data.filter(r => r.agreed).length;
+            document.getElementById('agreedCounter').textContent = data.filter(function(r) { return r.agreed; }).length;
         }
 
         function escapeHtml(text) {
@@ -803,10 +793,10 @@
         }
 
         // ================================================================
-        // 7. ДЕЙСТВИЯ
+        // ДЕЙСТВИЯ
         // ================================================================
         function updateField(id, field, value) {
-            const row = data.find(r => r.id === id);
+            var row = data.find(function(r) { return r.id === id; });
             if (row) {
                 row[field] = value;
                 render();
@@ -816,13 +806,13 @@
 
         function deleteRow(id) {
             if (!confirm('Удалить эту запись?')) return;
-            data = data.filter(r => r.id !== id);
+            data = data.filter(function(r) { return r.id !== id; });
             render();
             if (isOnline) scheduleSave();
         }
 
         function addRow() {
-            const newRow = {
+            var newRow = {
                 id: nextId++,
                 client: 'Новый клиент',
                 proposal: 'Новое КП',
@@ -836,14 +826,14 @@
             data.push(newRow);
             render();
             if (isOnline) scheduleSave();
-            const tbody = document.getElementById('tableBody');
-            const last = tbody.lastElementChild;
+            var tbody = document.getElementById('tableBody');
+            var last = tbody.lastElementChild;
             if (last) last.scrollIntoView({ behavior: 'smooth' });
         }
 
         function resetData() {
             if (data.length && !confirm('Сбросить всё к примеру?')) return;
-            data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
+            data = DEFAULT_DATA.map(function(r, i) { var copy = {}; for (var key in r) copy[key] = r[key]; copy.id = i + 1; return copy; });
             nextId = data.length + 1;
             render();
             if (isOnline) scheduleSave();
@@ -851,59 +841,51 @@
         }
 
         // ================================================================
-        // 8. CSV
+        // CSV
         // ================================================================
         function exportCSV() {
             if (!data.length) return showToast('Нет данных для экспорта', 'error');
-            const headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен',
-                'Комментарий', 'Телефон'
-            ];
-            const rows = data.map(r => [
-                `"${r.client || ''}"`,
-                `"${r.proposal || ''}"`,
-                r.amount || 0,
-                r.date || '',
-                r.status || 'Черновик',
-                r.agreed ? 'Да' : 'Нет',
-                `"${r.comment || ''}"`,
-                `"${r.phone || ''}"`
-            ]);
-            const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
+            var headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен', 'Комментарий', 'Телефон'];
+            var rows = data.map(function(r) {
+                return ['"' + (r.client || '') + '"', '"' + (r.proposal || '') + '"', r.amount || 0, r.date || '', r.status || 'Черновик', r.agreed ? 'Да' : 'Нет', '"' + (r.comment || '') + '"', '"' + (r.phone || '') + '"'];
+            });
+            var csv = [headers.join(',')];
+            rows.forEach(function(row) { csv.push(row.join(',')); });
+            csv = csv.join('\n');
+            var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `клиенты_${new Date().toISOString().slice(0, 10)}.csv`;
+            link.download = 'клиенты_' + new Date().toISOString().slice(0, 10) + '.csv';
             link.click();
             URL.revokeObjectURL(link.href);
             showToast('📤 CSV скачан', 'success');
         }
 
         function handleImport(event) {
-            const file = event.target.files[0];
+            var file = event.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
+            var reader = new FileReader();
             reader.onload = function(ev) {
-                const text = ev.target.result;
-                const lines = text.split('\n').filter(l => l.trim());
+                var text = ev.target.result;
+                var lines = text.split('\n').filter(function(l) { return l.trim(); });
 
                 if (lines.length < 2) {
                     showToast('Файл пуст или неверный формат', 'error');
                     return;
                 }
 
-                const headerLine = lines[0];
-                const headers = headerLine.split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+                var headerLine = lines[0];
+                var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
 
-                const idx = {
-                    client: headers.findIndex(h => h.includes('Клиент') || h.includes('client')),
-                    proposal: headers.findIndex(h => h.includes('Коммерческое') || h.includes('предложение') || h
-                        .includes('proposal')),
-                    amount: headers.findIndex(h => h.includes('Сумма') || h.includes('amount')),
-                    date: headers.findIndex(h => h.includes('Дата') || h.includes('date')),
-                    status: headers.findIndex(h => h.includes('Статус') || h.includes('status')),
-                    agreed: headers.findIndex(h => h.includes('Согласен') || h.includes('agreed')),
-                    comment: headers.findIndex(h => h.includes('Комментарий') || h.includes('comment')),
-                    phone: headers.findIndex(h => h.includes('Телефон') || h.includes('phone'))
+                var idx = {
+                    client: headers.indexOf('Клиент') !== -1 ? headers.indexOf('Клиент') : headers.indexOf('client'),
+                    proposal: headers.indexOf('Коммерческое_предложение') !== -1 ? headers.indexOf('Коммерческое_предложение') : headers.indexOf('proposal'),
+                    amount: headers.indexOf('Сумма') !== -1 ? headers.indexOf('Сумма') : headers.indexOf('amount'),
+                    date: headers.indexOf('Дата_отправки') !== -1 ? headers.indexOf('Дата_отправки') : headers.indexOf('date'),
+                    status: headers.indexOf('Статус') !== -1 ? headers.indexOf('Статус') : headers.indexOf('status'),
+                    agreed: headers.indexOf('Согласен') !== -1 ? headers.indexOf('Согласен') : headers.indexOf('agreed'),
+                    comment: headers.indexOf('Комментарий') !== -1 ? headers.indexOf('Комментарий') : headers.indexOf('comment'),
+                    phone: headers.indexOf('Телефон') !== -1 ? headers.indexOf('Телефон') : headers.indexOf('phone')
                 };
 
                 if (idx.client === -1 && idx.proposal === -1) {
@@ -911,19 +893,17 @@
                     return;
                 }
 
-                const imported = [];
-                for (let i = 1; i < lines.length; i++) {
-                    const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-                    const row = {
+                var imported = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, ''); });
+                    var row = {
                         id: nextId++,
                         client: (idx.client !== -1 && cols[idx.client]) ? cols[idx.client] : 'Неизвестный',
                         proposal: (idx.proposal !== -1 && cols[idx.proposal]) ? cols[idx.proposal] : 'Новое КП',
                         amount: (idx.amount !== -1 && cols[idx.amount]) ? parseFloat(cols[idx.amount]) || 0 : 0,
-                        date: (idx.date !== -1 && cols[idx.date]) ? cols[idx.date] : new Date().toISOString()
-                        .slice(0, 10),
+                        date: (idx.date !== -1 && cols[idx.date]) ? cols[idx.date] : new Date().toISOString().slice(0, 10),
                         status: (idx.status !== -1 && cols[idx.status]) ? cols[idx.status] : 'Черновик',
-                        agreed: (idx.agreed !== -1 && cols[idx.agreed]) ? cols[idx.agreed === 'Да' || cols[idx
-                            .agreed] === 'TRUE' || cols[idx.agreed] === 'true' : false,
+                        agreed: (idx.agreed !== -1 && cols[idx.agreed]) ? (cols[idx.agreed] === 'Да' || cols[idx.agreed] === 'TRUE' || cols[idx.agreed] === 'true') : false,
                         comment: (idx.comment !== -1 && cols[idx.comment]) ? cols[idx.comment] : '',
                         phone: (idx.phone !== -1 && cols[idx.phone]) ? cols[idx.phone] : ''
                     };
@@ -934,7 +914,7 @@
                     data = imported;
                     render();
                     if (isOnline) scheduleSave();
-                    showToast(`✅ Импортировано ${imported.length} записей`, 'success');
+                    showToast('✅ Импортировано ' + imported.length + ' записей', 'success');
                 } else {
                     showToast('Не удалось импортировать данные', 'error');
                 }
@@ -945,45 +925,47 @@
 
         function exportToClipboard() {
             if (!data.length) return showToast('Нет данных', 'error');
-            let tsv = 'Клиент\tКП\tСумма\tДата\tСтатус\tСогласен\tКомментарий\tТелефон\n';
-            data.forEach(r => {
-                tsv +=
-                    `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\t${r.phone || ''}\n`;
+            var tsv = 'Клиент\tКП\tСумма\tДата\tСтатус\tСогласен\tКомментарий\tТелефон\n';
+            data.forEach(function(r) {
+                tsv += (r.client || '') + '\t' + (r.proposal || '') + '\t' + (r.amount || 0) + '\t' + (r.date || '') + '\t' + (r.status || 'Черновик') + '\t' + (r.agreed ? 'Да' : 'Нет') + '\t' + (r.comment || '') + '\t' + (r.phone || '') + '\n';
             });
-            navigator.clipboard.writeText(tsv).then(() => {
+            navigator.clipboard.writeText(tsv).then(function() {
                 showToast('📋 Скопировано', 'success');
-            }).catch(() => showToast('Не удалось скопировать', 'error'));
+            }).catch(function() {
+                showToast('Не удалось скопировать', 'error');
+            });
         }
 
         // ================================================================
-        // 9. TOAST
+        // TOAST
         // ================================================================
-        let toastTimeout;
+        var toastTimeout;
 
-        function showToast(msg, type = '') {
-            const el = document.getElementById('toast');
+        function showToast(msg, type) {
+            type = type || '';
+            var el = document.getElementById('toast');
             el.textContent = msg;
             el.className = 'toast';
             if (type) el.classList.add(type);
             el.classList.add('show');
             clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => el.classList.remove('show'), 3000);
+            toastTimeout = setTimeout(function() { el.classList.remove('show'); }, 3000);
         }
 
         // ================================================================
-        // 10. ФИЛЬТРЫ
+        // ФИЛЬТРЫ
         // ================================================================
         document.getElementById('filterInput').addEventListener('input', render);
         document.getElementById('filterStatus').addEventListener('change', render);
 
         // ================================================================
-        // 11. ЗАПУСК
+        // ЗАПУСК
         // ================================================================
         loadFromCloud();
 
         console.log('⚡ CRM загружена!');
-        console.log('📁 Поддерживаемый формат CSV: Клиент, КП, Сумма, Дата, Статус, Согласен, Комментарий, Телефон');
         console.log('🔑 BIN_ID:', BIN_ID);
+        console.log('🔑 API_KEY:', API_KEY ? '✅ Установлен' : '❌ НЕ УСТАНОВЛЕН');
     </script>
 </body>
 </html>
