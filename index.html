@@ -4,11 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Учёт клиентов — CRM</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js">
-    </script>
     <style>
         * {
             box-sizing: border-box;
@@ -129,6 +124,13 @@
         }
         .btn-warning:hover {
             background: #d97706;
+        }
+        .btn-purple {
+            background: #8b5cf6;
+            color: #fff;
+        }
+        .btn-purple:hover {
+            background: #7c3aed;
         }
         .table-wrap {
             background: #fff;
@@ -306,6 +308,25 @@
                 opacity: 0.4;
             }
         }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-size: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+        }
         @media (max-width: 640px) {
             .toolbar {
                 flex-direction: column;
@@ -328,7 +349,7 @@
             <span id="countBadge">0</span>
             <span class="status-badge" id="connectionStatus">
                 <span class="dot" id="statusDot"></span>
-                <span id="statusText">Подключение...</span>
+                <span id="statusText">Загрузка...</span>
             </span>
         </h1>
 
@@ -344,6 +365,7 @@
             </select>
             <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
             <button class="btn btn-success" onclick="exportCSV()">📤 Экспорт CSV</button>
+            <button class="btn btn-purple" onclick="exportDB()">💾 Сохранить изменения (db.js)</button>
             <button class="btn btn-outline" onclick="importCSV()">📥 Импорт CSV</button>
             <button class="btn btn-warning" onclick="resetData()">🔄 Сбросить к примеру</button>
         </div>
@@ -380,34 +402,46 @@
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleImport(event)" />
+    <input type="file" id="dbFileInput" accept=".js" style="display:none" onchange="handleDbImport(event)" />
 
     <script>
         // ============================================================
-        // 1. НАСТРОЙКИ FIREBASE (ЗАМЕНИТЕ НА СВОИ)
-        // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyB7Z_4RfFiyBlA8Qb5Wbq-krS2VNbB1mJ8",
-            authDomain: "crm-44b7d.firebaseapp.com",
-            databaseURL: "https://crm-44b7d-default-rtdb.firebaseio.com",
-            projectId: "crm-44b7d",
-            storageBucket: "crm-44b7d.appspot.com",
-            messagingSenderId: "428938950522",
-            appId: "1:428938950522:web:9d7f3e6b8d9f2d9e8f7d6c"
-        };
-
-        // ИНИЦИАЛИЗАЦИЯ FIREBASE
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const dataRef = db.ref('crmData');
-
-        // ============================================================
-        // 2. ДАННЫЕ И СОСТОЯНИЕ
+        // 1. ЗАГРУЗКА ДАННЫХ ИЗ db.js (внешний файл)
         // ============================================================
         let data = [];
         let nextId = 1;
-        let isLoading = true;
 
+        // Функция загрузки данных из db.js
+        function loadDB() {
+            // Добавляем скрипт с данными
+            const script = document.createElement('script');
+            script.src = 'db.js?' + new Date().getTime(); // кэш-бастер
+            script.onload = function() {
+                if (typeof DB_DATA !== 'undefined' && Array.isArray(DB_DATA) && DB_DATA.length > 0) {
+                    data = JSON.parse(JSON.stringify(DB_DATA));
+                    nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
+                    render();
+                    updateConnectionStatus(true);
+                } else {
+                    // Если db.js пустой или нет данных — загружаем пример
+                    resetData();
+                }
+            };
+            script.onerror = function() {
+                // Если db.js не найден — создаём пример
+                console.warn('db.js не найден, загружаем пример');
+                resetData();
+                updateConnectionStatus(false);
+            };
+            document.head.appendChild(script);
+        }
+
+        // ============================================================
+        // 2. ДАННЫЕ ПО УМОЛЧАНИЮ (если db.js нет)
+        // ============================================================
         const DEFAULT_DATA = [
             { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10',
                 status: 'В работе', agreed: true, comment: 'Требуют доп. согласование' },
@@ -422,56 +456,7 @@
         ];
 
         // ============================================================
-        // 3. СЛУШАЕМ ИЗМЕНЕНИЯ ИЗ FIREBASE (РЕАЛЬНОЕ ВРЕМЯ)
-        // ============================================================
-        dataRef.on('value', (snapshot) => {
-            const val = snapshot.val();
-            if (val) {
-                // Конвертируем объект в массив
-                const arr = Object.values(val);
-                if (arr.length > 0) {
-                    data = arr;
-                    nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
-                    isLoading = false;
-                    render();
-                    updateConnectionStatus(true);
-                    return;
-                }
-            }
-            // Если данных нет — загружаем пример
-            if (isLoading) {
-                resetData();
-            }
-            isLoading = false;
-            updateConnectionStatus(true);
-        }, (error) => {
-            console.error('Ошибка Firebase:', error);
-            updateConnectionStatus(false);
-            // Показываем ошибку, но не ломаем интерфейс
-            if (data.length === 0) {
-                data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
-                nextId = data.length + 1;
-                render();
-            }
-        });
-
-        // ============================================================
-        // 4. СОХРАНЕНИЕ В FIREBASE
-        // ============================================================
-        function saveData() {
-            // Превращаем массив в объект с ключами
-            const obj = {};
-            data.forEach(row => {
-                obj[row.id] = row;
-            });
-            dataRef.set(obj).catch(err => {
-                console.error('Ошибка сохранения:', err);
-                alert('Не удалось сохранить данные. Проверьте подключение к интернету.');
-            });
-        }
-
-        // ============================================================
-        // 5. ОТОБРАЖЕНИЕ ТАБЛИЦЫ
+        // 3. ОТОБРАЖЕНИЕ ТАБЛИЦЫ
         // ============================================================
         function render() {
             const tbody = document.getElementById('tableBody');
@@ -553,24 +538,22 @@
         }
 
         // ============================================================
-        // 6. ДЕЙСТВИЯ С ДАННЫМИ
+        // 4. ДЕЙСТВИЯ С ДАННЫМИ
         // ============================================================
         function updateField(id, field, value) {
             const row = data.find(r => r.id === id);
             if (row) {
                 row[field] = value;
-                saveData();
-                // Не перерисовываем всю таблицу, чтобы сохранить фокус
-                // Но для обновления фильтров и счётчиков — render()
                 render();
+                showToast('✅ Изменения сохранены локально. Нажмите «Сохранить изменения», чтобы зафиксировать в db.js');
             }
         }
 
         function deleteRow(id) {
             if (!confirm('Удалить эту запись?')) return;
             data = data.filter(r => r.id !== id);
-            saveData();
             render();
+            showToast('🗑 Запись удалена. Нажмите «Сохранить изменения», чтобы обновить db.js');
         }
 
         function addRow() {
@@ -585,20 +568,81 @@
                 comment: ''
             };
             data.push(newRow);
-            saveData();
             render();
-            // Прокрутка к новой строке
+            showToast('➕ Добавлена новая запись. Нажмите «Сохранить изменения», чтобы обновить db.js');
             const tbody = document.getElementById('tableBody');
             const lastRow = tbody.lastElementChild;
             if (lastRow) lastRow.scrollIntoView({ behavior: 'smooth' });
         }
 
         function resetData() {
-            if (!confirm('Сбросить все данные к примеру? Текущие изменения будут потеряны.')) return;
+            if (data.length > 0 && !confirm('Сбросить все данные к примеру? Текущие изменения будут потеряны.')) return;
             data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
             nextId = data.length + 1;
-            saveData();
             render();
+            showToast('🔄 Данные сброшены к примеру. Нажмите «Сохранить изменения», чтобы обновить db.js');
+        }
+
+        // ============================================================
+        // 5. СОХРАНЕНИЕ В db.js (скачивание файла)
+        // ============================================================
+        function exportDB() {
+            if (!data.length) return alert('Нет данных для сохранения');
+
+            // Сортируем по id для читаемости
+            const sorted = [...data].sort((a, b) => a.id - b.id);
+
+            const content = `// ============================================================
+        // Файл базы данных для CRM-таблицы
+        // Редактируйте этот файл, чтобы изменить данные в таблице
+        // ============================================================
+
+        const DB_DATA = ${JSON.stringify(sorted, null, 2)};
+        `;
+
+            const blob = new Blob([content], { type: 'text/javascript;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'db.js';
+            link.click();
+            URL.revokeObjectURL(link.href);
+
+            showToast('💾 Файл db.js скачан! Загрузите его на GitHub вместо старого.');
+        }
+
+        // ============================================================
+        // 6. ИМПОРТ db.js (загрузка с компьютера)
+        // ============================================================
+        function importDB() {
+            document.getElementById('dbFileInput').click();
+        }
+
+        function handleDbImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    // Ищем массив в загруженном файле
+                    const text = e.target.result;
+                    const match = text.match(/DB_DATA\s*=\s*(\[[\s\S]*?\]);/);
+                    if (match) {
+                        const importedData = eval(match[1]);
+                        if (Array.isArray(importedData) && importedData.length > 0) {
+                            data = importedData;
+                            nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
+                            render();
+                            showToast(`✅ Импортировано ${data.length} записей из db.js`);
+                            return;
+                        }
+                    }
+                    alert('Не удалось найти DB_DATA в файле. Убедитесь, что файл имеет правильный формат.');
+                } catch (err) {
+                    alert('Ошибка при импорте: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
         }
 
         // ============================================================
@@ -623,6 +667,7 @@
             link.download = `клиенты_кп_${new Date().toISOString().slice(0, 10)}.csv`;
             link.click();
             URL.revokeObjectURL(link.href);
+            showToast('📤 CSV-файл скачан');
         }
 
         function importCSV() {
@@ -666,9 +711,8 @@
                 }
                 if (imported.length) {
                     data = imported;
-                    saveData();
                     render();
-                    alert(`Импортировано ${imported.length} записей`);
+                    showToast(`✅ Импортировано ${imported.length} записей из CSV. Нажмите «Сохранить изменения», чтобы обновить db.js`);
                 }
             };
             reader.readAsText(file, 'UTF-8');
@@ -679,10 +723,11 @@
             if (!data.length) return alert('Нет данных');
             let tsv = 'Клиент\tКП\tСумма\tДата\tСтатус\tСогласен\tКомментарий\n';
             data.forEach(r => {
-                tsv += `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\n`;
+                tsv +=
+                    `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\n`;
             });
             navigator.clipboard.writeText(tsv).then(() => {
-                alert('Таблица скопирована в буфер обмена (TSV-формат)');
+                showToast('📋 Таблица скопирована в буфер обмена (TSV)');
             }).catch(() => {
                 alert('Не удалось скопировать');
             });
@@ -691,33 +736,44 @@
         // ============================================================
         // 8. СТАТУС ПОДКЛЮЧЕНИЯ
         // ============================================================
-        function updateConnectionStatus(online) {
+        function updateConnectionStatus(ok) {
             const dot = document.getElementById('statusDot');
             const text = document.getElementById('statusText');
-            if (online) {
+            if (ok) {
                 dot.style.background = '#22c55e';
-                text.textContent = 'Онлайн (Firebase)';
+                text.textContent = 'Данные загружены из db.js';
             } else {
-                dot.style.background = '#ef4444';
-                text.textContent = 'Офлайн (изменения не сохранятся)';
+                dot.style.background = '#f59e0b';
+                text.textContent = 'db.js не найден, используется пример';
             }
         }
 
         // ============================================================
-        // 9. ФИЛЬТРЫ
+        // 9. TOAST (всплывающие уведомления)
+        // ============================================================
+        let toastTimeout;
+
+        function showToast(msg) {
+            const el = document.getElementById('toast');
+            el.textContent = msg;
+            el.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                el.classList.remove('show');
+            }, 4000);
+        }
+
+        // ============================================================
+        // 10. ФИЛЬТРЫ
         // ============================================================
         document.getElementById('filterInput').addEventListener('input', render);
         document.getElementById('filterStatus').addEventListener('change', render);
 
         // ============================================================
-        // 10. ПЕРВИЧНАЯ ЗАГРУЗКА
+        // 11. ПЕРВИЧНАЯ ЗАГРУЗКА
         // ============================================================
-        // Firebase уже слушает изменения, но если данных нет — загрузим пример
-        setTimeout(() => {
-            if (data.length === 0) {
-                resetData();
-            }
-        }, 2000);
+        // Пытаемся загрузить db.js
+        loadDB();
     </script>
 </body>
 </html>
