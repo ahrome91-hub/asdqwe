@@ -5,341 +5,189 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>CRM — Учёт клиентов</title>
     <style>
-        /* ============================================================
-           БАЗОВЫЕ СТИЛИ
-           ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* ===== БАЗОВЫЕ СТИЛИ ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: #0b0d10;
             color: #e8edf2;
-            padding: 24px;
+            padding: 16px;
             min-height: 100vh;
         }
+        .container { max-width: 1440px; margin: 0 auto; }
 
-        .container {
-            max-width: 1440px;
-            margin: 0 auto;
-        }
-
-        /* ============================================================
-           ШАПКА
-           ============================================================ */
+        /* ===== ШАПКА ===== */
         .header {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 24px;
-            padding: 16px 24px;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding: 12px 20px;
             background: #14171c;
-            border-radius: 16px;
+            border-radius: 12px;
             border: 1px solid #252b33;
         }
-
         .header-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
         }
-
         .header-left h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
-            letter-spacing: -0.3px;
             background: linear-gradient(135deg, #f0f4f8, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        .header-left .icon {
-            font-size: 26px;
-        }
-
         .badge-count {
             background: #2563eb;
             color: #fff;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 30px;
         }
-
         .status-badge {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-size: 13px;
             color: #94a3b8;
             background: #1e242c;
-            padding: 6px 16px;
+            padding: 4px 14px;
             border-radius: 30px;
             border: 1px solid #2a323d;
         }
-
         .status-badge .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #22c55e;
+            background: #f59e0b;
             display: inline-block;
-            animation: pulse-dot 2s infinite;
         }
+        .status-badge .dot.online { background: #22c55e; }
+        .status-badge .dot.offline { background: #ef4444; }
 
-        @keyframes pulse-dot {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
-        }
-
-        /* ============================================================
-           ПАНЕЛЬ ИНСТРУМЕНТОВ
-           ============================================================ */
+        /* ===== ПАНЕЛЬ ИНСТРУМЕНТОВ ===== */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 14px 20px;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 10px 16px;
             background: #14171c;
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px solid #252b33;
             align-items: center;
         }
-
-        .toolbar input,
-        .toolbar select {
-            padding: 8px 14px;
-            border-radius: 10px;
+        .toolbar input, .toolbar select {
+            padding: 6px 12px;
+            border-radius: 8px;
             border: 1px solid #2a323d;
             background: #0f1217;
             color: #e8edf2;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
-            transition: 0.25s;
-            min-width: 160px;
+            min-width: 120px;
         }
-
-        .toolbar input::placeholder {
-            color: #4b5563;
-        }
-
-        .toolbar input:focus,
-        .toolbar select:focus {
+        .toolbar input:focus, .toolbar select:focus {
             border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
         }
-
-        .toolbar select option {
-            background: #14171c;
-            color: #e8edf2;
-        }
+        .toolbar select option { background: #14171c; color: #e8edf2; }
 
         .btn {
-            padding: 8px 18px;
+            padding: 6px 14px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            white-space: nowrap;
+            gap: 4px;
         }
-
-        .btn-primary {
-            background: #2563eb;
-            color: #fff;
-        }
-        .btn-primary:hover {
-            background: #1d4ed8;
-            transform: scale(1.02);
-        }
-
-        .btn-success {
-            background: #16a34a;
-            color: #fff;
-        }
-        .btn-success:hover {
-            background: #15803d;
-            transform: scale(1.02);
-        }
-
-        .btn-danger {
-            background: #dc2626;
-            color: #fff;
-        }
-        .btn-danger:hover {
-            background: #b91c1c;
-            transform: scale(1.02);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #2a323d;
-            color: #cbd5e1;
-        }
-        .btn-outline:hover {
-            background: #1e242c;
-            border-color: #4b5563;
-        }
-
-        .btn-warning {
-            background: #d97706;
-            color: #fff;
-        }
-        .btn-warning:hover {
-            background: #b45309;
-            transform: scale(1.02);
-        }
+        .btn-primary { background: #2563eb; color: #fff; }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-success { background: #16a34a; color: #fff; }
+        .btn-success:hover { background: #15803d; }
+        .btn-outline { background: transparent; border: 1px solid #2a323d; color: #cbd5e1; }
+        .btn-outline:hover { background: #1e242c; }
+        .btn-warning { background: #d97706; color: #fff; }
+        .btn-warning:hover { background: #b45309; }
+        .btn-danger { background: #dc2626; color: #fff; }
+        .btn-danger:hover { background: #b91c1c; }
 
         .saving-indicator {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            gap: 6px;
+            font-size: 12px;
             color: #94a3b8;
             background: #1a1f26;
-            padding: 4px 14px;
+            padding: 3px 12px;
             border-radius: 30px;
             border: 1px solid #252b33;
+            margin-left: auto;
         }
-
         .saving-indicator .spinner {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border: 2px solid #2a323d;
             border-top-color: #2563eb;
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
+            display: none;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* ============================================================
-           ТАБЛИЦА
-           ============================================================ */
+        /* ===== ТАБЛИЦА ===== */
         .table-wrap {
             background: #14171c;
-            border-radius: 16px;
+            border-radius: 12px;
             border: 1px solid #252b33;
             overflow: auto;
-            padding: 2px 0;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
-            min-width: 900px;
+            font-size: 13px;
+            min-width: 850px;
         }
-
         th {
             background: #0f1217;
             color: #94a3b8;
             font-weight: 600;
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
-            padding: 14px 16px;
+            letter-spacing: 0.3px;
+            padding: 10px 12px;
             text-align: left;
             border-bottom: 1px solid #252b33;
             position: sticky;
             top: 0;
             z-index: 2;
         }
-
         td {
-            padding: 10px 16px;
+            padding: 6px 12px;
             border-bottom: 1px solid #1e242c;
             vertical-align: middle;
         }
+        tr:hover td { background: #1a1f26; }
 
-        tr:hover td {
-            background: #1a1f26;
-        }
+        /* Цветная рамка статуса */
+        tr.status-согласовано td:first-child { border-left: 4px solid #22c55e; }
+        tr.status-отказ td:first-child { border-left: 4px solid #ef4444; }
+        tr.status-вработе td:first-child { border-left: 4px solid #f59e0b; }
+        tr.status-отправлено td:first-child { border-left: 4px solid #3b82f6; }
 
-        /* Цветные статусы */
-        tr.status-согласовано {
-            border-left: 4px solid #22c55e;
-        }
-        tr.status-согласовано td:first-child {
-            border-left: 4px solid #22c55e;
-        }
-
-        tr.status-отказ {
-            border-left: 4px solid #ef4444;
-        }
-        tr.status-отказ td:first-child {
-            border-left: 4px solid #ef4444;
-        }
-
-        tr.status-вработе {
-            border-left: 4px solid #f59e0b;
-        }
-        tr.status-вработе td:first-child {
-            border-left: 4px solid #f59e0b;
-        }
-
-        tr.status-отправлено {
-            border-left: 4px solid #3b82f6;
-        }
-        tr.status-отправлено td:first-child {
-            border-left: 4px solid #3b82f6;
-        }
-
-        /* Бейджи статусов */
-        .badge {
-            display: inline-block;
-            padding: 2px 14px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .badge-согласовано {
-            background: #064e3b;
-            color: #6ee7b7;
-        }
-        .badge-отказ {
-            background: #450a0a;
-            color: #fca5a5;
-        }
-        .badge-вработе {
-            background: #451a03;
-            color: #fcd34d;
-        }
-        .badge-отправлено {
-            background: #0a2a4a;
-            color: #7dd3fc;
-        }
-        .badge-черновик {
-            background: #1e242c;
-            color: #94a3b8;
-        }
-
-        /* ============================================================
-           ПОЛЯ ВВОДА ВНУТРИ ТАБЛИЦЫ
-           ============================================================ */
         .table-input {
             width: 100%;
-            padding: 6px 10px;
-            border-radius: 8px;
+            padding: 4px 6px;
+            border-radius: 6px;
             border: 1px solid transparent;
             background: transparent;
             color: #e8edf2;
@@ -347,144 +195,80 @@
             font-family: inherit;
             transition: 0.2s;
         }
-
-        .table-input:hover {
-            border-color: #2a323d;
-            background: #0f1217;
-        }
-
+        .table-input:hover { border-color: #2a323d; background: #0f1217; }
         .table-input:focus {
             border-color: #2563eb;
             background: #0f1217;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
         }
 
         .table-select {
             width: 100%;
-            padding: 6px 10px;
-            border-radius: 8px;
+            padding: 4px 6px;
+            border-radius: 6px;
             border: 1px solid transparent;
             background: transparent;
             color: #e8edf2;
             font-size: 13px;
             font-family: inherit;
             cursor: pointer;
-            transition: 0.2s;
         }
-
-        .table-select:hover {
-            border-color: #2a323d;
-            background: #0f1217;
-        }
-
-        .table-select:focus {
-            border-color: #2563eb;
-            background: #0f1217;
-            outline: none;
-        }
-
-        .table-select option {
-            background: #14171c;
-            color: #e8edf2;
-        }
+        .table-select:hover { border-color: #2a323d; background: #0f1217; }
+        .table-select:focus { border-color: #2563eb; background: #0f1217; outline: none; }
+        .table-select option { background: #14171c; color: #e8edf2; }
 
         input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             accent-color: #2563eb;
             cursor: pointer;
-            filter: brightness(0.9);
         }
+        .td-checkbox { text-align: center; }
 
-        .td-checkbox {
-            text-align: center;
-        }
-
-        /* ============================================================
-           КНОПКИ ВНУТРИ ТАБЛИЦЫ
-           ============================================================ */
         .btn-sm-del {
-            padding: 4px 12px;
+            padding: 2px 10px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background: #2a0a0a;
             color: #f87171;
             font-size: 12px;
             cursor: pointer;
-            transition: 0.2s;
         }
+        .btn-sm-del:hover { background: #3f0a0a; color: #fca5a5; }
 
-        .btn-sm-del:hover {
-            background: #3f0a0a;
-            color: #fca5a5;
-        }
-
-        .actions {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        /* ============================================================
-           ПОДВАЛ
-           ============================================================ */
+        /* ===== ПОДВАЛ ===== */
         .footer-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px;
+            gap: 12px;
             align-items: center;
-            margin-top: 18px;
-            padding: 12px 20px;
+            margin-top: 14px;
+            padding: 10px 16px;
             background: #14171c;
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px solid #252b33;
         }
+        .counter { font-size: 13px; color: #94a3b8; }
+        .counter strong { color: #e8edf2; font-weight: 500; }
 
-        .counter {
-            font-size: 14px;
-            color: #94a3b8;
-        }
-
-        .counter strong {
-            color: #e8edf2;
-            font-weight: 500;
-        }
-
-        /* ============================================================
-           ПУСТОЕ СОСТОЯНИЕ / ЗАГРУЗКА
-           ============================================================ */
-        .empty-state,
-        .loading {
+        .empty-state, .loading {
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             color: #4b5563;
         }
 
-        .empty-state p {
-            font-size: 16px;
-        }
-
-        .empty-state .hint {
-            font-size: 13px;
-            margin-top: 6px;
-            color: #374151;
-        }
-
-        /* ============================================================
-           TOAST (уведомления)
-           ============================================================ */
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             background: #1e242c;
             color: #e8edf2;
-            padding: 12px 28px;
-            border-radius: 14px;
-            font-size: 14px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 13px;
             border: 1px solid #2a323d;
             z-index: 999;
             opacity: 0;
@@ -492,481 +276,454 @@
             pointer-events: none;
             backdrop-filter: blur(8px);
         }
+        .toast.show { opacity: 1; }
 
-        .toast.show {
-            opacity: 1;
-        }
-
-        /* ============================================================
-           АДАПТИВНОСТЬ
-           ============================================================ */
         @media (max-width: 640px) {
-            body {
-                padding: 12px;
-            }
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 14px;
-            }
-            .header-left h1 {
-                font-size: 18px;
-            }
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .toolbar input,
-            .toolbar select {
-                min-width: auto;
-            }
-            .table-wrap {
-                font-size: 12px;
-            }
-            th,
-            td {
-                padding: 6px 8px;
-            }
-            .btn {
-                justify-content: center;
-            }
+            body { padding: 10px; }
+            .header { flex-direction: column; align-items: stretch; }
+            .header-left h1 { font-size: 17px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar input, .toolbar select { min-width: auto; }
+            .saving-indicator { margin-left: 0; }
+            .table-wrap { font-size: 12px; }
+            th, td { padding: 4px 6px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <!-- ===== ШАПКА ===== -->
-        <header class="header">
-            <div class="header-left">
-                <span class="icon">⚡</span>
-                <h1>CRM — Учёт клиентов</h1>
-                <span class="badge-count" id="countBadge">0</span>
-            </div>
-            <div class="status-badge">
-                <span class="dot" id="statusDot"></span>
-                <span id="statusText">Загрузка...</span>
-            </div>
-        </header>
-
-        <!-- ===== ПАНЕЛЬ ИНСТРУМЕНТОВ ===== -->
-        <div class="toolbar">
-            <input type="text" id="filterInput" placeholder="🔍 Поиск по клиенту, КП..." />
-            <select id="filterStatus">
-                <option value="">Все статусы</option>
-                <option value="Согласовано">✅ Согласовано</option>
-                <option value="Отказ">❌ Отказ</option>
-                <option value="В работе">⚡ В работе</option>
-                <option value="Отправлено">📤 Отправлено</option>
-                <option value="Черновик">📝 Черновик</option>
-            </select>
-            <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
-            <button class="btn btn-success" onclick="exportCSV()">📤 Экспорт CSV</button>
-            <button class="btn btn-outline" onclick="importCSV()">📥 Импорт CSV</button>
-            <button class="btn btn-warning" onclick="resetData()">🔄 Сбросить</button>
-            <span class="saving-indicator">
-                <span class="spinner" id="savingSpinner" style="display:none;"></span>
-                <span id="savingText">💾 Сохранено</span>
-            </span>
+    <!-- ===== ШАПКА ===== -->
+    <header class="header">
+        <div class="header-left">
+            <span style="font-size:22px;">⚡</span>
+            <h1>CRM — Учёт клиентов</h1>
+            <span class="badge-count" id="countBadge">0</span>
         </div>
-
-        <!-- ===== ТАБЛИЦА ===== -->
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width:32px;">#</th>
-                        <th>Клиент</th>
-                        <th style="min-width:140px;">Коммерческое предложение</th>
-                        <th style="width:100px;">Сумма (₽)</th>
-                        <th style="width:120px;">Дата отправки</th>
-                        <th style="width:130px;">Статус</th>
-                        <th style="width:80px;">Согласен</th>
-                        <th style="min-width:160px;">Комментарий</th>
-                        <th style="width:80px;">Действия</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr>
-                        <td colspan="9">
-                            <div class="loading">⏳ Загрузка данных...</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="status-badge">
+            <span class="dot" id="statusDot"></span>
+            <span id="statusText">Подключение...</span>
         </div>
+    </header>
 
-        <!-- ===== ПОДВАЛ ===== -->
-        <div class="footer-actions">
-            <span class="counter">Всего: <strong id="rowCounter">0</strong></span>
-            <span class="counter">Согласны: <strong id="agreedCounter">0</strong></span>
-            <button class="btn btn-outline" onclick="exportToClipboard()">📋 Копировать TSV</button>
-        </div>
-
+    <!-- ===== ПАНЕЛЬ ===== -->
+    <div class="toolbar">
+        <input type="text" id="filterInput" placeholder="🔍 Поиск..." />
+        <select id="filterStatus">
+            <option value="">Все статусы</option>
+            <option value="Согласовано">✅ Согласовано</option>
+            <option value="Отказ">❌ Отказ</option>
+            <option value="В работе">⚡ В работе</option>
+            <option value="Отправлено">📤 Отправлено</option>
+            <option value="Черновик">📝 Черновик</option>
+        </select>
+        <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
+        <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
+        <button class="btn btn-outline" onclick="importCSV()">📥 Импорт</button>
+        <button class="btn btn-danger" onclick="resetData()">🔄 Сброс</button>
+        <span class="saving-indicator">
+            <span class="spinner" id="savingSpinner"></span>
+            <span id="savingText">💾 Сохранено</span>
+        </span>
     </div>
 
-    <!-- ===== TOAST ===== -->
-    <div id="toast" class="toast"></div>
+    <!-- ===== ТАБЛИЦА ===== -->
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:30px;">#</th>
+                    <th>Клиент</th>
+                    <th style="min-width:120px;">КП</th>
+                    <th style="width:90px;">Сумма</th>
+                    <th style="width:110px;">Дата</th>
+                    <th style="width:120px;">Статус</th>
+                    <th style="width:70px;">Согласен</th>
+                    <th style="min-width:140px;">Комментарий</th>
+                    <th style="width:70px;">Действия</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td colspan="9"><div class="loading">⏳ Загрузка данных...</div></td></tr>
+            </tbody>
+        </table>
+    </div>
 
-    <!-- ===== СКРЫТЫЙ ФАЙЛОВЫЙ ВВОД ===== -->
-    <input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleImport(event)" />
+    <!-- ===== ПОДВАЛ ===== -->
+    <div class="footer-actions">
+        <span class="counter">Всего: <strong id="rowCounter">0</strong></span>
+        <span class="counter">Согласны: <strong id="agreedCounter">0</strong></span>
+        <button class="btn btn-outline" onclick="exportToClipboard()">📋 Копировать</button>
+        <button class="btn btn-primary" onclick="saveToCloud()">💾 Сохранить в облако</button>
+    </div>
 
-    <!-- ============================================================
-    JAVASCRIPT
-    ============================================================ -->
-    <script>
-        // ============================================================
-        // 1. НАСТРОЙКИ JSONBIN.IO
-        // ============================================================
-        // Для работы замените BIN_ID и API_KEY на свои
-        const BIN_ID = '67c8e9c8acd3cb34a8f2d9e8';
-        const API_KEY = '$2a$10$1YzFk5q5Z5k5Z5k5Z5k5Z5';
+</div>
 
-        // ============================================================
-        // 2. СОСТОЯНИЕ
-        // ============================================================
-        let data = [];
-        let nextId = 1;
-        let isSaving = false;
-        let saveTimeout = null;
+<div id="toast" class="toast"></div>
+<input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleImport(event)" />
 
-        const DEFAULT_DATA = [
-            { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10',
-                status: 'В работе', agreed: true, comment: 'Требуют доп. согласование' },
-            { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12',
-                status: 'Отказ', agreed: false, comment: 'Нашли дешевле' },
-            { client: 'ООО Ромашка', proposal: 'Поставка оборудования', amount: 1500000, date: '2026-01-15',
-                status: 'Отправлено', agreed: false, comment: 'Ждём ответа' },
-            { client: 'АО СтройИнвест', proposal: 'Строительные материалы', amount: 3200000, date: '2026-01-18',
-                status: 'Согласовано', agreed: true, comment: 'Договор подписан' },
-            { client: 'ООО Техносервис', proposal: 'Обслуживание ПО', amount: 890000, date: '2026-01-20',
-                status: 'Черновик', agreed: false, comment: 'Правки от клиента' }
-        ];
+<script>
+    // ================================================================
+    // 1. НАСТРОЙКИ JSONBIN.IO
+    // ================================================================
+    // 👇 ЗАМЕНИТЕ НА СВОИ ДАННЫЕ (получите на jsonbin.io)
+    const BIN_ID = '67c8e9c8acd3cb34a8f2d9e8';
+    const API_KEY = '$2a$10$1YzFk5q5Z5k5Z5k5Z5k5Z5';
 
-        // ============================================================
-        // 3. ЗАГРУЗКА
-        // ============================================================
-        async function loadFromJsonBin() {
-            try {
-                showSaving(true, 'Загрузка...');
-                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
-                const result = await resp.json();
-                const loaded = result.record;
-                if (loaded && Array.isArray(loaded) && loaded.length) {
-                    data = loaded;
-                    nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
-                    render();
-                    updateConnectionStatus(true);
-                    showSaving(false, '✅ Загружено');
-                    showToast('✅ Данные загружены из облака');
-                    return;
-                }
-                resetData();
-                updateConnectionStatus(true);
-                showSaving(false, '✅ Загружено (пример)');
-            } catch (e) {
-                console.error(e);
-                updateConnectionStatus(false);
-                showSaving(false, '⚠️ Офлайн');
-                if (!data.length) resetData();
-                showToast('⚠️ Ошибка загрузки. Используется локальная копия.');
-            }
-        }
+    // ================================================================
+    // 2. СОСТОЯНИЕ
+    // ================================================================
+    let data = [];
+    let nextId = 1;
+    let isSaving = false;
+    let saveTimeout = null;
+    let isOnline = false;
 
-        // ============================================================
-        // 4. СОХРАНЕНИЕ
-        // ============================================================
-        async function saveToJsonBin() {
-            if (isSaving || !data.length) return;
-            isSaving = true;
-            showSaving(true, 'Сохранение...');
-            try {
-                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify(data)
-                });
-                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
-                isSaving = false;
-                showSaving(false, '💾 Сохранено');
-                showToast('💾 Данные сохранены');
-            } catch (e) {
-                console.error(e);
-                isSaving = false;
-                showSaving(false, '❌ Ошибка');
-                showToast('❌ Ошибка сохранения');
-            }
-        }
+    const DEFAULT_DATA = [
+        { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10',
+            status: 'В работе', agreed: true, comment: 'Требуют доп. согласование' },
+        { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12',
+            status: 'Отказ', agreed: false, comment: 'Нашли дешевле' },
+        { client: 'ООО Ромашка', proposal: 'Поставка оборудования', amount: 1500000, date: '2026-01-15',
+            status: 'Отправлено', agreed: false, comment: 'Ждём ответа' },
+        { client: 'АО СтройИнвест', proposal: 'Строительные материалы', amount: 3200000, date: '2026-01-18',
+            status: 'Согласовано', agreed: true, comment: 'Договор подписан' },
+        { client: 'ООО Техносервис', proposal: 'Обслуживание ПО', amount: 890000, date: '2026-01-20',
+            status: 'Черновик', agreed: false, comment: 'Правки от клиента' }
+    ];
 
-        function scheduleSave() {
-            clearTimeout(saveTimeout);
-            showSaving(true, 'Сохранение...');
-            saveTimeout = setTimeout(saveToJsonBin, 600);
-        }
-
-        // ============================================================
-        // 5. ИНДИКАТОР СОХРАНЕНИЯ
-        // ============================================================
-        function showSaving(active, text) {
-            document.getElementById('savingSpinner').style.display = active ? 'inline-block' : 'none';
-            if (text) document.getElementById('savingText').textContent = text;
-        }
-
-        // ============================================================
-        // 6. РЕНДЕР
-        // ============================================================
-        function render() {
-            const tbody = document.getElementById('tableBody');
-            const filterText = document.getElementById('filterInput').value.toLowerCase().trim();
-            const filterStatus = document.getElementById('filterStatus').value;
-
-            const filtered = data.filter(row => {
-                const matchText = (row.client || '').toLowerCase().includes(filterText) ||
-                    (row.proposal || '').toLowerCase().includes(filterText) ||
-                    (row.comment || '').toLowerCase().includes(filterText);
-                const matchStatus = filterStatus === '' || row.status === filterStatus;
-                return matchText && matchStatus;
+    // ================================================================
+    // 3. ЗАГРУЗКА ИЗ ОБЛАКА
+    // ================================================================
+    async function loadFromCloud() {
+        try {
+            setStatus('loading', 'Загрузка...');
+            const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                headers: { 'X-Master-Key': API_KEY }
             });
+            if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
+            const result = await resp.json();
+            const loaded = result.record;
 
-            if (!filtered.length) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="9">
-                            <div class="empty-state">
-                                <p>📭 Нет записей по вашему фильтру</p>
-                                <p class="hint">Нажмите «➕ Добавить», чтобы создать новую запись</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                document.getElementById('countBadge').textContent = data.length;
-                updateCounters();
+            if (loaded && Array.isArray(loaded) && loaded.length > 0) {
+                data = loaded;
+                nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
+                isOnline = true;
+                setStatus('online', 'Онлайн');
+                render();
+                showToast('✅ Данные загружены из облака');
                 return;
             }
+            // Если в облаке пусто — создаём пример
+            resetData();
+            isOnline = true;
+            setStatus('online', 'Онлайн');
 
-            let html = '';
-            const statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
-            filtered.forEach((row, idx) => {
-                const statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
-                const agreedChecked = row.agreed ? 'checked' : '';
-                html += `
-                    <tr class="status-${statusClass}">
-                        <td>${idx + 1}</td>
-                        <td><input class="table-input" type="text" value="${escapeHtml(row.client || '')}" onchange="updateField(${row.id}, 'client', this.value)" /></td>
-                        <td><input class="table-input" type="text" value="${escapeHtml(row.proposal || '')}" onchange="updateField(${row.id}, 'proposal', this.value)" /></td>
-                        <td><input class="table-input" type="number" value="${row.amount || 0}" onchange="updateField(${row.id}, 'amount', Number(this.value))" /></td>
-                        <td><input class="table-input" type="date" value="${row.date || ''}" onchange="updateField(${row.id}, 'date', this.value)" /></td>
-                        <td>
-                            <select class="table-select" onchange="updateField(${row.id}, 'status', this.value)">
-                                ${statusOptions.map(s =>
-                                    `<option value="${s}" ${s === row.status ? 'selected' : ''}>${s}</option>`
-                                ).join('')}
-                            </select>
-                        </td>
-                        <td class="td-checkbox">
-                            <input type="checkbox" ${agreedChecked} onchange="updateField(${row.id}, 'agreed', this.checked)" />
-                        </td>
-                        <td><input class="table-input" type="text" value="${escapeHtml(row.comment || '')}" onchange="updateField(${row.id}, 'comment', this.value)" /></td>
-                        <td>
-                            <button class="btn-sm-del" onclick="deleteRow(${row.id})">🗑</button>
-                        </td>
-                    </tr>
-                `;
+        } catch (e) {
+            console.warn('Облако недоступно:', e);
+            isOnline = false;
+            setStatus('offline', 'Офлайн');
+            if (data.length === 0) resetData();
+            showToast('⚠️ Офлайн-режим. Данные не синхронизируются.');
+        }
+    }
+
+    // ================================================================
+    // 4. СОХРАНЕНИЕ В ОБЛАКО
+    // ================================================================
+    async function saveToCloud() {
+        if (isSaving || !data.length) return;
+        isSaving = true;
+        showSaving(true, 'Сохранение...');
+
+        try {
+            const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': API_KEY
+                },
+                body: JSON.stringify(data)
             });
+            if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
 
-            tbody.innerHTML = html;
+            isSaving = false;
+            isOnline = true;
+            setStatus('online', 'Онлайн');
+            showSaving(false, '💾 Сохранено');
+            showToast('💾 Данные сохранены в облаке');
+
+        } catch (e) {
+            console.error(e);
+            isSaving = false;
+            isOnline = false;
+            setStatus('offline', 'Офлайн');
+            showSaving(false, '❌ Ошибка');
+            showToast('❌ Ошибка сохранения. Проверьте интернет.');
+        }
+    }
+
+    function scheduleSave() {
+        if (!isOnline) {
+            showToast('⚠️ Нет соединения с облаком. Данные не сохранены.');
+            return;
+        }
+        clearTimeout(saveTimeout);
+        showSaving(true, 'Сохранение...');
+        saveTimeout = setTimeout(saveToCloud, 600);
+    }
+
+    // ================================================================
+    // 5. ИНДИКАТОРЫ
+    // ================================================================
+    function setStatus(type, text) {
+        const dot = document.getElementById('statusDot');
+        const el = document.getElementById('statusText');
+        dot.className = 'dot';
+        if (type === 'online') { dot.classList.add('online'); }
+        else if (type === 'offline') { dot.classList.add('offline'); }
+        else { dot.style.background = '#f59e0b'; }
+        el.textContent = text;
+    }
+
+    function showSaving(active, text) {
+        document.getElementById('savingSpinner').style.display = active ? 'inline-block' : 'none';
+        if (text) document.getElementById('savingText').textContent = text;
+    }
+
+    // ================================================================
+    // 6. РЕНДЕР ТАБЛИЦЫ
+    // ================================================================
+    function render() {
+        const tbody = document.getElementById('tableBody');
+        const filterText = document.getElementById('filterInput').value.toLowerCase().trim();
+        const filterStatus = document.getElementById('filterStatus').value;
+
+        const filtered = data.filter(row => {
+            const matchText = (row.client || '').toLowerCase().includes(filterText) ||
+                (row.proposal || '').toLowerCase().includes(filterText) ||
+                (row.comment || '').toLowerCase().includes(filterText);
+            const matchStatus = filterStatus === '' || row.status === filterStatus;
+            return matchText && matchStatus;
+        });
+
+        if (!filtered.length) {
+            tbody.innerHTML = `
+                <tr><td colspan="9">
+                    <div class="empty-state">📭 Нет записей<br><span style="font-size:12px;color:#374151;">Нажмите «➕ Добавить»</span></div>
+                </td></tr>
+            `;
             document.getElementById('countBadge').textContent = data.length;
             updateCounters();
+            return;
         }
 
-        function updateCounters() {
-            document.getElementById('rowCounter').textContent = data.length;
-            document.getElementById('agreedCounter').textContent = data.filter(r => r.agreed).length;
-        }
+        let html = '';
+        const statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
+        filtered.forEach((row, idx) => {
+            const statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
+            const agreedChecked = row.agreed ? 'checked' : '';
+            html += `
+                <tr class="status-${statusClass}">
+                    <td>${idx + 1}</td>
+                    <td><input class="table-input" type="text" value="${escapeHtml(row.client || '')}" onchange="updateField(${row.id}, 'client', this.value)" /></td>
+                    <td><input class="table-input" type="text" value="${escapeHtml(row.proposal || '')}" onchange="updateField(${row.id}, 'proposal', this.value)" /></td>
+                    <td><input class="table-input" type="number" value="${row.amount || 0}" onchange="updateField(${row.id}, 'amount', Number(this.value))" /></td>
+                    <td><input class="table-input" type="date" value="${row.date || ''}" onchange="updateField(${row.id}, 'date', this.value)" /></td>
+                    <td>
+                        <select class="table-select" onchange="updateField(${row.id}, 'status', this.value)">
+                            ${statusOptions.map(s =>
+                                `<option value="${s}" ${s === row.status ? 'selected' : ''}>${s}</option>`
+                            ).join('')}
+                        </select>
+                    </td>
+                    <td class="td-checkbox">
+                        <input type="checkbox" ${agreedChecked} onchange="updateField(${row.id}, 'agreed', this.checked)" />
+                    </td>
+                    <td><input class="table-input" type="text" value="${escapeHtml(row.comment || '')}" onchange="updateField(${row.id}, 'comment', this.value)" /></td>
+                    <td><button class="btn-sm-del" onclick="deleteRow(${row.id})">🗑</button></td>
+                </tr>
+            `;
+        });
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            return String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
+        tbody.innerHTML = html;
+        document.getElementById('countBadge').textContent = data.length;
+        updateCounters();
+    }
 
-        // ============================================================
-        // 7. ДЕЙСТВИЯ
-        // ============================================================
-        function updateField(id, field, value) {
-            const row = data.find(r => r.id === id);
-            if (row) {
-                row[field] = value;
+    function updateCounters() {
+        document.getElementById('rowCounter').textContent = data.length;
+        document.getElementById('agreedCounter').textContent = data.filter(r => r.agreed).length;
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // ================================================================
+    // 7. ДЕЙСТВИЯ
+    // ================================================================
+    function updateField(id, field, value) {
+        const row = data.find(r => r.id === id);
+        if (row) {
+            row[field] = value;
+            render();
+            if (isOnline) scheduleSave();
+        }
+    }
+
+    function deleteRow(id) {
+        if (!confirm('Удалить эту запись?')) return;
+        data = data.filter(r => r.id !== id);
+        render();
+        if (isOnline) scheduleSave();
+    }
+
+    function addRow() {
+        const newRow = {
+            id: nextId++,
+            client: 'Новый клиент',
+            proposal: 'Новое КП',
+            amount: 0,
+            date: new Date().toISOString().slice(0, 10),
+            status: 'Черновик',
+            agreed: false,
+            comment: ''
+        };
+        data.push(newRow);
+        render();
+        if (isOnline) scheduleSave();
+        const tbody = document.getElementById('tableBody');
+        const last = tbody.lastElementChild;
+        if (last) last.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetData() {
+        if (data.length && !confirm('Сбросить всё к примеру?')) return;
+        data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
+        nextId = data.length + 1;
+        render();
+        if (isOnline) scheduleSave();
+    }
+
+    // ================================================================
+    // 8. CSV
+    // ================================================================
+    function exportCSV() {
+        if (!data.length) return alert('Нет данных');
+        const headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен', 'Комментарий'];
+        const rows = data.map(r => [
+            `"${r.client || ''}"`,
+            `"${r.proposal || ''}"`,
+            r.amount || 0,
+            r.date || '',
+            r.status || 'Черновик',
+            r.agreed ? 'Да' : 'Нет',
+            `"${r.comment || ''}"`
+        ]);
+        const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `клиенты_${new Date().toISOString().slice(0, 10)}.csv`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        showToast('📤 CSV скачан');
+    }
+
+    function importCSV() {
+        document.getElementById('fileInput').click();
+    }
+
+    function handleImport(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const text = ev.target.result;
+            const lines = text.split('\n').filter(l => l.trim());
+            if (lines.length < 2) return alert('Файл пуст');
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            const idx = {
+                client: headers.findIndex(h => h.includes('Клиент')),
+                proposal: headers.findIndex(h => h.includes('Коммерческое') || h.includes('предложение')),
+                amount: headers.findIndex(h => h.includes('Сумма')),
+                date: headers.findIndex(h => h.includes('Дата')),
+                status: headers.findIndex(h => h.includes('Статус')),
+                agreed: headers.findIndex(h => h.includes('Согласен')),
+                comment: headers.findIndex(h => h.includes('Комментарий'))
+            };
+            if (idx.client === -1 || idx.proposal === -1) return alert('Не найден столбец "Клиент" или "КП"');
+
+            const imported = [];
+            for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                imported.push({
+                    id: nextId++,
+                    client: cols[idx.client] || 'Неизвестный',
+                    proposal: cols[idx.proposal] || 'Новое КП',
+                    amount: parseFloat(cols[idx.amount]) || 0,
+                    date: cols[idx.date] || new Date().toISOString().slice(0, 10),
+                    status: cols[idx.status] || 'Черновик',
+                    agreed: cols[idx.agreed] === 'Да',
+                    comment: cols[idx.comment] || ''
+                });
+            }
+            if (imported.length) {
+                data = imported;
                 render();
-                scheduleSave();
+                if (isOnline) scheduleSave();
+                showToast(`✅ Импортировано ${imported.length} записей`);
             }
+        };
+        reader.readAsText(file, 'UTF-8');
+        e.target.value = '';
+    }
+
+    function exportToClipboard() {
+        if (!data.length) return alert('Нет данных');
+        let tsv = 'Клиент\tКП\tСумма\tДата\tСтатус\tСогласен\tКомментарий\n';
+        data.forEach(r => {
+            tsv +=
+                `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\n`;
+        });
+        navigator.clipboard.writeText(tsv).then(() => {
+            showToast('📋 Скопировано');
+        }).catch(() => alert('Не удалось скопировать'));
+    }
+
+    // ================================================================
+    // 9. TOAST
+    // ================================================================
+    let toastTimeout;
+
+    function showToast(msg) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    // ================================================================
+    // 10. ФИЛЬТРЫ
+    // ================================================================
+    document.getElementById('filterInput').addEventListener('input', render);
+    document.getElementById('filterStatus').addEventListener('change', render);
+
+    // ================================================================
+    // 11. ЗАПУСК
+    // ================================================================
+    loadFromCloud();
+
+    // Автосохранение каждые 30 секунд (на случай, если пользователь забыл нажать "Сохранить")
+    setInterval(() => {
+        if (isOnline && data.length > 0) {
+            saveToCloud();
         }
-
-        function deleteRow(id) {
-            if (!confirm('Удалить эту запись?')) return;
-            data = data.filter(r => r.id !== id);
-            render();
-            scheduleSave();
-        }
-
-        function addRow() {
-            const newRow = {
-                id: nextId++,
-                client: 'Новый клиент',
-                proposal: 'Новое КП',
-                amount: 0,
-                date: new Date().toISOString().slice(0, 10),
-                status: 'Черновик',
-                agreed: false,
-                comment: ''
-            };
-            data.push(newRow);
-            render();
-            scheduleSave();
-            const tbody = document.getElementById('tableBody');
-            const last = tbody.lastElementChild;
-            if (last) last.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function resetData() {
-            if (data.length && !confirm('Сбросить все данные к примеру?')) return;
-            data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
-            nextId = data.length + 1;
-            render();
-            scheduleSave();
-        }
-
-        // ============================================================
-        // 8. CSV
-        // ============================================================
-        function exportCSV() {
-            if (!data.length) return alert('Нет данных');
-            const headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен', 'Комментарий'];
-            const rows = data.map(r => [
-                `"${r.client || ''}"`,
-                `"${r.proposal || ''}"`,
-                r.amount || 0,
-                r.date || '',
-                r.status || 'Черновик',
-                r.agreed ? 'Да' : 'Нет',
-                `"${r.comment || ''}"`
-            ]);
-            const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `клиенты_кп_${new Date().toISOString().slice(0, 10)}.csv`;
-            link.click();
-            URL.revokeObjectURL(link.href);
-            showToast('📤 CSV скачан');
-        }
-
-        function importCSV() {
-            document.getElementById('fileInput').click();
-        }
-
-        function handleImport(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                const text = ev.target.result;
-                const lines = text.split('\n').filter(l => l.trim());
-                if (lines.length < 2) return alert('Файл пуст');
-                const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-                const idx = {
-                    client: headers.findIndex(h => h.includes('Клиент')),
-                    proposal: headers.findIndex(h => h.includes('Коммерческое') || h.includes('предложение')),
-                    amount: headers.findIndex(h => h.includes('Сумма')),
-                    date: headers.findIndex(h => h.includes('Дата')),
-                    status: headers.findIndex(h => h.includes('Статус')),
-                    agreed: headers.findIndex(h => h.includes('Согласен')),
-                    comment: headers.findIndex(h => h.includes('Комментарий'))
-                };
-                if (idx.client === -1 || idx.proposal === -1) return alert('Не найден столбец "Клиент" или "Коммерческое предложение"');
-
-                const imported = [];
-                for (let i = 1; i < lines.length; i++) {
-                    const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-                    const row = {
-                        id: nextId++,
-                        client: cols[idx.client] || 'Неизвестный',
-                        proposal: cols[idx.proposal] || 'Новое КП',
-                        amount: parseFloat(cols[idx.amount]) || 0,
-                        date: cols[idx.date] || new Date().toISOString().slice(0, 10),
-                        status: cols[idx.status] || 'Черновик',
-                        agreed: cols[idx.agreed] === 'Да',
-                        comment: cols[idx.comment] || ''
-                    };
-                    imported.push(row);
-                }
-                if (imported.length) {
-                    data = imported;
-                    render();
-                    scheduleSave();
-                    showToast(`✅ Импортировано ${imported.length} записей`);
-                }
-            };
-            reader.readAsText(file, 'UTF-8');
-            e.target.value = '';
-        }
-
-        function exportToClipboard() {
-            if (!data.length) return alert('Нет данных');
-            let tsv = 'Клиент\tКП\tСумма\tДата\tСтатус\tСогласен\tКомментарий\n';
-            data.forEach(r => {
-                tsv +=
-                    `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\n`;
-            });
-            navigator.clipboard.writeText(tsv).then(() => {
-                showToast('📋 Таблица скопирована (TSV)');
-            }).catch(() => alert('Не удалось скопировать'));
-        }
-
-        // ============================================================
-        // 9. СТАТУС
-        // ============================================================
-        function updateConnectionStatus(online) {
-            const dot = document.getElementById('statusDot');
-            const text = document.getElementById('statusText');
-            if (online) {
-                dot.style.background = '#22c55e';
-                text.textContent = 'Онлайн (jsonbin.io)';
-            } else {
-                dot.style.background = '#ef4444';
-                text.textContent = 'Офлайн';
-            }
-        }
-
-        // ============================================================
-        // 10. TOAST
-        // ============================================================
-        let toastTimeout;
-
-        function showToast(msg) {
-            const el = document.getElementById('toast');
-            el.textContent = msg;
-            el.classList.add('show');
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => el.classList.remove('show'), 3000);
-        }
-
-        // ============================================================
-        // 11. ФИЛЬТРЫ
-        // ============================================================
-        document.getElementById('filterInput').addEventListener('input', render);
-        document.getElementById('filterStatus').addEventListener('change', render);
-
-        // ============================================================
-        // 12. ЗАПУСК
-        // ============================================================
-        loadFromJsonBin();
-    </script>
+    }, 30000);
+</script>
 </body>
 </html>
