@@ -4,10 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>CRM — Учёт клиентов</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js">
-    </script>
     <style>
         /* ============================================================
            БАЗОВЫЕ СТИЛИ + АНИМАЦИИ
@@ -19,30 +15,17 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
         body {
@@ -527,59 +510,27 @@
 
         /* ===== АДАПТИВНОСТЬ ===== */
         @media (max-width: 640px) {
-            body {
-                padding: 10px;
-            }
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 12px;
-            }
-            .header-left h1 {
-                font-size: 17px;
-            }
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .toolbar input,
-            .toolbar select {
-                min-width: auto;
-            }
-            .saving-indicator {
-                margin-left: 0;
-            }
-            .table-wrap {
-                font-size: 12px;
-            }
-            th,
-            td {
-                padding: 4px 6px;
-            }
-            .btn {
-                justify-content: center;
-            }
+            body { padding: 10px; }
+            .header { flex-direction: column; align-items: stretch; padding: 12px; }
+            .header-left h1 { font-size: 17px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar input, .toolbar select { min-width: auto; }
+            .saving-indicator { margin-left: 0; }
+            .table-wrap { font-size: 12px; }
+            th, td { padding: 4px 6px; }
+            .btn { justify-content: center; }
         }
 
-        .table-wrap::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .table-wrap::-webkit-scrollbar-track {
-            background: #0f1217;
-        }
-        .table-wrap::-webkit-scrollbar-thumb {
-            background: #2a323d;
-            border-radius: 10px;
-        }
-        .table-wrap::-webkit-scrollbar-thumb:hover {
-            background: #3a434d;
-        }
+        .table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
+        .table-wrap::-webkit-scrollbar-track { background: #0f1217; }
+        .table-wrap::-webkit-scrollbar-thumb { background: #2a323d; border-radius: 10px; }
+        .table-wrap::-webkit-scrollbar-thumb:hover { background: #3a434d; }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- ===== ШАПКА ===== -->
         <header class="header">
             <div class="header-left">
                 <span class="logo">⚡</span>
@@ -592,6 +543,7 @@
             </div>
         </header>
 
+        <!-- ===== ПАНЕЛЬ ===== -->
         <div class="toolbar">
             <input type="text" id="filterInput" placeholder="🔍 Поиск..." />
             <select id="filterStatus">
@@ -612,6 +564,7 @@
             </span>
         </div>
 
+        <!-- ===== ТАБЛИЦА ===== -->
         <div class="table-wrap">
             <table>
                 <thead>
@@ -638,6 +591,7 @@
             </table>
         </div>
 
+        <!-- ===== ПОДВАЛ ===== -->
         <div class="footer-actions">
             <span class="counter">Всего: <strong id="rowCounter">0</strong></span>
             <span class="counter">Согласны: <strong id="agreedCounter">0</strong></span>
@@ -650,31 +604,19 @@
 
     <script>
         // ================================================================
-        // 🔥 ВАШИ ДАННЫЕ ИЗ FIREBASE
+        // 🔥 ВАШИ ДАННЫЕ ИЗ JSONBIN.IO
         // ================================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyDkL9nP7qR5vT8sU3wXxY2zZ4aB6cE8fG1hI",
-            authDomain: "crm-ahrome91.firebaseapp.com",
-            databaseURL: "https://crm-ahrome91-default-rtdb.firebaseio.com",
-            projectId: "crm-ahrome91",
-            storageBucket: "crm-ahrome91.appspot.com",
-            messagingSenderId: "987654321012",
-            appId: "1:987654321012:web:3f4g5h6i7j8k9l0m1n2o"
-        };
+        const BIN_ID = '6a34730dda38895dfeda3121';
+        const API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
 
         // ================================================================
-        // 2. ИНИЦИАЛИЗАЦИЯ
-        // ================================================================
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const dataRef = db.ref('crmData');
-
-        // ================================================================
-        // 3. СОСТОЯНИЕ
+        // 2. СОСТОЯНИЕ
         // ================================================================
         let data = [];
         let nextId = 1;
         let isSaving = false;
+        let saveTimeout = null;
+        let isOnline = false;
 
         const DEFAULT_DATA = [
             { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10',
@@ -690,70 +632,93 @@
         ];
 
         // ================================================================
-        // 4. СЛУШАЕМ ИЗМЕНЕНИЯ В РЕАЛЬНОМ ВРЕМЕНИ
+        // 3. ЗАГРУЗКА ИЗ JSONBIN.IO
         // ================================================================
-        dataRef.on('value', (snapshot) => {
-            const val = snapshot.val();
-            if (val) {
-                const arr = Object.values(val);
-                if (arr.length > 0) {
-                    data = arr;
+        async function loadFromCloud() {
+            try {
+                setStatus('loading', 'Загрузка...');
+                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
+                const result = await resp.json();
+                const loaded = result.record;
+
+                if (loaded && Array.isArray(loaded) && loaded.length > 0) {
+                    data = loaded;
                     nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
+                    isOnline = true;
                     setStatus('online', 'Онлайн ✅');
                     render();
-                    showToast('✅ Данные загружены', 'success');
+                    showToast('✅ Данные загружены из облака', 'success');
                     return;
                 }
+                resetData();
+                isOnline = true;
+                setStatus('online', 'Онлайн ✅');
+            } catch (e) {
+                console.warn('Облако недоступно:', e);
+                isOnline = false;
+                setStatus('offline', 'Офлайн ❌');
+                if (data.length === 0) resetData();
+                showToast('⚠️ Офлайн-режим. Данные не синхронизируются.', 'error');
             }
-            if (data.length === 0) { resetData(); }
-            setStatus('online', 'Онлайн ✅');
-        }, (error) => {
-            console.error('Firebase ошибка:', error);
-            setStatus('offline', 'Офлайн ❌');
-            if (data.length === 0) resetData();
-            showToast('⚠️ Ошибка подключения к Firebase', 'error');
-        });
+        }
 
         // ================================================================
-        // 5. СОХРАНЕНИЕ В FIREBASE
+        // 4. СОХРАНЕНИЕ В JSONBIN.IO
         // ================================================================
-        function saveToFirebase() {
-            if (isSaving || !data.length) return;
+        async function saveToCloud() {
+            if (isSaving || !data.length || !isOnline) return;
             isSaving = true;
             showSaving(true, 'Сохранение...');
 
-            const obj = {};
-            data.forEach(row => { obj[row.id] = row; });
-
-            dataRef.set(obj)
-                .then(() => {
-                    isSaving = false;
-                    showSaving(false, '💾 Сохранено');
-                    showToast('💾 Данные сохранены', 'success');
-                })
-                .catch((err) => {
-                    console.error('Ошибка сохранения:', err);
-                    isSaving = false;
-                    showSaving(false, '❌ Ошибка');
-                    showToast('❌ Ошибка сохранения', 'error');
+            try {
+                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(data)
                 });
+                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
+
+                isSaving = false;
+                isOnline = true;
+                setStatus('online', 'Онлайн ✅');
+                showSaving(false, '💾 Сохранено');
+                showToast('💾 Данные сохранены в облаке', 'success');
+            } catch (e) {
+                console.error(e);
+                isSaving = false;
+                isOnline = false;
+                setStatus('offline', 'Офлайн ❌');
+                showSaving(false, '❌ Ошибка');
+                showToast('❌ Ошибка сохранения. Проверьте интернет.', 'error');
+            }
         }
 
         function scheduleSave() {
-            clearTimeout(window.saveTimeout);
+            if (!isOnline) {
+                showToast('⚠️ Нет соединения с облаком. Данные не сохранены.', 'error');
+                return;
+            }
+            clearTimeout(saveTimeout);
             showSaving(true, 'Сохранение...');
-            window.saveTimeout = setTimeout(saveToFirebase, 500);
+            saveTimeout = setTimeout(saveToCloud, 600);
         }
 
         // ================================================================
-        // 6. ИНДИКАТОРЫ
+        // 5. ИНДИКАТОРЫ
         // ================================================================
         function setStatus(type, text) {
             const dot = document.getElementById('statusDot');
             const el = document.getElementById('statusText');
             dot.className = 'dot';
-            if (type === 'online') { dot.classList.add('online'); } else if (type === 'offline') { dot.classList
-                    .add('offline'); } else { dot.classList.add('loading'); }
+            if (type === 'online') { dot.classList.add('online'); }
+            else if (type === 'offline') { dot.classList.add('offline'); }
+            else { dot.classList.add('loading'); }
             el.textContent = text;
         }
 
@@ -763,7 +728,7 @@
         }
 
         // ================================================================
-        // 7. РЕНДЕР
+        // 6. РЕНДЕР
         // ================================================================
         function render() {
             const tbody = document.getElementById('tableBody');
@@ -838,14 +803,14 @@
         }
 
         // ================================================================
-        // 8. ДЕЙСТВИЯ
+        // 7. ДЕЙСТВИЯ
         // ================================================================
         function updateField(id, field, value) {
             const row = data.find(r => r.id === id);
             if (row) {
                 row[field] = value;
                 render();
-                scheduleSave();
+                if (isOnline) scheduleSave();
             }
         }
 
@@ -853,7 +818,7 @@
             if (!confirm('Удалить эту запись?')) return;
             data = data.filter(r => r.id !== id);
             render();
-            scheduleSave();
+            if (isOnline) scheduleSave();
         }
 
         function addRow() {
@@ -870,7 +835,7 @@
             };
             data.push(newRow);
             render();
-            scheduleSave();
+            if (isOnline) scheduleSave();
             const tbody = document.getElementById('tableBody');
             const last = tbody.lastElementChild;
             if (last) last.scrollIntoView({ behavior: 'smooth' });
@@ -881,12 +846,12 @@
             data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
             nextId = data.length + 1;
             render();
-            scheduleSave();
+            if (isOnline) scheduleSave();
             showToast('🔄 Данные сброшены к примеру', 'success');
         }
 
         // ================================================================
-        // 9. CSV
+        // 8. CSV
         // ================================================================
         function exportCSV() {
             if (!data.length) return showToast('Нет данных для экспорта', 'error');
@@ -968,7 +933,7 @@
                 if (imported.length) {
                     data = imported;
                     render();
-                    scheduleSave();
+                    if (isOnline) scheduleSave();
                     showToast(`✅ Импортировано ${imported.length} записей`, 'success');
                 } else {
                     showToast('Не удалось импортировать данные', 'error');
@@ -991,7 +956,7 @@
         }
 
         // ================================================================
-        // 10. TOAST
+        // 9. TOAST
         // ================================================================
         let toastTimeout;
 
@@ -1006,22 +971,19 @@
         }
 
         // ================================================================
-        // 11. ФИЛЬТРЫ
+        // 10. ФИЛЬТРЫ
         // ================================================================
         document.getElementById('filterInput').addEventListener('input', render);
         document.getElementById('filterStatus').addEventListener('change', render);
 
         // ================================================================
-        // 12. ЗАПУСК
+        // 11. ЗАПУСК
         // ================================================================
-        dataRef.once('value').then(snapshot => {
-            if (!snapshot.val()) {
-                resetData();
-            }
-        });
+        loadFromCloud();
 
         console.log('⚡ CRM загружена!');
         console.log('📁 Поддерживаемый формат CSV: Клиент, КП, Сумма, Дата, Статус, Согласен, Комментарий, Телефон');
+        console.log('🔑 BIN_ID:', BIN_ID);
     </script>
 </body>
 </html>
