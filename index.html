@@ -3,84 +3,152 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Учёт клиентов — CRM</title>
+    <title>CRM — Учёт клиентов</title>
     <style>
+        /* ============================================================
+           БАЗОВЫЕ СТИЛИ
+           ============================================================ */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #f4f7fc;
-            padding: 20px;
-            color: #1e293b;
+            background: #0b0d10;
+            color: #e8edf2;
+            padding: 24px;
+            min-height: 100vh;
         }
+
         .container {
-            max-width: 1400px;
+            max-width: 1440px;
             margin: 0 auto;
         }
-        h1 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
+
+        /* ============================================================
+           ШАПКА
+           ============================================================ */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 16px 24px;
+            background: #14171c;
+            border-radius: 16px;
+            border: 1px solid #252b33;
+        }
+
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 14px;
         }
-        h1 span {
+
+        .header-left h1 {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #f0f4f8, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-left .icon {
+            font-size: 26px;
+        }
+
+        .badge-count {
             background: #2563eb;
             color: #fff;
-            font-size: 14px;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-weight: 400;
-        }
-        .status-badge {
             font-size: 13px;
-            font-weight: 400;
-            background: #e2e8f0;
+            font-weight: 500;
             padding: 2px 14px;
-            border-radius: 20px;
-            color: #1e293b;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            border-radius: 30px;
         }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #94a3b8;
+            background: #1e242c;
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid #2a323d;
+        }
+
         .status-badge .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            display: inline-block;
             background: #22c55e;
+            display: inline-block;
+            animation: pulse-dot 2s infinite;
         }
+
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* ============================================================
+           ПАНЕЛЬ ИНСТРУМЕНТОВ
+           ============================================================ */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
+            padding: 14px 20px;
+            background: #14171c;
+            border-radius: 14px;
+            border: 1px solid #252b33;
             align-items: center;
         }
+
         .toolbar input,
         .toolbar select {
             padding: 8px 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
+            border-radius: 10px;
+            border: 1px solid #2a323d;
+            background: #0f1217;
+            color: #e8edf2;
             font-size: 14px;
-            background: #fff;
             outline: none;
-            transition: 0.2s;
+            transition: 0.25s;
+            min-width: 160px;
         }
+
+        .toolbar input::placeholder {
+            color: #4b5563;
+        }
+
         .toolbar input:focus,
         .toolbar select:focus {
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         }
-        .toolbar .btn {
+
+        .toolbar select option {
+            background: #14171c;
+            color: #e8edf2;
+        }
+
+        .btn {
             padding: 8px 18px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 500;
             font-size: 14px;
             cursor: pointer;
@@ -88,247 +156,369 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
         }
+
         .btn-primary {
             background: #2563eb;
             color: #fff;
         }
         .btn-primary:hover {
             background: #1d4ed8;
+            transform: scale(1.02);
         }
+
         .btn-success {
             background: #16a34a;
             color: #fff;
         }
         .btn-success:hover {
             background: #15803d;
+            transform: scale(1.02);
         }
+
         .btn-danger {
             background: #dc2626;
             color: #fff;
         }
         .btn-danger:hover {
             background: #b91c1c;
+            transform: scale(1.02);
         }
+
         .btn-outline {
             background: transparent;
-            border: 1px solid #d1d5db;
-            color: #1e293b;
+            border: 1px solid #2a323d;
+            color: #cbd5e1;
         }
         .btn-outline:hover {
-            background: #f1f5f9;
+            background: #1e242c;
+            border-color: #4b5563;
         }
+
         .btn-warning {
-            background: #f59e0b;
+            background: #d97706;
             color: #fff;
         }
         .btn-warning:hover {
-            background: #d97706;
+            background: #b45309;
+            transform: scale(1.02);
         }
+
+        .saving-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #94a3b8;
+            background: #1a1f26;
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid #252b33;
+        }
+
+        .saving-indicator .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #2a323d;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ============================================================
+           ТАБЛИЦА
+           ============================================================ */
         .table-wrap {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04);
+            background: #14171c;
+            border-radius: 16px;
+            border: 1px solid #252b33;
             overflow: auto;
-            padding: 4px 0;
+            padding: 2px 0;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
             min-width: 900px;
         }
+
         th {
-            background: #f8fafc;
+            background: #0f1217;
+            color: #94a3b8;
             font-weight: 600;
-            padding: 12px 14px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 14px 16px;
             text-align: left;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 1px solid #252b33;
             position: sticky;
             top: 0;
             z-index: 2;
-            white-space: nowrap;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            color: #475569;
         }
+
         td {
-            padding: 10px 14px;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 10px 16px;
+            border-bottom: 1px solid #1e242c;
             vertical-align: middle;
         }
+
         tr:hover td {
-            background: #f8fafc;
+            background: #1a1f26;
         }
+
+        /* Цветные статусы */
         tr.status-согласовано {
-            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
         }
         tr.status-согласовано td:first-child {
             border-left: 4px solid #22c55e;
         }
+
         tr.status-отказ {
-            background: #fef2f2;
+            border-left: 4px solid #ef4444;
         }
         tr.status-отказ td:first-child {
             border-left: 4px solid #ef4444;
         }
+
         tr.status-вработе {
-            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
         }
         tr.status-вработе td:first-child {
             border-left: 4px solid #f59e0b;
         }
+
         tr.status-отправлено {
-            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
         }
         tr.status-отправлено td:first-child {
             border-left: 4px solid #3b82f6;
         }
+
+        /* Бейджи статусов */
         .badge {
             display: inline-block;
-            padding: 2px 12px;
-            border-radius: 20px;
+            padding: 2px 14px;
+            border-radius: 30px;
             font-size: 12px;
             font-weight: 500;
         }
         .badge-согласовано {
-            background: #dcfce7;
-            color: #166534;
+            background: #064e3b;
+            color: #6ee7b7;
         }
         .badge-отказ {
-            background: #fee2e2;
-            color: #991b1b;
+            background: #450a0a;
+            color: #fca5a5;
         }
         .badge-вработе {
-            background: #fef3c7;
-            color: #92400e;
+            background: #451a03;
+            color: #fcd34d;
         }
         .badge-отправлено {
-            background: #dbeafe;
-            color: #1e40af;
+            background: #0a2a4a;
+            color: #7dd3fc;
         }
         .badge-черновик {
-            background: #f1f5f9;
-            color: #475569;
+            background: #1e242c;
+            color: #94a3b8;
         }
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        select {
+
+        /* ============================================================
+           ПОЛЯ ВВОДА ВНУТРИ ТАБЛИЦЫ
+           ============================================================ */
+        .table-input {
             width: 100%;
-            padding: 6px 8px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #e8edf2;
             font-size: 13px;
-            background: #fff;
-            transition: 0.2s;
             font-family: inherit;
+            transition: 0.2s;
         }
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        input[type="date"]:focus,
-        select:focus {
+
+        .table-input:hover {
+            border-color: #2a323d;
+            background: #0f1217;
+        }
+
+        .table-input:focus {
             border-color: #2563eb;
+            background: #0f1217;
+            outline: none;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .table-select {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #e8edf2;
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .table-select:hover {
+            border-color: #2a323d;
+            background: #0f1217;
+        }
+
+        .table-select:focus {
+            border-color: #2563eb;
+            background: #0f1217;
             outline: none;
         }
+
+        .table-select option {
+            background: #14171c;
+            color: #e8edf2;
+        }
+
         input[type="checkbox"] {
             width: 18px;
             height: 18px;
             accent-color: #2563eb;
             cursor: pointer;
+            filter: brightness(0.9);
         }
+
         .td-checkbox {
             text-align: center;
         }
+
+        /* ============================================================
+           КНОПКИ ВНУТРИ ТАБЛИЦЫ
+           ============================================================ */
+        .btn-sm-del {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 8px;
+            background: #2a0a0a;
+            color: #f87171;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-sm-del:hover {
+            background: #3f0a0a;
+            color: #fca5a5;
+        }
+
         .actions {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
         }
-        .actions .btn-sm {
-            padding: 4px 10px;
-            font-size: 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-sm-del {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        .btn-sm-del:hover {
-            background: #fecaca;
-        }
+
+        /* ============================================================
+           ПОДВАЛ
+           ============================================================ */
         .footer-actions {
-            margin-top: 16px;
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 14px;
             align-items: center;
+            margin-top: 18px;
+            padding: 12px 20px;
+            background: #14171c;
+            border-radius: 14px;
+            border: 1px solid #252b33;
         }
+
         .counter {
             font-size: 14px;
-            color: #64748b;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
             color: #94a3b8;
         }
+
+        .counter strong {
+            color: #e8edf2;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           ПУСТОЕ СОСТОЯНИЕ / ЗАГРУЗКА
+           ============================================================ */
+        .empty-state,
         .loading {
             text-align: center;
-            padding: 40px;
-            color: #64748b;
+            padding: 60px 20px;
+            color: #4b5563;
         }
+
+        .empty-state p {
+            font-size: 16px;
+        }
+
+        .empty-state .hint {
+            font-size: 13px;
+            margin-top: 6px;
+            color: #374151;
+        }
+
+        /* ============================================================
+           TOAST (уведомления)
+           ============================================================ */
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1e293b;
-            color: #fff;
+            background: #1e242c;
+            color: #e8edf2;
             padding: 12px 28px;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 14px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid #2a323d;
             z-index: 999;
             opacity: 0;
             transition: opacity 0.4s;
             pointer-events: none;
+            backdrop-filter: blur(8px);
         }
+
         .toast.show {
             opacity: 1;
         }
-        .saving-indicator {
-            font-size: 12px;
-            color: #64748b;
-            background: #f1f5f9;
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .saving-indicator .spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid #e2e8f0;
-            border-top-color: #2563eb;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+
+        /* ============================================================
+           АДАПТИВНОСТЬ
+           ============================================================ */
         @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 14px;
+            }
+            .header-left h1 {
+                font-size: 18px;
+            }
             .toolbar {
                 flex-direction: column;
                 align-items: stretch;
+            }
+            .toolbar input,
+            .toolbar select {
+                min-width: auto;
             }
             .table-wrap {
                 font-size: 12px;
@@ -337,45 +527,56 @@
             td {
                 padding: 6px 8px;
             }
+            .btn {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container" id="app">
-        <h1>
-            📋 Учёт клиентов и коммерческих предложений
-            <span id="countBadge">0</span>
-            <span class="status-badge" id="connectionStatus">
+
+    <div class="container">
+
+        <!-- ===== ШАПКА ===== -->
+        <header class="header">
+            <div class="header-left">
+                <span class="icon">⚡</span>
+                <h1>CRM — Учёт клиентов</h1>
+                <span class="badge-count" id="countBadge">0</span>
+            </div>
+            <div class="status-badge">
                 <span class="dot" id="statusDot"></span>
                 <span id="statusText">Загрузка...</span>
-            </span>
-        </h1>
+            </div>
+        </header>
 
+        <!-- ===== ПАНЕЛЬ ИНСТРУМЕНТОВ ===== -->
         <div class="toolbar">
             <input type="text" id="filterInput" placeholder="🔍 Поиск по клиенту, КП..." />
             <select id="filterStatus">
                 <option value="">Все статусы</option>
-                <option value="Согласовано">Согласовано</option>
-                <option value="Отказ">Отказ</option>
-                <option value="В работе">В работе</option>
-                <option value="Отправлено">Отправлено</option>
-                <option value="Черновик">Черновик</option>
+                <option value="Согласовано">✅ Согласовано</option>
+                <option value="Отказ">❌ Отказ</option>
+                <option value="В работе">⚡ В работе</option>
+                <option value="Отправлено">📤 Отправлено</option>
+                <option value="Черновик">📝 Черновик</option>
             </select>
             <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
             <button class="btn btn-success" onclick="exportCSV()">📤 Экспорт CSV</button>
             <button class="btn btn-outline" onclick="importCSV()">📥 Импорт CSV</button>
-            <button class="btn btn-warning" onclick="resetData()">🔄 Сбросить к примеру</button>
-            <span class="saving-indicator" id="savingIndicator">
+            <button class="btn btn-warning" onclick="resetData()">🔄 Сбросить</button>
+            <span class="saving-indicator">
                 <span class="spinner" id="savingSpinner" style="display:none;"></span>
                 <span id="savingText">💾 Сохранено</span>
             </span>
         </div>
 
+        <!-- ===== ТАБЛИЦА ===== -->
         <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        <th style="width:28px;">#</th>
+                        <th style="width:32px;">#</th>
                         <th>Клиент</th>
                         <th style="min-width:140px;">Коммерческое предложение</th>
                         <th style="width:100px;">Сумма (₽)</th>
@@ -396,22 +597,29 @@
             </table>
         </div>
 
+        <!-- ===== ПОДВАЛ ===== -->
         <div class="footer-actions">
-            <span class="counter" id="rowCounter">Всего: 0</span>
-            <span class="counter" id="agreedCounter">Согласны: 0</span>
-            <button class="btn btn-outline" onclick="exportToClipboard()">📋 Копировать таблицу (TSV)</button>
+            <span class="counter">Всего: <strong id="rowCounter">0</strong></span>
+            <span class="counter">Согласны: <strong id="agreedCounter">0</strong></span>
+            <button class="btn btn-outline" onclick="exportToClipboard()">📋 Копировать TSV</button>
         </div>
+
     </div>
 
+    <!-- ===== TOAST ===== -->
     <div id="toast" class="toast"></div>
 
+    <!-- ===== СКРЫТЫЙ ФАЙЛОВЫЙ ВВОД ===== -->
     <input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleImport(event)" />
 
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
     <script>
         // ============================================================
-        // 1. НАСТРОЙКИ JSONBIN.IO (уже заполнены для теста)
+        // 1. НАСТРОЙКИ JSONBIN.IO
         // ============================================================
-        // Если хотите использовать свой бин — замените эти значения
+        // Для работы замените BIN_ID и API_KEY на свои
         const BIN_ID = '67c8e9c8acd3cb34a8f2d9e8';
         const API_KEY = '$2a$10$1YzFk5q5Z5k5Z5k5Z5k5Z5';
 
@@ -437,26 +645,19 @@
         ];
 
         // ============================================================
-        // 3. ЗАГРУЗКА ИЗ JSONBIN.IO
+        // 3. ЗАГРУЗКА
         // ============================================================
         async function loadFromJsonBin() {
             try {
                 showSaving(true, 'Загрузка...');
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: {
-                        'X-Master-Key': API_KEY
-                    }
+                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
                 });
-
-                if (!response.ok) {
-                    throw new Error(`Ошибка загрузки: ${response.status}`);
-                }
-
-                const result = await response.json();
-                const loadedData = result.record;
-
-                if (loadedData && Array.isArray(loadedData) && loadedData.length > 0) {
-                    data = loadedData;
+                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
+                const result = await resp.json();
+                const loaded = result.record;
+                if (loaded && Array.isArray(loaded) && loaded.length) {
+                    data = loaded;
                     nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
                     render();
                     updateConnectionStatus(true);
@@ -464,39 +665,27 @@
                     showToast('✅ Данные загружены из облака');
                     return;
                 }
-
-                // Если данных нет — создаём пример
                 resetData();
                 updateConnectionStatus(true);
                 showSaving(false, '✅ Загружено (пример)');
-
-            } catch (error) {
-                console.error('Ошибка загрузки:', error);
+            } catch (e) {
+                console.error(e);
                 updateConnectionStatus(false);
-                showSaving(false, '⚠️ Офлайн-режим');
-
-                if (data.length === 0) {
-                    resetData();
-                }
-                showToast('⚠️ Не удалось загрузить данные. Используется локальная копия.');
+                showSaving(false, '⚠️ Офлайн');
+                if (!data.length) resetData();
+                showToast('⚠️ Ошибка загрузки. Используется локальная копия.');
             }
         }
 
         // ============================================================
-        // 4. СОХРАНЕНИЕ В JSONBIN.IO
+        // 4. СОХРАНЕНИЕ
         // ============================================================
         async function saveToJsonBin() {
-            if (isSaving) return;
-            if (!data.length) {
-                showToast('⚠️ Нет данных для сохранения');
-                return;
-            }
-
+            if (isSaving || !data.length) return;
             isSaving = true;
             showSaving(true, 'Сохранение...');
-
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -504,49 +693,34 @@
                     },
                     body: JSON.stringify(data)
                 });
-
-                if (!response.ok) {
-                    throw new Error(`Ошибка сохранения: ${response.status}`);
-                }
-
+                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
                 isSaving = false;
                 showSaving(false, '💾 Сохранено');
-                showToast('💾 Данные сохранены в облаке');
-
-            } catch (error) {
-                console.error('Ошибка сохранения:', error);
+                showToast('💾 Данные сохранены');
+            } catch (e) {
+                console.error(e);
                 isSaving = false;
-                showSaving(false, '❌ Ошибка сохранения');
-                showToast('❌ Ошибка сохранения. Проверьте интернет.');
+                showSaving(false, '❌ Ошибка');
+                showToast('❌ Ошибка сохранения');
             }
         }
 
         function scheduleSave() {
             clearTimeout(saveTimeout);
             showSaving(true, 'Сохранение...');
-            saveTimeout = setTimeout(() => {
-                saveToJsonBin();
-            }, 700);
+            saveTimeout = setTimeout(saveToJsonBin, 600);
         }
 
         // ============================================================
         // 5. ИНДИКАТОР СОХРАНЕНИЯ
         // ============================================================
         function showSaving(active, text) {
-            const spinner = document.getElementById('savingSpinner');
-            const textEl = document.getElementById('savingText');
-            if (active) {
-                spinner.style.display = 'inline-block';
-            } else {
-                spinner.style.display = 'none';
-            }
-            if (text) {
-                textEl.textContent = text;
-            }
+            document.getElementById('savingSpinner').style.display = active ? 'inline-block' : 'none';
+            if (text) document.getElementById('savingText').textContent = text;
         }
 
         // ============================================================
-        // 6. ОТОБРАЖЕНИЕ ТАБЛИЦЫ
+        // 6. РЕНДЕР
         // ============================================================
         function render() {
             const tbody = document.getElementById('tableBody');
@@ -561,13 +735,13 @@
                 return matchText && matchStatus;
             });
 
-            if (filtered.length === 0) {
+            if (!filtered.length) {
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="9">
                             <div class="empty-state">
                                 <p>📭 Нет записей по вашему фильтру</p>
-                                <p style="font-size:13px;margin-top:6px;">Нажмите «➕ Добавить», чтобы создать новую запись</p>
+                                <p class="hint">Нажмите «➕ Добавить», чтобы создать новую запись</p>
                             </div>
                         </td>
                     </tr>
@@ -578,19 +752,19 @@
             }
 
             let html = '';
+            const statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
             filtered.forEach((row, idx) => {
                 const statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
                 const agreedChecked = row.agreed ? 'checked' : '';
-                const statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
                 html += `
                     <tr class="status-${statusClass}">
                         <td>${idx + 1}</td>
-                        <td><input type="text" value="${escapeHtml(row.client || '')}" onchange="updateField(${row.id}, 'client', this.value)" /></td>
-                        <td><input type="text" value="${escapeHtml(row.proposal || '')}" onchange="updateField(${row.id}, 'proposal', this.value)" /></td>
-                        <td><input type="number" value="${row.amount || 0}" onchange="updateField(${row.id}, 'amount', Number(this.value))" /></td>
-                        <td><input type="date" value="${row.date || ''}" onchange="updateField(${row.id}, 'date', this.value)" /></td>
+                        <td><input class="table-input" type="text" value="${escapeHtml(row.client || '')}" onchange="updateField(${row.id}, 'client', this.value)" /></td>
+                        <td><input class="table-input" type="text" value="${escapeHtml(row.proposal || '')}" onchange="updateField(${row.id}, 'proposal', this.value)" /></td>
+                        <td><input class="table-input" type="number" value="${row.amount || 0}" onchange="updateField(${row.id}, 'amount', Number(this.value))" /></td>
+                        <td><input class="table-input" type="date" value="${row.date || ''}" onchange="updateField(${row.id}, 'date', this.value)" /></td>
                         <td>
-                            <select onchange="updateField(${row.id}, 'status', this.value)">
+                            <select class="table-select" onchange="updateField(${row.id}, 'status', this.value)">
                                 ${statusOptions.map(s =>
                                     `<option value="${s}" ${s === row.status ? 'selected' : ''}>${s}</option>`
                                 ).join('')}
@@ -599,11 +773,9 @@
                         <td class="td-checkbox">
                             <input type="checkbox" ${agreedChecked} onchange="updateField(${row.id}, 'agreed', this.checked)" />
                         </td>
-                        <td><input type="text" value="${escapeHtml(row.comment || '')}" onchange="updateField(${row.id}, 'comment', this.value)" /></td>
+                        <td><input class="table-input" type="text" value="${escapeHtml(row.comment || '')}" onchange="updateField(${row.id}, 'comment', this.value)" /></td>
                         <td>
-                            <div class="actions">
-                                <button class="btn-sm btn-sm-del" onclick="deleteRow(${row.id})">🗑</button>
-                            </div>
+                            <button class="btn-sm-del" onclick="deleteRow(${row.id})">🗑</button>
                         </td>
                     </tr>
                 `;
@@ -615,10 +787,8 @@
         }
 
         function updateCounters() {
-            const total = data.length;
-            const agreed = data.filter(r => r.agreed).length;
-            document.getElementById('rowCounter').textContent = `Всего: ${total}`;
-            document.getElementById('agreedCounter').textContent = `Согласны: ${agreed}`;
+            document.getElementById('rowCounter').textContent = data.length;
+            document.getElementById('agreedCounter').textContent = data.filter(r => r.agreed).length;
         }
 
         function escapeHtml(text) {
@@ -627,7 +797,7 @@
         }
 
         // ============================================================
-        // 7. ДЕЙСТВИЯ (автосохранение)
+        // 7. ДЕЙСТВИЯ
         // ============================================================
         function updateField(id, field, value) {
             const row = data.find(r => r.id === id);
@@ -660,12 +830,12 @@
             render();
             scheduleSave();
             const tbody = document.getElementById('tableBody');
-            const lastRow = tbody.lastElementChild;
-            if (lastRow) lastRow.scrollIntoView({ behavior: 'smooth' });
+            const last = tbody.lastElementChild;
+            if (last) last.scrollIntoView({ behavior: 'smooth' });
         }
 
         function resetData() {
-            if (data.length > 0 && !confirm('Сбросить все данные к примеру? Текущие изменения будут потеряны.')) return;
+            if (data.length && !confirm('Сбросить все данные к примеру?')) return;
             data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
             nextId = data.length + 1;
             render();
@@ -673,10 +843,10 @@
         }
 
         // ============================================================
-        // 8. ЭКСПОРТ / ИМПОРТ CSV
+        // 8. CSV
         // ============================================================
         function exportCSV() {
-            if (!data.length) return alert('Нет данных для экспорта');
+            if (!data.length) return alert('Нет данных');
             const headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен', 'Комментарий'];
             const rows = data.map(r => [
                 `"${r.client || ''}"`,
@@ -694,21 +864,21 @@
             link.download = `клиенты_кп_${new Date().toISOString().slice(0, 10)}.csv`;
             link.click();
             URL.revokeObjectURL(link.href);
-            showToast('📤 CSV-файл скачан');
+            showToast('📤 CSV скачан');
         }
 
         function importCSV() {
             document.getElementById('fileInput').click();
         }
 
-        function handleImport(event) {
-            const file = event.target.files[0];
+        function handleImport(e) {
+            const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const text = e.target.result;
-                const lines = text.split('\n').filter(line => line.trim());
-                if (lines.length < 2) return alert('Файл пуст или неверный формат');
+            reader.onload = function(ev) {
+                const text = ev.target.result;
+                const lines = text.split('\n').filter(l => l.trim());
+                if (lines.length < 2) return alert('Файл пуст');
                 const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
                 const idx = {
                     client: headers.findIndex(h => h.includes('Клиент')),
@@ -740,11 +910,11 @@
                     data = imported;
                     render();
                     scheduleSave();
-                    showToast(`✅ Импортировано ${imported.length} записей из CSV`);
+                    showToast(`✅ Импортировано ${imported.length} записей`);
                 }
             };
             reader.readAsText(file, 'UTF-8');
-            event.target.value = '';
+            e.target.value = '';
         }
 
         function exportToClipboard() {
@@ -755,14 +925,12 @@
                     `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\n`;
             });
             navigator.clipboard.writeText(tsv).then(() => {
-                showToast('📋 Таблица скопирована в буфер обмена (TSV)');
-            }).catch(() => {
-                alert('Не удалось скопировать');
-            });
+                showToast('📋 Таблица скопирована (TSV)');
+            }).catch(() => alert('Не удалось скопировать'));
         }
 
         // ============================================================
-        // 9. СТАТУС ПОДКЛЮЧЕНИЯ
+        // 9. СТАТУС
         // ============================================================
         function updateConnectionStatus(online) {
             const dot = document.getElementById('statusDot');
@@ -772,7 +940,7 @@
                 text.textContent = 'Онлайн (jsonbin.io)';
             } else {
                 dot.style.background = '#ef4444';
-                text.textContent = 'Офлайн (изменения не сохранятся)';
+                text.textContent = 'Офлайн';
             }
         }
 
@@ -786,9 +954,7 @@
             el.textContent = msg;
             el.classList.add('show');
             clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                el.classList.remove('show');
-            }, 3000);
+            toastTimeout = setTimeout(() => el.classList.remove('show'), 3000);
         }
 
         // ============================================================
