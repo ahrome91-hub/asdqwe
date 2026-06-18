@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CRM — Клиентская база</title>
+    <title>CRM — Клиентская база (офлайн-редактор)</title>
     <style>
         /* ============================================================
-           БАЗОВЫЕ СТИЛИ + АНИМАЦИИ (сохранены)
+           БАЗОВЫЕ СТИЛИ + АНИМАЦИИ
            ============================================================ */
         * {
             margin: 0;
@@ -262,6 +262,15 @@
             box-shadow: 0 0 30px rgba(217, 119, 6, 0.25);
         }
 
+        .btn-info {
+            background: linear-gradient(135deg, #0891b2, #0e7490);
+            color: #fff;
+        }
+
+        .btn-info:hover {
+            box-shadow: 0 0 30px rgba(8, 145, 178, 0.25);
+        }
+
         .saving-indicator {
             display: flex;
             align-items: center;
@@ -313,6 +322,28 @@
             position: sticky;
             top: 0;
             z-index: 2;
+        }
+
+        th .col-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        th .col-actions button {
+            background: #1a1f26;
+            border: 1px solid #2a323d;
+            color: #94a3b8;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        th .col-actions button:hover {
+            background: #2a323d;
+            color: #e8edf2;
         }
 
         td {
@@ -494,6 +525,73 @@
             border-color: #ef4444;
         }
 
+        /* Модальное окно для добавления столбца */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1f26;
+            border: 1px solid #2a323d;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 16px;
+            color: #e8edf2;
+        }
+
+        .modal-content label {
+            display: block;
+            margin: 8px 0 4px;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #2a323d;
+            background: #0f1217;
+            color: #e8edf2;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .modal-content input:focus, .modal-content select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            justify-content: flex-end;
+        }
+
+        .modal-actions .btn {
+            padding: 8px 16px;
+        }
+
         @media (max-width: 640px) {
             body { padding: 10px; }
             .header { flex-direction: column; align-items: stretch; padding: 12px; }
@@ -523,8 +621,8 @@
             <span class="badge-count" id="countBadge">0</span>
         </div>
         <div class="status-badge">
-            <span class="dot loading" id="statusDot"></span>
-            <span id="statusText">Подключение...</span>
+            <span class="dot offline" id="statusDot"></span>
+            <span id="statusText">Офлайн ✏️</span>
         </div>
     </header>
 
@@ -540,36 +638,28 @@
             <option value="Черновик">📝 Черновик</option>
         </select>
         <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
+        <button class="btn btn-info" onclick="showAddColumnModal()">📊 Добавить столбец</button>
         <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
         <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
         <button class="btn btn-danger" onclick="resetData()">🔄 Сброс</button>
+        <button class="btn btn-warning" onclick="saveToLocalStorage()">💾 Сохранить</button>
         <span class="saving-indicator">
             <span class="spinner" id="savingSpinner"></span>
-            <span id="savingText">💾 Сохранено</span>
+            <span id="savingText">📁 Локально</span>
         </span>
     </div>
 
     <!-- ТАБЛИЦА -->
     <div class="table-wrap">
         <table>
-            <thead>
-                <tr>
-                    <th style="width:30px;">#</th>
-                    <th>Клиент</th>
-                    <th>КП (название)</th>
-                    <th style="width:80px;">Сумма</th>
-                    <th style="width:100px;">Дата КП</th>
-                    <th style="width:110px;">Статус</th>
-                    <th style="width:70px;">Согласен</th>
-                    <th>Комментарий</th>
-                    <th>Телефон</th>
-                    <th>Email</th>
-                    <th style="width:70px;">Действия</th>
+            <thead id="tableHead">
+                <tr id="headerRow">
+                    <!-- Заголовки будут генерироваться динамически -->
                 </tr>
             </thead>
             <tbody id="tableBody">
                 <tr>
-                    <td colspan="11">
+                    <td colspan="10">
                         <div class="loading">⏳ Загрузка данных...</div>
                     </td>
                 </tr>
@@ -582,6 +672,33 @@
         <span class="counter">Всего: <strong id="rowCounter">0</strong></span>
         <span class="counter">Согласны: <strong id="agreedCounter">0</strong></span>
         <button class="btn btn-outline" onclick="exportToClipboard()">📋 Копировать</button>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления столбца -->
+<div class="modal" id="addColumnModal">
+    <div class="modal-content">
+        <h3>➕ Добавить столбец</h3>
+        <label>Название столбца (ключ):</label>
+        <input type="text" id="newColumnKey" placeholder="например: city" />
+        <label>Отображаемое имя:</label>
+        <input type="text" id="newColumnLabel" placeholder="например: Город" />
+        <label>Тип данных:</label>
+        <select id="newColumnType">
+            <option value="text">Текст</option>
+            <option value="number">Число</option>
+            <option value="date">Дата</option>
+            <option value="select">Выпадающий список</option>
+            <option value="checkbox">Чекбокс</option>
+        </select>
+        <div id="selectOptionsContainer" style="display:none; margin-top:8px;">
+            <label>Варианты (через запятую):</label>
+            <input type="text" id="newColumnOptions" placeholder="например: Да,Нет,Возможно" />
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal()">Отмена</button>
+            <button class="btn btn-primary" onclick="addColumn()">Добавить</button>
+        </div>
     </div>
 </div>
 
@@ -604,7 +721,19 @@
     var saveTimeout = null;
     var isOnline = false;
 
-    // НОВЫЙ НАБОР ПОЛЕЙ: добавили email, убрали лишнее
+    // Определение колонок (можно динамически менять)
+    var columns = [
+        { key: 'client', label: 'Клиент', type: 'text' },
+        { key: 'proposal', label: 'КП (название)', type: 'text' },
+        { key: 'amount', label: 'Сумма', type: 'number' },
+        { key: 'date', label: 'Дата КП', type: 'date' },
+        { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
+        { key: 'agreed', label: 'Согласен', type: 'checkbox' },
+        { key: 'comment', label: 'Комментарий', type: 'text' },
+        { key: 'phone', label: 'Телефон', type: 'text' },
+        { key: 'email', label: 'Email', type: 'text' }
+    ];
+
     var DEFAULT_DATA = [
         { client: 'ИП Иванов', proposal: 'Ремонт оборудования', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Доп. согласование', phone: '+7 912 345-67-89', email: 'ivanov@mail.ru' },
         { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', phone: '+7 912 345-67-90', email: 'logist@pro.ru' },
@@ -625,8 +754,8 @@
 
             if (!resp.ok) {
                 var errorText = await resp.text();
-                console.error('Ошибка загрузки:', resp.status, errorText);
-                throw new Error('Ошибка ' + resp.status + ': ' + errorText);
+                console.warn('Ошибка загрузки:', resp.status, errorText);
+                throw new Error('Ошибка ' + resp.status);
             }
 
             var result = await resp.json();
@@ -639,17 +768,60 @@
                 setStatus('online', 'Онлайн ✅');
                 render();
                 showToast('✅ Данные загружены из облака', 'success');
+                saveToLocalStorage();
                 return;
             }
-            resetData();
-            isOnline = true;
-            setStatus('online', 'Онлайн ✅');
+            loadFromLocalStorage();
         } catch (e) {
             console.warn('Облако недоступно:', e);
             isOnline = false;
-            setStatus('offline', 'Офлайн ❌');
-            if (data.length === 0) resetData();
-            showToast('⚠️ Офлайн-режим. Данные не синхронизируются.', 'error');
+            setStatus('offline', 'Офлайн ✏️');
+            loadFromLocalStorage();
+            showToast('⚠️ Офлайн-режим. Редактирование локально.', 'error');
+        }
+    }
+
+    // ================================================================
+    // ЛОКАЛЬНОЕ ХРАНИЛИЩЕ
+    // ================================================================
+    function saveToLocalStorage() {
+        try {
+            localStorage.setItem('crm_data', JSON.stringify(data));
+            localStorage.setItem('crm_nextId', String(nextId));
+            localStorage.setItem('crm_columns', JSON.stringify(columns));
+            document.getElementById('savingText').textContent = '💾 Сохранено';
+            showToast('💾 Данные сохранены локально', 'success');
+        } catch (e) {
+            console.error('Ошибка сохранения в localStorage:', e);
+            showToast('❌ Не удалось сохранить локально', 'error');
+        }
+    }
+
+    function loadFromLocalStorage() {
+        try {
+            var stored = localStorage.getItem('crm_data');
+            var storedId = localStorage.getItem('crm_nextId');
+            var storedCols = localStorage.getItem('crm_columns');
+            
+            if (storedCols) {
+                var parsedCols = JSON.parse(storedCols);
+                if (Array.isArray(parsedCols) && parsedCols.length > 0) {
+                    columns = parsedCols;
+                }
+            }
+
+            if (stored) {
+                data = JSON.parse(stored);
+                if (storedId) nextId = parseInt(storedId, 10);
+                else nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
+                render();
+                showToast('📁 Загружено из локального хранилища', 'success');
+                return;
+            }
+            resetData();
+        } catch (e) {
+            console.error('Ошибка загрузки из localStorage:', e);
+            resetData();
         }
     }
 
@@ -657,7 +829,11 @@
     // СОХРАНЕНИЕ В JSONBIN.IO
     // ================================================================
     async function saveToCloud() {
-        if (isSaving || !data.length || !isOnline) return;
+        if (isSaving || !data.length) return;
+        if (!isOnline) {
+            saveToLocalStorage();
+            return;
+        }
         isSaving = true;
         showSaving(true, 'Сохранение...');
 
@@ -674,32 +850,37 @@
             if (!resp.ok) {
                 var errorText = await resp.text();
                 console.error('Ошибка сохранения:', resp.status, errorText);
-                throw new Error('Ошибка ' + resp.status + ': ' + errorText);
+                throw new Error('Ошибка ' + resp.status);
             }
 
             isSaving = false;
             isOnline = true;
             setStatus('online', 'Онлайн ✅');
             showSaving(false, '💾 Сохранено');
-            showToast('💾 Данные сохранены в облаке', 'success');
+            saveToLocalStorage();
+            showToast('💾 Данные сохранены в облаке и локально', 'success');
         } catch (e) {
             console.error('Ошибка сохранения:', e);
             isSaving = false;
             isOnline = false;
-            setStatus('offline', 'Офлайн ❌');
-            showSaving(false, '❌ Ошибка');
-            showToast('❌ Ошибка сохранения: ' + e.message, 'error');
+            setStatus('offline', 'Офлайн ✏️');
+            showSaving(false, '📁 Локально');
+            saveToLocalStorage();
+            showToast('⚠️ Ошибка соединения. Данные сохранены локально.', 'error');
         }
     }
 
     function scheduleSave() {
-        if (!isOnline) {
-            showToast('⚠️ Нет соединения с облаком. Данные не сохранены.', 'error');
-            return;
-        }
         clearTimeout(saveTimeout);
         showSaving(true, 'Сохранение...');
-        saveTimeout = setTimeout(saveToCloud, 600);
+        saveTimeout = setTimeout(function() {
+            if (isOnline) {
+                saveToCloud();
+            } else {
+                saveToLocalStorage();
+                showSaving(false, '📁 Локально');
+            }
+        }, 600);
     }
 
     // ================================================================
@@ -721,54 +902,91 @@
     }
 
     // ================================================================
-    // РЕНДЕР (обновлён под новые поля)
+    // РЕНДЕР (динамический, на основе columns)
     // ================================================================
     function render() {
+        var thead = document.getElementById('headerRow');
         var tbody = document.getElementById('tableBody');
         var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
         var filterStatus = document.getElementById('filterStatus').value;
 
+        // Генерация заголовков
+        var headerHtml = '<th style="width:30px;">#</th>';
+        columns.forEach(function(col) {
+            headerHtml += '<th>' + col.label;
+            headerHtml += '<div class="col-actions">';
+            headerHtml += '<button onclick="removeColumn(\'' + col.key + '\')" title="Удалить столбец">✕</button>';
+            headerHtml += '</div></th>';
+        });
+        headerHtml += '<th style="width:70px;">Действия</th>';
+        thead.innerHTML = headerHtml;
+
+        // Фильтрация
         var filtered = data.filter(function(row) {
-            var matchText = (row.client || '').toLowerCase().indexOf(filterText) !== -1 ||
-                (row.proposal || '').toLowerCase().indexOf(filterText) !== -1 ||
-                (row.comment || '').toLowerCase().indexOf(filterText) !== -1 ||
-                (row.phone || '').toLowerCase().indexOf(filterText) !== -1 ||
-                (row.email || '').toLowerCase().indexOf(filterText) !== -1;
+            var matchText = false;
+            columns.forEach(function(col) {
+                var val = row[col.key] || '';
+                if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
+            });
             return filterStatus === '' || row.status === filterStatus;
         });
 
         if (!filtered.length) {
-            tbody.innerHTML = '<tr><td colspan="11"><div class="empty-state"><span class="emoji">📭</span><p>Нет записей</p><p style="font-size:12px;color:#374151;margin-top:4px;">Нажмите «➕ Добавить» или импортируйте CSV</p></div></td></tr>';
+            tbody.innerHTML = '<tr><td colspan="' + (columns.length + 2) + '"><div class="empty-state"><span class="emoji">📭</span><p>Нет записей</p><p style="font-size:12px;color:#374151;margin-top:4px;">Нажмите «➕ Добавить» или импортируйте CSV</p></div></td></tr>';
             document.getElementById('countBadge').textContent = data.length;
             updateCounters();
             return;
         }
 
         var html = '';
-        var statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
         filtered.forEach(function(row, idx) {
             var statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
-            var agreedChecked = row.agreed ? 'checked' : '';
-            html += '<tr class="status-' + statusClass + '">' +
-                '<td>' + (idx + 1) + '</td>' +
-                '<td><input class="table-input" type="text" value="' + escapeHtml(row.client || '') + '" onchange="updateField(' + row.id + ', \'client\', this.value)" /></td>' +
-                '<td><input class="table-input" type="text" value="' + escapeHtml(row.proposal || '') + '" onchange="updateField(' + row.id + ', \'proposal\', this.value)" /></td>' +
-                '<td><input class="table-input" type="number" value="' + (row.amount || 0) + '" onchange="updateField(' + row.id + ', \'amount\', Number(this.value))" /></td>' +
-                '<td><input class="table-input" type="date" value="' + (row.date || '') + '" onchange="updateField(' + row.id + ', \'date\', this.value)" /></td>' +
-                '<td><select class="table-select" onchange="updateField(' + row.id + ', \'status\', this.value)">' +
-                statusOptions.map(function(s) { return '<option value="' + s + '" ' + (s === row.status ? 'selected' : '') + '>' + s + '</option>'; }).join('') +
-                '</select></td>' +
-                '<td class="td-checkbox"><input type="checkbox" ' + agreedChecked + ' onchange="updateField(' + row.id + ', \'agreed\', this.checked)" /></td>' +
-                '<td><input class="table-input" type="text" value="' + escapeHtml(row.comment || '') + '" onchange="updateField(' + row.id + ', \'comment\', this.value)" /></td>' +
-                '<td><input class="table-input" type="text" value="' + escapeHtml(row.phone || '') + '" onchange="updateField(' + row.id + ', \'phone\', this.value)" /></td>' +
-                '<td><input class="table-input" type="email" value="' + escapeHtml(row.email || '') + '" onchange="updateField(' + row.id + ', \'email\', this.value)" /></td>' +
-                '<td><button class="btn-sm-del" onclick="deleteRow(' + row.id + ')">🗑</button></td>' +
-                '</tr>';
+            html += '<tr class="status-' + statusClass + '">';
+            html += '<td>' + (idx + 1) + '</td>';
+            
+            columns.forEach(function(col) {
+                html += '<td>';
+                html += renderCell(row, col);
+                html += '</td>';
+            });
+            
+            html += '<td><button class="btn-sm-del" onclick="deleteRow(' + row.id + ')">🗑</button></td>';
+            html += '</tr>';
         });
 
         tbody.innerHTML = html;
         document.getElementById('countBadge').textContent = data.length;
         updateCounters();
+    }
+
+    function renderCell(row, col) {
+        var value = row[col.key] !== undefined ? row[col.key] : '';
+        var id = row.id;
+        var key = col.key;
+
+        switch(col.type) {
+            case 'checkbox':
+                var checked = value ? 'checked' : '';
+                return '<input type="checkbox" ' + checked + ' onchange="updateField(' + id + ', \'' + key + '\', this.checked)" />';
+            
+            case 'select':
+                var options = col.options || ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
+                var html = '<select class="table-select" onchange="updateField(' + id + ', \'' + key + '\', this.value)">';
+                options.forEach(function(opt) {
+                    html += '<option value="' + opt + '" ' + (opt === value ? 'selected' : '') + '>' + opt + '</option>';
+                });
+                html += '</select>';
+                return html;
+            
+            case 'number':
+                return '<input class="table-input" type="number" value="' + (value || 0) + '" onchange="updateField(' + id + ', \'' + key + '\', Number(this.value))" />';
+            
+            case 'date':
+                return '<input class="table-input" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+            
+            default: // text
+                return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+        }
     }
 
     function updateCounters() {
@@ -782,6 +1000,85 @@
     }
 
     // ================================================================
+    // УПРАВЛЕНИЕ СТОЛБЦАМИ
+    // ================================================================
+    function showAddColumnModal() {
+        document.getElementById('addColumnModal').classList.add('active');
+        document.getElementById('newColumnKey').value = '';
+        document.getElementById('newColumnLabel').value = '';
+        document.getElementById('newColumnType').value = 'text';
+        document.getElementById('selectOptionsContainer').style.display = 'none';
+    }
+
+    function closeModal() {
+        document.getElementById('addColumnModal').classList.remove('active');
+    }
+
+    // Показывать поле для опций при выборе 'select'
+    document.getElementById('newColumnType').addEventListener('change', function() {
+        document.getElementById('selectOptionsContainer').style.display = this.value === 'select' ? 'block' : 'none';
+    });
+
+    function addColumn() {
+        var key = document.getElementById('newColumnKey').value.trim();
+        var label = document.getElementById('newColumnLabel').value.trim() || key;
+        var type = document.getElementById('newColumnType').value;
+        var optionsStr = document.getElementById('newColumnOptions').value.trim();
+
+        if (!key) {
+            showToast('Введите название столбца', 'error');
+            return;
+        }
+
+        // Проверка на уникальность
+        if (columns.some(function(c) { return c.key === key; })) {
+            showToast('Столбец с таким ключом уже существует', 'error');
+            return;
+        }
+
+        var newCol = { key: key, label: label, type: type };
+        if (type === 'select' && optionsStr) {
+            newCol.options = optionsStr.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
+        }
+
+        columns.push(newCol);
+        
+        // Добавляем поле в каждую существующую запись
+        data.forEach(function(row) {
+            if (type === 'checkbox') row[key] = false;
+            else if (type === 'number') row[key] = 0;
+            else if (type === 'select' && newCol.options && newCol.options.length) row[key] = newCol.options[0];
+            else row[key] = '';
+        });
+
+        saveToLocalStorage();
+        render();
+        closeModal();
+        showToast('✅ Столбец "' + label + '" добавлен', 'success');
+        scheduleSave();
+    }
+
+    function removeColumn(key) {
+        // Нельзя удалять базовые столбцы (можно удалить только добавленные)
+        var baseKeys = ['client', 'proposal', 'amount', 'date', 'status', 'agreed', 'comment', 'phone', 'email'];
+        if (baseKeys.indexOf(key) !== -1) {
+            if (!confirm('Удалить базовый столбец "' + key + '"? Это может нарушить работу.')) return;
+        }
+
+        if (!confirm('Удалить столбец "' + key + '"? Все данные в нём будут потеряны.')) return;
+
+        columns = columns.filter(function(c) { return c.key !== key; });
+        data.forEach(function(row) {
+            delete row[key];
+        });
+
+        saveToLocalStorage();
+        render();
+        showToast('🗑️ Столбец удалён', 'success');
+        scheduleSave();
+    }
+
+    // ================================================================
     // ДЕЙСТВИЯ
     // ================================================================
     function updateField(id, field, value) {
@@ -789,7 +1086,7 @@
         if (row) {
             row[field] = value;
             render();
-            if (isOnline) scheduleSave();
+            scheduleSave();
         }
     }
 
@@ -797,25 +1094,26 @@
         if (!confirm('Удалить эту запись?')) return;
         data = data.filter(function(r) { return r.id !== id; });
         render();
-        if (isOnline) scheduleSave();
+        scheduleSave();
     }
 
     function addRow() {
-        var newRow = {
-            id: nextId++,
-            client: 'Новый клиент',
-            proposal: 'Новое КП',
-            amount: 0,
-            date: new Date().toISOString().slice(0, 10),
-            status: 'Черновик',
-            agreed: false,
-            comment: '',
-            phone: '',
-            email: ''
-        };
+        var newRow = { id: nextId++ };
+        columns.forEach(function(col) {
+            if (col.type === 'checkbox') newRow[col.key] = false;
+            else if (col.type === 'number') newRow[col.key] = 0;
+            else if (col.type === 'select' && col.options && col.options.length) newRow[col.key] = col.options[0];
+            else if (col.key === 'date') newRow[col.key] = new Date().toISOString().slice(0, 10);
+            else newRow[col.key] = '';
+        });
+        // Заполним базовые поля для удобства
+        if (!newRow.client) newRow.client = 'Новый клиент';
+        if (!newRow.proposal) newRow.proposal = 'Новое КП';
+        if (!newRow.status) newRow.status = 'Черновик';
+        
         data.push(newRow);
         render();
-        if (isOnline) scheduleSave();
+        scheduleSave();
         var tbody = document.getElementById('tableBody');
         var last = tbody.lastElementChild;
         if (last) last.scrollIntoView({ behavior: 'smooth' });
@@ -823,6 +1121,18 @@
 
     function resetData() {
         if (data.length && !confirm('Сбросить всё к примеру?')) return;
+        // Восстанавливаем стандартные колонки
+        columns = [
+            { key: 'client', label: 'Клиент', type: 'text' },
+            { key: 'proposal', label: 'КП (название)', type: 'text' },
+            { key: 'amount', label: 'Сумма', type: 'number' },
+            { key: 'date', label: 'Дата КП', type: 'date' },
+            { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
+            { key: 'agreed', label: 'Согласен', type: 'checkbox' },
+            { key: 'comment', label: 'Комментарий', type: 'text' },
+            { key: 'phone', label: 'Телефон', type: 'text' },
+            { key: 'email', label: 'Email', type: 'text' }
+        ];
         data = DEFAULT_DATA.map(function(r, i) {
             var copy = {};
             for (var key in r) copy[key] = r[key];
@@ -830,19 +1140,24 @@
             return copy;
         });
         nextId = data.length + 1;
+        saveToLocalStorage();
         render();
-        if (isOnline) scheduleSave();
+        scheduleSave();
         showToast('🔄 Данные сброшены к примеру', 'success');
     }
 
     // ================================================================
-    // CSV (экспорт с новыми полями)
+    // CSV (экспорт с динамическими колонками)
     // ================================================================
     function exportCSV() {
         if (!data.length) return showToast('Нет данных для экспорта', 'error');
-        var headers = ['Клиент', 'КП', 'Сумма', 'Дата_КП', 'Статус', 'Согласен', 'Комментарий', 'Телефон', 'Email'];
+        var headers = columns.map(function(c) { return c.label; });
         var rows = data.map(function(r) {
-            return ['"' + (r.client || '') + '"', '"' + (r.proposal || '') + '"', r.amount || 0, r.date || '', r.status || 'Черновик', r.agreed ? 'Да' : 'Нет', '"' + (r.comment || '') + '"', '"' + (r.phone || '') + '"', '"' + (r.email || '') + '"'];
+            return columns.map(function(c) {
+                var val = r[c.key] !== undefined ? r[c.key] : '';
+                if (c.type === 'checkbox') val = val ? 'Да' : 'Нет';
+                return '"' + String(val).replace(/"/g, '""') + '"';
+            });
         });
         var csv = [headers.join(',')];
         rows.forEach(function(row) { csv.push(row.join(',')); });
@@ -872,45 +1187,55 @@
             var headerLine = lines[0];
             var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
 
-            var idx = {
-                client: headers.indexOf('Клиент') !== -1 ? headers.indexOf('Клиент') : headers.indexOf('client'),
-                proposal: headers.indexOf('КП') !== -1 ? headers.indexOf('КП') : headers.indexOf('proposal'),
-                amount: headers.indexOf('Сумма') !== -1 ? headers.indexOf('Сумма') : headers.indexOf('amount'),
-                date: headers.indexOf('Дата_КП') !== -1 ? headers.indexOf('Дата_КП') : headers.indexOf('date'),
-                status: headers.indexOf('Статус') !== -1 ? headers.indexOf('Статус') : headers.indexOf('status'),
-                agreed: headers.indexOf('Согласен') !== -1 ? headers.indexOf('Согласен') : headers.indexOf('agreed'),
-                comment: headers.indexOf('Комментарий') !== -1 ? headers.indexOf('Комментарий') : headers.indexOf('comment'),
-                phone: headers.indexOf('Телефон') !== -1 ? headers.indexOf('Телефон') : headers.indexOf('phone'),
-                email: headers.indexOf('Email') !== -1 ? headers.indexOf('Email') : headers.indexOf('email')
-            };
-
-            if (idx.client === -1 && idx.proposal === -1) {
-                showToast('Не найден столбец "Клиент" или "КП"', 'error');
-                return;
-            }
+            // Создаём маппинг по заголовкам
+            var colMap = {};
+            headers.forEach(function(h, index) {
+                // Ищем совпадение по label или key
+                columns.forEach(function(col) {
+                    if (col.label === h || col.key === h) {
+                        colMap[index] = col.key;
+                    }
+                });
+            });
 
             var imported = [];
             for (var i = 1; i < lines.length; i++) {
                 var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, ''); });
-                var row = {
-                    id: nextId++,
-                    client: (idx.client !== -1 && cols[idx.client]) ? cols[idx.client] : 'Неизвестный',
-                    proposal: (idx.proposal !== -1 && cols[idx.proposal]) ? cols[idx.proposal] : 'Новое КП',
-                    amount: (idx.amount !== -1 && cols[idx.amount]) ? parseFloat(cols[idx.amount]) || 0 : 0,
-                    date: (idx.date !== -1 && cols[idx.date]) ? cols[idx.date] : new Date().toISOString().slice(0, 10),
-                    status: (idx.status !== -1 && cols[idx.status]) ? cols[idx.status] : 'Черновик',
-                    agreed: (idx.agreed !== -1 && cols[idx.agreed]) ? (cols[idx.agreed] === 'Да' || cols[idx.agreed] === 'TRUE' || cols[idx.agreed] === 'true') : false,
-                    comment: (idx.comment !== -1 && cols[idx.comment]) ? cols[idx.comment] : '',
-                    phone: (idx.phone !== -1 && cols[idx.phone]) ? cols[idx.phone] : '',
-                    email: (idx.email !== -1 && cols[idx.email]) ? cols[idx.email] : ''
-                };
-                imported.push(row);
+                var row = { id: nextId++ };
+                columns.forEach(function(col) {
+                    row[col.key] = col.type === 'checkbox' ? false : (col.type === 'number' ? 0 : '');
+                });
+                // Заполняем из CSV
+                for (var j = 0; j < cols.length; j++) {
+                    var key = colMap[j];
+                    if (key) {
+                        var col = columns.find(function(c) { return c.key === key; });
+                        if (col) {
+                            if (col.type === 'checkbox') {
+                                row[key] = cols[j] === 'Да' || cols[j] === 'TRUE' || cols[j] === 'true' || cols[j] === '1';
+                            } else if (col.type === 'number') {
+                                row[key] = parseFloat(cols[j]) || 0;
+                            } else {
+                                row[key] = cols[j] || '';
+                            }
+                        }
+                    }
+                }
+                // Проверяем, что запись не пустая
+                var hasData = false;
+                columns.forEach(function(col) {
+                    if (row[col.key] && row[col.key] !== '' && row[col.key] !== 0 && row[col.key] !== false) {
+                        hasData = true;
+                    }
+                });
+                if (hasData) imported.push(row);
             }
 
             if (imported.length) {
                 data = imported;
+                saveToLocalStorage();
                 render();
-                if (isOnline) scheduleSave();
+                scheduleSave();
                 showToast('✅ Импортировано ' + imported.length + ' записей', 'success');
             } else {
                 showToast('Не удалось импортировать данные', 'error');
@@ -922,9 +1247,14 @@
 
     function exportToClipboard() {
         if (!data.length) return showToast('Нет данных', 'error');
-        var tsv = 'Клиент\tКП\tСумма\tДата_КП\tСтатус\tСогласен\tКомментарий\tТелефон\tEmail\n';
+        var tsv = columns.map(function(c) { return c.label; }).join('\t') + '\n';
         data.forEach(function(r) {
-            tsv += (r.client || '') + '\t' + (r.proposal || '') + '\t' + (r.amount || 0) + '\t' + (r.date || '') + '\t' + (r.status || 'Черновик') + '\t' + (r.agreed ? 'Да' : 'Нет') + '\t' + (r.comment || '') + '\t' + (r.phone || '') + '\t' + (r.email || '') + '\n';
+            var row = columns.map(function(c) {
+                var val = r[c.key] !== undefined ? r[c.key] : '';
+                if (c.type === 'checkbox') val = val ? 'Да' : 'Нет';
+                return String(val);
+            });
+            tsv += row.join('\t') + '\n';
         });
         navigator.clipboard.writeText(tsv).then(function() {
             showToast('📋 Скопировано', 'success');
@@ -955,6 +1285,11 @@
     document.getElementById('filterInput').addEventListener('input', render);
     document.getElementById('filterStatus').addEventListener('change', render);
 
+    // Клик вне модального окна для закрытия
+    document.getElementById('addColumnModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
     // ================================================================
     // ЗАПУСК
     // ================================================================
@@ -963,6 +1298,7 @@
     console.log('⚡ CRM загружена!');
     console.log('🔑 BIN_ID:', BIN_ID);
     console.log('🔑 API_KEY:', API_KEY ? '✅ Установлен' : '❌ НЕ УСТАНОВЛЕН');
+    console.log('📊 Колонок:', columns.length);
 </script>
 </body>
 </html>
