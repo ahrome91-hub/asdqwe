@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CRM — Клиентская база (офлайн-редактор)</title>
+    <title>CRM — Клиентская база</title>
     <style>
         /* ============================================================
            БАЗОВЫЕ СТИЛИ + АНИМАЦИИ
@@ -361,7 +361,6 @@
             animation: fadeIn 0.3s ease;
         }
 
-        /* Цветные статусы */
         tr.status-согласовано td:first-child { border-left: 4px solid #22c55e; }
         tr.status-отказ td:first-child { border-left: 4px solid #ef4444; }
         tr.status-вработе td:first-child { border-left: 4px solid #f59e0b; }
@@ -525,7 +524,6 @@
             border-color: #ef4444;
         }
 
-        /* Модальное окно для добавления столбца */
         .modal {
             display: none;
             position: fixed;
@@ -613,7 +611,6 @@
 <body>
 
 <div class="container">
-    <!-- ШАПКА -->
     <header class="header">
         <div class="header-left">
             <span class="logo">⚡</span>
@@ -621,12 +618,11 @@
             <span class="badge-count" id="countBadge">0</span>
         </div>
         <div class="status-badge">
-            <span class="dot offline" id="statusDot"></span>
-            <span id="statusText">Офлайн ✏️</span>
+            <span class="dot loading" id="statusDot"></span>
+            <span id="statusText">Подключение...</span>
         </div>
     </header>
 
-    <!-- ПАНЕЛЬ -->
     <div class="toolbar">
         <input type="text" id="filterInput" placeholder="🔍 Поиск..." />
         <select id="filterStatus">
@@ -642,20 +638,17 @@
         <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
         <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
         <button class="btn btn-danger" onclick="resetData()">🔄 Сброс</button>
-        <button class="btn btn-warning" onclick="saveToLocalStorage()">💾 Сохранить</button>
+        <button class="btn btn-warning" onclick="forceSave()">💾 Принудительно сохранить</button>
         <span class="saving-indicator">
             <span class="spinner" id="savingSpinner"></span>
             <span id="savingText">📁 Локально</span>
         </span>
     </div>
 
-    <!-- ТАБЛИЦА -->
     <div class="table-wrap">
         <table>
             <thead id="tableHead">
-                <tr id="headerRow">
-                    <!-- Заголовки будут генерироваться динамически -->
-                </tr>
+                <tr id="headerRow"></tr>
             </thead>
             <tbody id="tableBody">
                 <tr>
@@ -667,7 +660,6 @@
         </table>
     </div>
 
-    <!-- ПОДВАЛ -->
     <div class="footer-actions">
         <span class="counter">Всего: <strong id="rowCounter">0</strong></span>
         <span class="counter">Согласны: <strong id="agreedCounter">0</strong></span>
@@ -675,7 +667,6 @@
     </div>
 </div>
 
-<!-- Модальное окно для добавления столбца -->
 <div class="modal" id="addColumnModal">
     <div class="modal-content">
         <h3>➕ Добавить столбец</h3>
@@ -707,7 +698,7 @@
 
 <script>
     // ================================================================
-    // ВАШИ ДАННЫЕ ИЗ JSONBIN.IO (НЕ ТРОГАТЬ!)
+    // КОНФИГУРАЦИЯ
     // ================================================================
     var BIN_ID = '6a34730dda38895dfeda3121';
     var API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
@@ -721,7 +712,6 @@
     var saveTimeout = null;
     var isOnline = false;
 
-    // Определение колонок (можно динамически менять)
     var columns = [
         { key: 'client', label: 'Клиент', type: 'text' },
         { key: 'proposal', label: 'КП (название)', type: 'text' },
@@ -734,16 +724,8 @@
         { key: 'email', label: 'Email', type: 'text' }
     ];
 
-    var DEFAULT_DATA = [
-        { client: 'ИП Иванов', proposal: 'Ремонт оборудования', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Доп. согласование', phone: '+7 912 345-67-89', email: 'ivanov@mail.ru' },
-        { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', phone: '+7 912 345-67-90', email: 'logist@pro.ru' },
-        { client: 'ООО Ромашка', proposal: 'Поставка оборудования', amount: 1500000, date: '2026-01-15', status: 'Отправлено', agreed: false, comment: 'Ждём ответа', phone: '+7 912 345-67-91', email: 'romashka@oo.ru' },
-        { client: 'АО СтройИнвест', proposal: 'Строительные материалы', amount: 3200000, date: '2026-01-18', status: 'Согласовано', agreed: true, comment: 'Договор подписан', phone: '+7 912 345-67-92', email: 'stroy@invest.ru' },
-        { client: 'ООО Техносервис', proposal: 'Обслуживание ПО', amount: 890000, date: '2026-01-20', status: 'Черновик', agreed: false, comment: 'Правки от клиента', phone: '+7 912 345-67-93', email: 'tech@service.ru' }
-    ];
-
     // ================================================================
-    // ЗАГРУЗКА ИЗ JSONBIN.IO
+    // ЗАГРУЗКА
     // ================================================================
     async function loadFromCloud() {
         try {
@@ -753,8 +735,6 @@
             });
 
             if (!resp.ok) {
-                var errorText = await resp.text();
-                console.warn('Ошибка загрузки:', resp.status, errorText);
                 throw new Error('Ошибка ' + resp.status);
             }
 
@@ -762,26 +742,104 @@
             var loaded = result.record;
 
             if (loaded && Array.isArray(loaded) && loaded.length > 0) {
-                data = loaded;
-                // Обновляем nextId
+                // ОЧИСТКА ДАННЫХ: исправляем перепутанные поля
+                data = loaded.map(function(row) {
+                    return cleanRow(row);
+                });
                 nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
                 isOnline = true;
                 setStatus('online', 'Онлайн ✅');
                 render();
-                showToast('✅ Данные загружены из облака', 'success');
-                // Сохраняем в локальное хранилище как резерв
                 saveToLocalStorage();
+                showToast('✅ Данные загружены и очищены', 'success');
                 return;
             }
-            // Если облако вернуло пустой массив — берём локальное
             loadFromLocalStorage();
         } catch (e) {
             console.warn('Облако недоступно:', e);
             isOnline = false;
             setStatus('offline', 'Офлайн ✏️');
             loadFromLocalStorage();
-            showToast('⚠️ Офлайн-режим. Редактирование локально.', 'error');
         }
+    }
+
+    // ФУНКЦИЯ ОЧИСТКИ ДАННЫХ — исправляет перепутанные поля
+    function cleanRow(row) {
+        var clean = {};
+
+        // ID
+        clean.id = row.id || 0;
+
+        // Клиент
+        clean.client = row.client || '';
+
+        // КП
+        clean.proposal = row.proposal || '';
+
+        // Сумма — если в поле amount число, оставляем, иначе ищем в других полях
+        var amountVal = parseFloat(row.amount);
+        if (!isNaN(amountVal) && row.amount !== '') {
+            clean.amount = amountVal;
+        } else {
+            // Проверяем, может быть сумма записана в поле date или status
+            var possibleAmount = parseFloat(row.date) || parseFloat(row.status) || parseFloat(row.comment) || 0;
+            clean.amount = possibleAmount || 0;
+        }
+
+        // Дата — должна быть в формате YYYY-MM-DD
+        var dateStr = row.date || '';
+        // Проверяем, является ли date корректной датой
+        var dateTest = new Date(dateStr);
+        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/) && !isNaN(dateTest.getTime())) {
+            clean.date = dateStr;
+        } else {
+            // Ищем дату в других полях
+            var foundDate = '';
+            var fields = [row.status, row.comment, row.phone, row.email];
+            for (var i = 0; i < fields.length; i++) {
+                var val = fields[i];
+                if (val && val.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                    foundDate = val;
+                    break;
+                }
+            }
+            clean.date = foundDate || new Date().toISOString().slice(0, 10);
+        }
+
+        // Статус
+        var statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
+        var statusVal = row.status || 'Черновик';
+        if (statusOptions.indexOf(statusVal) === -1) {
+            // Ищем статус в других полях
+            var foundStatus = 'Черновик';
+            var allFields = [row.client, row.proposal, row.comment, row.phone];
+            for (var j = 0; j < allFields.length; j++) {
+                var f = allFields[j];
+                if (f && statusOptions.indexOf(f) !== -1) {
+                    foundStatus = f;
+                    break;
+                }
+            }
+            statusVal = foundStatus;
+        }
+        clean.status = statusVal;
+
+        // Согласен
+        clean.agreed = row.agreed === true || row.agreed === 'true' || row.agreed === 'Да' || row.agreed === '1';
+
+        // Комментарий
+        clean.comment = row.comment || '';
+        if (clean.comment === 'Нет' || clean.comment === 'Да' || clean.comment === 'TRUE') {
+            clean.comment = '';
+        }
+
+        // Телефон
+        clean.phone = row.phone || '';
+
+        // Email
+        clean.email = row.email || '';
+
+        return clean;
     }
 
     // ================================================================
@@ -797,7 +855,6 @@
             showToast('💾 Данные сохранены локально', 'success');
         } catch (e) {
             console.error('Ошибка сохранения в localStorage:', e);
-            showToast('❌ Не удалось сохранить локально', 'error');
         }
     }
 
@@ -806,7 +863,7 @@
             var stored = localStorage.getItem('crm_data');
             var storedId = localStorage.getItem('crm_nextId');
             var storedCols = localStorage.getItem('crm_columns');
-            
+
             if (storedCols) {
                 var parsedCols = JSON.parse(storedCols);
                 if (Array.isArray(parsedCols) && parsedCols.length > 0) {
@@ -825,7 +882,6 @@
                 showToast('📁 Загружено из локального хранилища', 'success');
                 return;
             }
-            // Если нет локальных данных — используем DEFAULT_DATA
             resetData();
         } catch (e) {
             console.error('Ошибка загрузки из localStorage:', e);
@@ -834,17 +890,24 @@
     }
 
     // ================================================================
-    // СОХРАНЕНИЕ В JSONBIN.IO (если есть интернет)
+    // ПРИНУДИТЕЛЬНОЕ СОХРАНЕНИЕ
+    // ================================================================
+    function forceSave() {
+        saveToLocalStorage();
+        if (isOnline) {
+            saveToCloud();
+        } else {
+            showToast('⚠️ Вы офлайн. Данные сохранены локально.', 'error');
+        }
+    }
+
+    // ================================================================
+    // СОХРАНЕНИЕ В ОБЛАКО
     // ================================================================
     async function saveToCloud() {
-        if (isSaving || !data.length) return;
-        if (!isOnline) {
-            // Если офлайн — просто сохраняем локально
-            saveToLocalStorage();
-            return;
-        }
+        if (isSaving) return;
         isSaving = true;
-        showSaving(true, 'Сохранение...');
+        showSaving(true, 'Сохранение в облако...');
 
         try {
             var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID, {
@@ -857,25 +920,21 @@
             });
 
             if (!resp.ok) {
-                var errorText = await resp.text();
-                console.error('Ошибка сохранения:', resp.status, errorText);
                 throw new Error('Ошибка ' + resp.status);
             }
 
             isSaving = false;
             isOnline = true;
             setStatus('online', 'Онлайн ✅');
-            showSaving(false, '💾 Сохранено');
-            // Также сохраняем локально как резерв
+            showSaving(false, '💾 Сохранено в облаке');
             saveToLocalStorage();
-            showToast('💾 Данные сохранены в облаке и локально', 'success');
+            showToast('💾 Данные сохранены в облаке', 'success');
         } catch (e) {
             console.error('Ошибка сохранения:', e);
             isSaving = false;
             isOnline = false;
             setStatus('offline', 'Офлайн ✏️');
             showSaving(false, '📁 Локально');
-            // Сохраняем локально при ошибке
             saveToLocalStorage();
             showToast('⚠️ Ошибка соединения. Данные сохранены локально.', 'error');
         }
@@ -891,7 +950,7 @@
                 saveToLocalStorage();
                 showSaving(false, '📁 Локально');
             }
-        }, 300); // Уменьшил задержку для более быстрого сохранения
+        }, 500);
     }
 
     // ================================================================
@@ -913,7 +972,7 @@
     }
 
     // ================================================================
-    // РЕНДЕР (динамический, на основе columns)
+    // РЕНДЕР
     // ================================================================
     function render() {
         var thead = document.getElementById('headerRow');
@@ -921,7 +980,6 @@
         var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
         var filterStatus = document.getElementById('filterStatus').value;
 
-        // Генерация заголовков
         var headerHtml = '<th style="width:30px;">#</th>';
         columns.forEach(function(col) {
             headerHtml += '<th>' + col.label;
@@ -932,7 +990,6 @@
         headerHtml += '<th style="width:70px;">Действия</th>';
         thead.innerHTML = headerHtml;
 
-        // Фильтрация
         var filtered = data.filter(function(row) {
             var matchText = false;
             columns.forEach(function(col) {
@@ -945,7 +1002,7 @@
 
         if (!filtered.length) {
             var colCount = columns.length + 2;
-            tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><p>Нет записей</p><p style="font-size:12px;color:#374151;margin-top:4px;">Нажмите «➕ Добавить» или импортируйте CSV</p></div></td></tr>';
+            tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><p>Нет записей</p></div></td></tr>';
             document.getElementById('countBadge').textContent = data.length;
             updateCounters();
             return;
@@ -956,13 +1013,13 @@
             var statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
             html += '<tr class="status-' + statusClass + '">';
             html += '<td>' + (idx + 1) + '</td>';
-            
+
             columns.forEach(function(col) {
                 html += '<td>';
                 html += renderCell(row, col);
                 html += '</td>';
             });
-            
+
             html += '<td><button class="btn-sm-del" onclick="deleteRow(' + row.id + ')">🗑</button></td>';
             html += '</tr>';
         });
@@ -981,7 +1038,7 @@
             case 'checkbox':
                 var checked = value ? 'checked' : '';
                 return '<input type="checkbox" ' + checked + ' onchange="updateField(' + id + ', \'' + key + '\', this.checked)" />';
-            
+
             case 'select':
                 var options = col.options || ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
                 var html = '<select class="table-select" onchange="updateField(' + id + ', \'' + key + '\', this.value)">';
@@ -990,14 +1047,15 @@
                 });
                 html += '</select>';
                 return html;
-            
+
             case 'number':
                 return '<input class="table-input" type="number" value="' + (value || 0) + '" onchange="updateField(' + id + ', \'' + key + '\', Number(this.value))" />';
-            
+
             case 'date':
-                return '<input class="table-input" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
-            
-            default: // text
+                var dateVal = value || '';
+                return '<input class="table-input" type="date" value="' + dateVal + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+
+            default:
                 return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
         }
     }
@@ -1028,7 +1086,6 @@
         document.getElementById('addColumnModal').classList.remove('active');
     }
 
-    // Показывать поле для опций при выборе 'select'
     document.getElementById('newColumnType').addEventListener('change', function() {
         document.getElementById('selectOptionsContainer').style.display = this.value === 'select' ? 'block' : 'none';
     });
@@ -1044,7 +1101,6 @@
             return;
         }
 
-        // Проверка на уникальность
         if (columns.some(function(c) { return c.key === key; })) {
             showToast('Столбец с таким ключом уже существует', 'error');
             return;
@@ -1056,12 +1112,12 @@
         }
 
         columns.push(newCol);
-        
-        // Добавляем поле в каждую существующую запись
+
         data.forEach(function(row) {
             if (type === 'checkbox') row[key] = false;
             else if (type === 'number') row[key] = 0;
             else if (type === 'select' && newCol.options && newCol.options.length) row[key] = newCol.options[0];
+            else if (type === 'date') row[key] = new Date().toISOString().slice(0, 10);
             else row[key] = '';
         });
 
@@ -1069,17 +1125,10 @@
         render();
         closeModal();
         showToast('✅ Столбец "' + label + '" добавлен', 'success');
-        // Пытаемся сохранить в облако, если есть соединение
         if (isOnline) scheduleSave();
     }
 
     function removeColumn(key) {
-        // Нельзя удалять базовые столбцы (можно удалить только добавленные)
-        var baseKeys = ['client', 'proposal', 'amount', 'date', 'status', 'agreed', 'comment', 'phone', 'email'];
-        if (baseKeys.indexOf(key) !== -1) {
-            if (!confirm('Удалить базовый столбец "' + key + '"? Это может нарушить работу.')) return;
-        }
-
         if (!confirm('Удалить столбец "' + key + '"? Все данные в нём будут потеряны.')) return;
 
         columns = columns.filter(function(c) { return c.key !== key; });
@@ -1100,8 +1149,6 @@
         var row = data.find(function(r) { return r.id === id; });
         if (row) {
             row[field] = value;
-            // Обновляем отображение без полного рендера (для производительности)
-            // но для гарантии сохранения вызываем render и scheduleSave
             render();
             scheduleSave();
         }
@@ -1123,15 +1170,13 @@
             else if (col.key === 'date') newRow[col.key] = new Date().toISOString().slice(0, 10);
             else newRow[col.key] = '';
         });
-        // Заполним базовые поля для удобства
         if (!newRow.client) newRow.client = 'Новый клиент';
         if (!newRow.proposal) newRow.proposal = 'Новое КП';
         if (!newRow.status) newRow.status = 'Черновик';
-        
+
         data.push(newRow);
         render();
         scheduleSave();
-        // Прокрутка к новой строке
         var tbody = document.getElementById('tableBody');
         var last = tbody.lastElementChild;
         if (last) last.scrollIntoView({ behavior: 'smooth' });
@@ -1139,7 +1184,7 @@
 
     function resetData() {
         if (data.length && !confirm('Сбросить всё к примеру?')) return;
-        // Восстанавливаем стандартные колонки
+
         columns = [
             { key: 'client', label: 'Клиент', type: 'text' },
             { key: 'proposal', label: 'КП (название)', type: 'text' },
@@ -1151,7 +1196,13 @@
             { key: 'phone', label: 'Телефон', type: 'text' },
             { key: 'email', label: 'Email', type: 'text' }
         ];
-        data = DEFAULT_DATA.map(function(r, i) {
+
+        var defaultData = [
+            { client: 'ИП Иванов', proposal: 'Ремонт оборудования', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Доп. согласование', phone: '+7 912 345-67-89', email: 'ivanov@mail.ru' },
+            { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', phone: '+7 912 345-67-90', email: 'logist@pro.ru' }
+        ];
+
+        data = defaultData.map(function(r, i) {
             var copy = {};
             for (var key in r) copy[key] = r[key];
             copy.id = i + 1;
@@ -1161,11 +1212,11 @@
         saveToLocalStorage();
         render();
         if (isOnline) scheduleSave();
-        showToast('🔄 Данные сброшены к примеру', 'success');
+        showToast('🔄 Данные сброшены', 'success');
     }
 
     // ================================================================
-    // CSV (экспорт с динамическими колонками)
+    // CSV
     // ================================================================
     function exportCSV() {
         if (!data.length) return showToast('Нет данных для экспорта', 'error');
@@ -1205,10 +1256,8 @@
             var headerLine = lines[0];
             var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
 
-            // Создаём маппинг по заголовкам
             var colMap = {};
             headers.forEach(function(h, index) {
-                // Ищем совпадение по label или key
                 columns.forEach(function(col) {
                     if (col.label === h || col.key === h) {
                         colMap[index] = col.key;
@@ -1224,9 +1273,10 @@
                     if (col.type === 'checkbox') row[col.key] = false;
                     else if (col.type === 'number') row[col.key] = 0;
                     else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
+                    else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
                     else row[col.key] = '';
                 });
-                // Заполняем из CSV
+
                 for (var j = 0; j < cols.length; j++) {
                     var key = colMap[j];
                     if (key) {
@@ -1242,7 +1292,7 @@
                         }
                     }
                 }
-                // Проверяем, что запись не пустая
+
                 var hasData = false;
                 columns.forEach(function(col) {
                     var val = row[col.key];
@@ -1307,7 +1357,6 @@
     document.getElementById('filterInput').addEventListener('input', render);
     document.getElementById('filterStatus').addEventListener('change', render);
 
-    // Клик вне модального окна для закрытия
     document.getElementById('addColumnModal').addEventListener('click', function(e) {
         if (e.target === this) closeModal();
     });
@@ -1321,7 +1370,6 @@
     console.log('🔑 BIN_ID:', BIN_ID);
     console.log('🔑 API_KEY:', API_KEY ? '✅ Установлен' : '❌ НЕ УСТАНОВЛЕН');
     console.log('📊 Колонок:', columns.length);
-    console.log('💾 Данные сохранены в localStorage');
 </script>
 </body>
 </html>
