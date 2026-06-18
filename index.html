@@ -4,12 +4,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>CRM — Учёт клиентов</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js">
+    </script>
     <style>
+        /* ============================================================
+           БАЗОВЫЕ СТИЛИ + АНИМАЦИИ
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: #0b0d10;
@@ -17,10 +52,14 @@
             padding: 16px;
             min-height: 100vh;
         }
+
         .container {
             max-width: 1440px;
             margin: 0 auto;
+            animation: fadeIn 0.5s ease;
         }
+
+        /* ===== ШАПКА ===== */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -28,31 +67,55 @@
             justify-content: space-between;
             gap: 12px;
             margin-bottom: 18px;
-            padding: 12px 20px;
-            background: #14171c;
-            border-radius: 12px;
+            padding: 14px 22px;
+            background: linear-gradient(145deg, #14171c, #1a1f26);
+            border-radius: 16px;
             border: 1px solid #252b33;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
+
+        .header:hover {
+            border-color: #2a323d;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08);
+        }
+
         .header-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
+
+        .header-left .logo {
+            font-size: 26px;
+            filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .header-left .logo:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
         .header-left h1 {
             font-size: 20px;
             font-weight: 600;
             background: linear-gradient(135deg, #f0f4f8, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
         }
+
         .badge-count {
-            background: #2563eb;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: #fff;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
             padding: 2px 12px;
             border-radius: 30px;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+            animation: pulse 2s infinite;
         }
+
         .status-badge {
             display: flex;
             align-items: center;
@@ -63,30 +126,48 @@
             padding: 4px 14px;
             border-radius: 30px;
             border: 1px solid #2a323d;
+            transition: all 0.3s ease;
         }
+
         .status-badge .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
             display: inline-block;
+            transition: all 0.3s ease;
         }
-        .status-badge .dot.online { background: #22c55e; }
-        .status-badge .dot.offline { background: #ef4444; }
-        .status-badge .dot.loading { background: #f59e0b; animation: pulse 1s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
+        .status-badge .dot.online {
+            background: #22c55e;
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+        }
+
+        .status-badge .dot.offline {
+            background: #ef4444;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .status-badge .dot.loading {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+
+        /* ===== ПАНЕЛЬ ИНСТРУМЕНТОВ ===== */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             margin-bottom: 16px;
-            padding: 10px 16px;
+            padding: 12px 18px;
             background: #14171c;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1px solid #252b33;
             align-items: center;
+            backdrop-filter: blur(4px);
         }
-        .toolbar input, .toolbar select {
+
+        .toolbar input,
+        .toolbar select {
             padding: 6px 12px;
             border-radius: 8px;
             border: 1px solid #2a323d;
@@ -95,13 +176,26 @@
             font-size: 13px;
             outline: none;
             min-width: 120px;
+            transition: all 0.25s ease;
         }
-        .toolbar input:focus, .toolbar select:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
-        }
-        .toolbar select option { background: #14171c; color: #e8edf2; }
 
+        .toolbar input:focus,
+        .toolbar select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            transform: scale(1.01);
+        }
+
+        .toolbar input::placeholder {
+            color: #4b5563;
+        }
+
+        .toolbar select option {
+            background: #14171c;
+            color: #e8edf2;
+        }
+
+        /* ===== КНОПКИ ===== */
         .btn {
             padding: 6px 14px;
             border: none;
@@ -109,19 +203,84 @@
             font-weight: 500;
             font-size: 13px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            position: relative;
+            overflow: hidden;
         }
-        .btn-primary { background: #2563eb; color: #fff; }
-        .btn-primary:hover { background: #1d4ed8; }
-        .btn-success { background: #16a34a; color: #fff; }
-        .btn-success:hover { background: #15803d; }
-        .btn-outline { background: transparent; border: 1px solid #2a323d; color: #cbd5e1; }
-        .btn-outline:hover { background: #1e242c; }
-        .btn-danger { background: #dc2626; color: #fff; }
-        .btn-danger:hover { background: #b91c1c; }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 0 30px rgba(22, 163, 74, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #2a323d;
+            color: #cbd5e1;
+        }
+
+        .btn-outline:hover {
+            background: #1e242c;
+            border-color: #4b5563;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.03);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.25);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: #fff;
+        }
+
+        .btn-warning:hover {
+            box-shadow: 0 0 30px rgba(217, 119, 6, 0.25);
+        }
 
         .saving-indicator {
             display: flex;
@@ -135,6 +294,7 @@
             border: 1px solid #252b33;
             margin-left: auto;
         }
+
         .saving-indicator .spinner {
             width: 14px;
             height: 14px;
@@ -144,66 +304,96 @@
             animation: spin 0.7s linear infinite;
             display: none;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* ===== ТАБЛИЦА ===== */
         .table-wrap {
             background: #14171c;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1px solid #252b33;
             overflow: auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
-            min-width: 850px;
+            min-width: 900px;
         }
+
         th {
-            background: #0f1217;
+            background: linear-gradient(180deg, #0f1217, #14171c);
             color: #94a3b8;
             font-weight: 600;
             font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            padding: 10px 12px;
+            letter-spacing: 0.5px;
+            padding: 12px 14px;
             text-align: left;
             border-bottom: 1px solid #252b33;
             position: sticky;
             top: 0;
             z-index: 2;
         }
+
         td {
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-bottom: 1px solid #1e242c;
             vertical-align: middle;
+            transition: all 0.2s ease;
         }
-        tr:hover td { background: #1a1f26; }
-        tr.status-согласовано td:first-child { border-left: 4px solid #22c55e; }
-        tr.status-отказ td:first-child { border-left: 4px solid #ef4444; }
-        tr.status-вработе td:first-child { border-left: 4px solid #f59e0b; }
-        tr.status-отправлено td:first-child { border-left: 4px solid #3b82f6; }
 
+        tr:hover td {
+            background: #1a1f26;
+        }
+
+        tr {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Цветные статусы */
+        tr.status-согласовано td:first-child {
+            border-left: 4px solid #22c55e;
+        }
+        tr.status-отказ td:first-child {
+            border-left: 4px solid #ef4444;
+        }
+        tr.status-вработе td:first-child {
+            border-left: 4px solid #f59e0b;
+        }
+        tr.status-отправлено td:first-child {
+            border-left: 4px solid #3b82f6;
+        }
+
+        /* ===== ПОЛЯ ВВОДА ===== */
         .table-input {
             width: 100%;
-            padding: 4px 6px;
+            padding: 4px 8px;
             border-radius: 6px;
             border: 1px solid transparent;
             background: transparent;
             color: #e8edf2;
             font-size: 13px;
             font-family: inherit;
-            transition: 0.2s;
+            transition: all 0.25s ease;
         }
-        .table-input:hover { border-color: #2a323d; background: #0f1217; }
+
+        .table-input:hover {
+            border-color: #2a323d;
+            background: #0f1217;
+        }
+
         .table-input:focus {
             border-color: #2563eb;
             background: #0f1217;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            transform: scale(1.01);
         }
+
         .table-select {
             width: 100%;
-            padding: 4px 6px;
+            padding: 4px 8px;
             border-radius: 6px;
             border: 1px solid transparent;
             background: transparent;
@@ -211,13 +401,42 @@
             font-size: 13px;
             font-family: inherit;
             cursor: pointer;
+            transition: all 0.25s ease;
         }
-        .table-select:hover { border-color: #2a323d; background: #0f1217; }
-        .table-select:focus { border-color: #2563eb; background: #0f1217; outline: none; }
-        .table-select option { background: #14171c; color: #e8edf2; }
 
-        input[type="checkbox"] { width: 16px; height: 16px; accent-color: #2563eb; cursor: pointer; }
-        .td-checkbox { text-align: center; }
+        .table-select:hover {
+            border-color: #2a323d;
+            background: #0f1217;
+        }
+
+        .table-select:focus {
+            border-color: #2563eb;
+            background: #0f1217;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .table-select option {
+            background: #14171c;
+            color: #e8edf2;
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2563eb;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        input[type="checkbox"]:hover {
+            transform: scale(1.1);
+        }
+
+        .td-checkbox {
+            text-align: center;
+        }
+
         .btn-sm-del {
             padding: 2px 10px;
             border: none;
@@ -226,29 +445,59 @@
             color: #f87171;
             font-size: 12px;
             cursor: pointer;
+            transition: all 0.25s ease;
         }
-        .btn-sm-del:hover { background: #3f0a0a; color: #fca5a5; }
 
+        .btn-sm-del:hover {
+            background: #3f0a0a;
+            color: #fca5a5;
+            transform: scale(1.05);
+        }
+
+        /* ===== ПОДВАЛ ===== */
         .footer-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             align-items: center;
-            margin-top: 14px;
-            padding: 10px 16px;
+            margin-top: 16px;
+            padding: 12px 18px;
             background: #14171c;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1px solid #252b33;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
-        .counter { font-size: 13px; color: #94a3b8; }
-        .counter strong { color: #e8edf2; font-weight: 500; }
-        .empty-state, .loading { text-align: center; padding: 40px 20px; color: #4b5563; }
 
+        .counter {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .counter strong {
+            color: #e8edf2;
+            font-weight: 500;
+        }
+
+        .empty-state,
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #4b5563;
+        }
+
+        .empty-state .emoji {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+            animation: pulse 2s infinite;
+        }
+
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 24px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(20px);
             background: #1e242c;
             color: #e8edf2;
             padding: 10px 24px;
@@ -257,21 +506,74 @@
             border: 1px solid #2a323d;
             z-index: 999;
             opacity: 0;
-            transition: opacity 0.4s;
+            transition: all 0.4s ease;
             pointer-events: none;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
         }
-        .toast.show { opacity: 1; }
 
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success {
+            border-color: #22c55e;
+        }
+
+        .toast.error {
+            border-color: #ef4444;
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
         @media (max-width: 640px) {
-            body { padding: 10px; }
-            .header { flex-direction: column; align-items: stretch; }
-            .header-left h1 { font-size: 17px; }
-            .toolbar { flex-direction: column; align-items: stretch; }
-            .toolbar input, .toolbar select { min-width: auto; }
-            .saving-indicator { margin-left: 0; }
-            .table-wrap { font-size: 12px; }
-            th, td { padding: 4px 6px; }
+            body {
+                padding: 10px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px;
+            }
+            .header-left h1 {
+                font-size: 17px;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .toolbar input,
+            .toolbar select {
+                min-width: auto;
+            }
+            .saving-indicator {
+                margin-left: 0;
+            }
+            .table-wrap {
+                font-size: 12px;
+            }
+            th,
+            td {
+                padding: 4px 6px;
+            }
+            .btn {
+                justify-content: center;
+            }
+        }
+
+        .table-wrap::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .table-wrap::-webkit-scrollbar-track {
+            background: #0f1217;
+        }
+        .table-wrap::-webkit-scrollbar-thumb {
+            background: #2a323d;
+            border-radius: 10px;
+        }
+        .table-wrap::-webkit-scrollbar-thumb:hover {
+            background: #3a434d;
         }
     </style>
 </head>
@@ -280,7 +582,7 @@
     <div class="container">
         <header class="header">
             <div class="header-left">
-                <span style="font-size:22px;">⚡</span>
+                <span class="logo">⚡</span>
                 <h1>CRM — Учёт клиентов</h1>
                 <span class="badge-count" id="countBadge">0</span>
             </div>
@@ -302,7 +604,7 @@
             </select>
             <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
             <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
-            <button class="btn btn-outline" onclick="importCSV()">📥 Импорт</button>
+            <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
             <button class="btn btn-danger" onclick="resetData()">🔄 Сброс</button>
             <span class="saving-indicator">
                 <span class="spinner" id="savingSpinner"></span>
@@ -322,12 +624,13 @@
                         <th style="width:120px;">Статус</th>
                         <th style="width:70px;">Согласен</th>
                         <th style="min-width:140px;">Комментарий</th>
+                        <th style="min-width:120px;">Телефон</th>
                         <th style="width:70px;">Действия</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr>
-                        <td colspan="9">
+                        <td colspan="10">
                             <div class="loading">⏳ Загрузка данных...</div>
                         </td>
                     </tr>
@@ -347,121 +650,110 @@
 
     <script>
         // ================================================================
-        // 1. ВАШИ ДАННЫЕ ИЗ JSONBIN.IO (уже вставлены)
+        // 🔥 ВАШИ ДАННЫЕ ИЗ FIREBASE
         // ================================================================
-        const BIN_ID = '6a34730dda38895dfeda3121';
-        const API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkL9nP7qR5vT8sU3wXxY2zZ4aB6cE8fG1hI",
+            authDomain: "crm-ahrome91.firebaseapp.com",
+            databaseURL: "https://crm-ahrome91-default-rtdb.firebaseio.com",
+            projectId: "crm-ahrome91",
+            storageBucket: "crm-ahrome91.appspot.com",
+            messagingSenderId: "987654321012",
+            appId: "1:987654321012:web:3f4g5h6i7j8k9l0m1n2o"
+        };
 
         // ================================================================
-        // 2. НЕ МЕНЯЙТЕ НИЧЕГО НИЖЕ
+        // 2. ИНИЦИАЛИЗАЦИЯ
+        // ================================================================
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const dataRef = db.ref('crmData');
+
+        // ================================================================
+        // 3. СОСТОЯНИЕ
         // ================================================================
         let data = [];
         let nextId = 1;
         let isSaving = false;
-        let saveTimeout = null;
-        let isOnline = false;
 
         const DEFAULT_DATA = [
             { client: 'ИП Иванов (копия)', proposal: 'Ремонтные работы', amount: 450000, date: '2026-01-10',
-                status: 'В работе', agreed: true, comment: 'Требуют доп. согласование' },
+                status: 'В работе', agreed: true, comment: 'Требуют доп. согласование', phone: '+7 912 345-67-89' },
             { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12',
-                status: 'Отказ', agreed: false, comment: 'Нашли дешевле' },
+                status: 'Отказ', agreed: false, comment: 'Нашли дешевле', phone: '+7 912 345-67-90' },
             { client: 'ООО Ромашка', proposal: 'Поставка оборудования', amount: 1500000, date: '2026-01-15',
-                status: 'Отправлено', agreed: false, comment: 'Ждём ответа' },
+                status: 'Отправлено', agreed: false, comment: 'Ждём ответа', phone: '+7 912 345-67-91' },
             { client: 'АО СтройИнвест', proposal: 'Строительные материалы', amount: 3200000, date: '2026-01-18',
-                status: 'Согласовано', agreed: true, comment: 'Договор подписан' },
+                status: 'Согласовано', agreed: true, comment: 'Договор подписан', phone: '+7 912 345-67-92' },
             { client: 'ООО Техносервис', proposal: 'Обслуживание ПО', amount: 890000, date: '2026-01-20',
-                status: 'Черновик', agreed: false, comment: 'Правки от клиента' }
+                status: 'Черновик', agreed: false, comment: 'Правки от клиента', phone: '+7 912 345-67-93' }
         ];
 
         // ================================================================
-        // 3. ЗАГРУЗКА ИЗ JSONBIN.IO
+        // 4. СЛУШАЕМ ИЗМЕНЕНИЯ В РЕАЛЬНОМ ВРЕМЕНИ
         // ================================================================
-        async function loadFromCloud() {
-            try {
-                setStatus('loading', 'Загрузка...');
-                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
-                const result = await resp.json();
-                const loaded = result.record;
-
-                if (loaded && Array.isArray(loaded) && loaded.length > 0) {
-                    data = loaded;
+        dataRef.on('value', (snapshot) => {
+            const val = snapshot.val();
+            if (val) {
+                const arr = Object.values(val);
+                if (arr.length > 0) {
+                    data = arr;
                     nextId = data.reduce((max, r) => Math.max(max, r.id || 0), 0) + 1;
-                    isOnline = true;
                     setStatus('online', 'Онлайн ✅');
                     render();
-                    showToast('✅ Данные загружены из облака');
+                    showToast('✅ Данные загружены', 'success');
                     return;
                 }
-                resetData();
-                isOnline = true;
-                setStatus('online', 'Онлайн ✅');
-            } catch (e) {
-                console.warn('Облако недоступно:', e);
-                isOnline = false;
-                setStatus('offline', 'Офлайн ❌');
-                if (data.length === 0) resetData();
-                showToast('⚠️ Офлайн-режим. Данные не синхронизируются.');
             }
-        }
+            if (data.length === 0) { resetData(); }
+            setStatus('online', 'Онлайн ✅');
+        }, (error) => {
+            console.error('Firebase ошибка:', error);
+            setStatus('offline', 'Офлайн ❌');
+            if (data.length === 0) resetData();
+            showToast('⚠️ Ошибка подключения к Firebase', 'error');
+        });
 
         // ================================================================
-        // 4. СОХРАНЕНИЕ В JSONBIN.IO
+        // 5. СОХРАНЕНИЕ В FIREBASE
         // ================================================================
-        async function saveToCloud() {
-            if (isSaving || !data.length || !isOnline) return;
+        function saveToFirebase() {
+            if (isSaving || !data.length) return;
             isSaving = true;
             showSaving(true, 'Сохранение...');
 
-            try {
-                const resp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify(data)
-                });
-                if (!resp.ok) throw new Error(`Ошибка ${resp.status}`);
+            const obj = {};
+            data.forEach(row => { obj[row.id] = row; });
 
-                isSaving = false;
-                isOnline = true;
-                setStatus('online', 'Онлайн ✅');
-                showSaving(false, '💾 Сохранено');
-                showToast('💾 Данные сохранены в облаке');
-            } catch (e) {
-                console.error(e);
-                isSaving = false;
-                isOnline = false;
-                setStatus('offline', 'Офлайн ❌');
-                showSaving(false, '❌ Ошибка');
-                showToast('❌ Ошибка сохранения. Проверьте интернет.');
-            }
+            dataRef.set(obj)
+                .then(() => {
+                    isSaving = false;
+                    showSaving(false, '💾 Сохранено');
+                    showToast('💾 Данные сохранены', 'success');
+                })
+                .catch((err) => {
+                    console.error('Ошибка сохранения:', err);
+                    isSaving = false;
+                    showSaving(false, '❌ Ошибка');
+                    showToast('❌ Ошибка сохранения', 'error');
+                });
         }
 
         function scheduleSave() {
-            if (!isOnline) {
-                showToast('⚠️ Нет соединения с облаком. Данные не сохранены.');
-                return;
-            }
-            clearTimeout(saveTimeout);
+            clearTimeout(window.saveTimeout);
             showSaving(true, 'Сохранение...');
-            saveTimeout = setTimeout(saveToCloud, 600);
+            window.saveTimeout = setTimeout(saveToFirebase, 500);
         }
 
         // ================================================================
-        // 5. ИНДИКАТОРЫ
+        // 6. ИНДИКАТОРЫ
         // ================================================================
         function setStatus(type, text) {
             const dot = document.getElementById('statusDot');
             const el = document.getElementById('statusText');
             dot.className = 'dot';
-            if (type === 'online') dot.classList.add('online');
-            else if (type === 'offline') dot.classList.add('offline');
-            else dot.classList.add('loading');
+            if (type === 'online') { dot.classList.add('online'); } else if (type === 'offline') { dot.classList
+                    .add('offline'); } else { dot.classList.add('loading'); }
             el.textContent = text;
         }
 
@@ -471,7 +763,7 @@
         }
 
         // ================================================================
-        // 6. РЕНДЕР
+        // 7. РЕНДЕР
         // ================================================================
         function render() {
             const tbody = document.getElementById('tableBody');
@@ -481,13 +773,21 @@
             const filtered = data.filter(row => {
                 const matchText = (row.client || '').toLowerCase().includes(filterText) ||
                     (row.proposal || '').toLowerCase().includes(filterText) ||
-                    (row.comment || '').toLowerCase().includes(filterText);
+                    (row.comment || '').toLowerCase().includes(filterText) ||
+                    (row.phone || '').toLowerCase().includes(filterText);
                 return filterStatus === '' || row.status === filterStatus;
             });
 
             if (!filtered.length) {
-                tbody.innerHTML =
-                    `<tr><td colspan="9"><div class="empty-state">📭 Нет записей<br><span style="font-size:12px;color:#374151;">Нажмите «➕ Добавить»</span></div></td></tr>`;
+                tbody.innerHTML = `
+                    <tr><td colspan="10">
+                        <div class="empty-state">
+                            <span class="emoji">📭</span>
+                            <p>Нет записей</p>
+                            <p style="font-size:12px;color:#374151;margin-top:4px;">Нажмите «➕ Добавить» или импортируйте CSV</p>
+                        </div>
+                    </td></tr>
+                `;
                 document.getElementById('countBadge').textContent = data.length;
                 updateCounters();
                 return;
@@ -516,6 +816,7 @@
                             <input type="checkbox" ${agreedChecked} onchange="updateField(${row.id}, 'agreed', this.checked)" />
                         </td>
                         <td><input class="table-input" type="text" value="${escapeHtml(row.comment || '')}" onchange="updateField(${row.id}, 'comment', this.value)" /></td>
+                        <td><input class="table-input" type="text" value="${escapeHtml(row.phone || '')}" onchange="updateField(${row.id}, 'phone', this.value)" /></td>
                         <td><button class="btn-sm-del" onclick="deleteRow(${row.id})">🗑</button></td>
                     </tr>
                 `;
@@ -537,20 +838,22 @@
         }
 
         // ================================================================
-        // 7. ДЕЙСТВИЯ
+        // 8. ДЕЙСТВИЯ
         // ================================================================
         function updateField(id, field, value) {
             const row = data.find(r => r.id === id);
-            if (row) { row[field] = value;
+            if (row) {
+                row[field] = value;
                 render();
-                if (isOnline) scheduleSave(); }
+                scheduleSave();
+            }
         }
 
         function deleteRow(id) {
             if (!confirm('Удалить эту запись?')) return;
             data = data.filter(r => r.id !== id);
             render();
-            if (isOnline) scheduleSave();
+            scheduleSave();
         }
 
         function addRow() {
@@ -562,11 +865,12 @@
                 date: new Date().toISOString().slice(0, 10),
                 status: 'Черновик',
                 agreed: false,
-                comment: ''
+                comment: '',
+                phone: ''
             };
             data.push(newRow);
             render();
-            if (isOnline) scheduleSave();
+            scheduleSave();
             const tbody = document.getElementById('tableBody');
             const last = tbody.lastElementChild;
             if (last) last.scrollIntoView({ behavior: 'smooth' });
@@ -577,16 +881,17 @@
             data = DEFAULT_DATA.map((r, i) => ({ ...r, id: i + 1 }));
             nextId = data.length + 1;
             render();
-            if (isOnline) scheduleSave();
+            scheduleSave();
+            showToast('🔄 Данные сброшены к примеру', 'success');
         }
 
         // ================================================================
-        // 8. CSV
+        // 9. CSV
         // ================================================================
         function exportCSV() {
-            if (!data.length) return alert('Нет данных');
+            if (!data.length) return showToast('Нет данных для экспорта', 'error');
             const headers = ['Клиент', 'Коммерческое_предложение', 'Сумма', 'Дата_отправки', 'Статус', 'Согласен',
-                'Комментарий'
+                'Комментарий', 'Телефон'
             ];
             const rows = data.map(r => [
                 `"${r.client || ''}"`,
@@ -595,7 +900,8 @@
                 r.date || '',
                 r.status || 'Черновик',
                 r.agreed ? 'Да' : 'Нет',
-                `"${r.comment || ''}"`
+                `"${r.comment || ''}"`,
+                `"${r.phone || ''}"`
             ]);
             const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
             const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -604,93 +910,118 @@
             link.download = `клиенты_${new Date().toISOString().slice(0, 10)}.csv`;
             link.click();
             URL.revokeObjectURL(link.href);
-            showToast('📤 CSV скачан');
+            showToast('📤 CSV скачан', 'success');
         }
 
-        function importCSV() {
-            document.getElementById('fileInput').click();
-        }
-
-        function handleImport(e) {
-            const file = e.target.files[0];
+        function handleImport(event) {
+            const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(ev) {
                 const text = ev.target.result;
                 const lines = text.split('\n').filter(l => l.trim());
-                if (lines.length < 2) return alert('Файл пуст');
-                const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+
+                if (lines.length < 2) {
+                    showToast('Файл пуст или неверный формат', 'error');
+                    return;
+                }
+
+                const headerLine = lines[0];
+                const headers = headerLine.split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+
                 const idx = {
-                    client: headers.findIndex(h => h.includes('Клиент')),
-                    proposal: headers.findIndex(h => h.includes('Коммерческое') || h.includes('предложение')),
-                    amount: headers.findIndex(h => h.includes('Сумма')),
-                    date: headers.findIndex(h => h.includes('Дата')),
-                    status: headers.findIndex(h => h.includes('Статус')),
-                    agreed: headers.findIndex(h => h.includes('Согласен')),
-                    comment: headers.findIndex(h => h.includes('Комментарий'))
+                    client: headers.findIndex(h => h.includes('Клиент') || h.includes('client')),
+                    proposal: headers.findIndex(h => h.includes('Коммерческое') || h.includes('предложение') || h
+                        .includes('proposal')),
+                    amount: headers.findIndex(h => h.includes('Сумма') || h.includes('amount')),
+                    date: headers.findIndex(h => h.includes('Дата') || h.includes('date')),
+                    status: headers.findIndex(h => h.includes('Статус') || h.includes('status')),
+                    agreed: headers.findIndex(h => h.includes('Согласен') || h.includes('agreed')),
+                    comment: headers.findIndex(h => h.includes('Комментарий') || h.includes('comment')),
+                    phone: headers.findIndex(h => h.includes('Телефон') || h.includes('phone'))
                 };
-                if (idx.client === -1 || idx.proposal === -1) return alert('Не найден столбец "Клиент" или "КП"');
+
+                if (idx.client === -1 && idx.proposal === -1) {
+                    showToast('Не найден столбец "Клиент" или "КП"', 'error');
+                    return;
+                }
 
                 const imported = [];
                 for (let i = 1; i < lines.length; i++) {
                     const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-                    imported.push({
+                    const row = {
                         id: nextId++,
-                        client: cols[idx.client] || 'Неизвестный',
-                        proposal: cols[idx.proposal] || 'Новое КП',
-                        amount: parseFloat(cols[idx.amount]) || 0,
-                        date: cols[idx.date] || new Date().toISOString().slice(0, 10),
-                        status: cols[idx.status] || 'Черновик',
-                        agreed: cols[idx.agreed] === 'Да',
-                        comment: cols[idx.comment] || ''
-                    });
+                        client: (idx.client !== -1 && cols[idx.client]) ? cols[idx.client] : 'Неизвестный',
+                        proposal: (idx.proposal !== -1 && cols[idx.proposal]) ? cols[idx.proposal] : 'Новое КП',
+                        amount: (idx.amount !== -1 && cols[idx.amount]) ? parseFloat(cols[idx.amount]) || 0 : 0,
+                        date: (idx.date !== -1 && cols[idx.date]) ? cols[idx.date] : new Date().toISOString()
+                        .slice(0, 10),
+                        status: (idx.status !== -1 && cols[idx.status]) ? cols[idx.status] : 'Черновик',
+                        agreed: (idx.agreed !== -1 && cols[idx.agreed]) ? cols[idx.agreed === 'Да' || cols[idx
+                            .agreed] === 'TRUE' || cols[idx.agreed] === 'true' : false,
+                        comment: (idx.comment !== -1 && cols[idx.comment]) ? cols[idx.comment] : '',
+                        phone: (idx.phone !== -1 && cols[idx.phone]) ? cols[idx.phone] : ''
+                    };
+                    imported.push(row);
                 }
+
                 if (imported.length) {
                     data = imported;
                     render();
-                    if (isOnline) scheduleSave();
-                    showToast(`✅ Импортировано ${imported.length} записей`);
+                    scheduleSave();
+                    showToast(`✅ Импортировано ${imported.length} записей`, 'success');
+                } else {
+                    showToast('Не удалось импортировать данные', 'error');
                 }
             };
             reader.readAsText(file, 'UTF-8');
-            e.target.value = '';
+            event.target.value = '';
         }
 
         function exportToClipboard() {
-            if (!data.length) return alert('Нет данных');
-            let tsv = 'Клиент\tКП\tСумма\tДата\tСтатус\tСогласен\tКомментарий\n';
+            if (!data.length) return showToast('Нет данных', 'error');
+            let tsv = 'Клиент\tКП\tСумма\tДата\tСтатус\tСогласен\tКомментарий\tТелефон\n';
             data.forEach(r => {
                 tsv +=
-                    `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\n`;
+                    `${r.client || ''}\t${r.proposal || ''}\t${r.amount || 0}\t${r.date || ''}\t${r.status || 'Черновик'}\t${r.agreed ? 'Да' : 'Нет'}\t${r.comment || ''}\t${r.phone || ''}\n`;
             });
             navigator.clipboard.writeText(tsv).then(() => {
-                showToast('📋 Скопировано');
-            }).catch(() => alert('Не удалось скопировать'));
+                showToast('📋 Скопировано', 'success');
+            }).catch(() => showToast('Не удалось скопировать', 'error'));
         }
 
         // ================================================================
-        // 9. TOAST
+        // 10. TOAST
         // ================================================================
         let toastTimeout;
 
-        function showToast(msg) {
+        function showToast(msg, type = '') {
             const el = document.getElementById('toast');
             el.textContent = msg;
+            el.className = 'toast';
+            if (type) el.classList.add(type);
             el.classList.add('show');
             clearTimeout(toastTimeout);
             toastTimeout = setTimeout(() => el.classList.remove('show'), 3000);
         }
 
         // ================================================================
-        // 10. ФИЛЬТРЫ
+        // 11. ФИЛЬТРЫ
         // ================================================================
         document.getElementById('filterInput').addEventListener('input', render);
         document.getElementById('filterStatus').addEventListener('change', render);
 
         // ================================================================
-        // 11. ЗАПУСК
+        // 12. ЗАПУСК
         // ================================================================
-        loadFromCloud();
+        dataRef.once('value').then(snapshot => {
+            if (!snapshot.val()) {
+                resetData();
+            }
+        });
+
+        console.log('⚡ CRM загружена!');
+        console.log('📁 Поддерживаемый формат CSV: Клиент, КП, Сумма, Дата, Статус, Согласен, Комментарий, Телефон');
     </script>
 </body>
 </html>
