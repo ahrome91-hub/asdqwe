@@ -763,14 +763,17 @@
 
             if (loaded && Array.isArray(loaded) && loaded.length > 0) {
                 data = loaded;
+                // Обновляем nextId
                 nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
                 isOnline = true;
                 setStatus('online', 'Онлайн ✅');
                 render();
                 showToast('✅ Данные загружены из облака', 'success');
+                // Сохраняем в локальное хранилище как резерв
                 saveToLocalStorage();
                 return;
             }
+            // Если облако вернуло пустой массив — берём локальное
             loadFromLocalStorage();
         } catch (e) {
             console.warn('Облако недоступно:', e);
@@ -790,6 +793,7 @@
             localStorage.setItem('crm_nextId', String(nextId));
             localStorage.setItem('crm_columns', JSON.stringify(columns));
             document.getElementById('savingText').textContent = '💾 Сохранено';
+            document.getElementById('savingSpinner').style.display = 'none';
             showToast('💾 Данные сохранены локально', 'success');
         } catch (e) {
             console.error('Ошибка сохранения в localStorage:', e);
@@ -812,12 +816,16 @@
 
             if (stored) {
                 data = JSON.parse(stored);
-                if (storedId) nextId = parseInt(storedId, 10);
-                else nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
+                if (storedId) {
+                    nextId = parseInt(storedId, 10);
+                } else {
+                    nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
+                }
                 render();
                 showToast('📁 Загружено из локального хранилища', 'success');
                 return;
             }
+            // Если нет локальных данных — используем DEFAULT_DATA
             resetData();
         } catch (e) {
             console.error('Ошибка загрузки из localStorage:', e);
@@ -826,11 +834,12 @@
     }
 
     // ================================================================
-    // СОХРАНЕНИЕ В JSONBIN.IO
+    // СОХРАНЕНИЕ В JSONBIN.IO (если есть интернет)
     // ================================================================
     async function saveToCloud() {
         if (isSaving || !data.length) return;
         if (!isOnline) {
+            // Если офлайн — просто сохраняем локально
             saveToLocalStorage();
             return;
         }
@@ -857,6 +866,7 @@
             isOnline = true;
             setStatus('online', 'Онлайн ✅');
             showSaving(false, '💾 Сохранено');
+            // Также сохраняем локально как резерв
             saveToLocalStorage();
             showToast('💾 Данные сохранены в облаке и локально', 'success');
         } catch (e) {
@@ -865,6 +875,7 @@
             isOnline = false;
             setStatus('offline', 'Офлайн ✏️');
             showSaving(false, '📁 Локально');
+            // Сохраняем локально при ошибке
             saveToLocalStorage();
             showToast('⚠️ Ошибка соединения. Данные сохранены локально.', 'error');
         }
@@ -880,7 +891,7 @@
                 saveToLocalStorage();
                 showSaving(false, '📁 Локально');
             }
-        }, 600);
+        }, 300); // Уменьшил задержку для более быстрого сохранения
     }
 
     // ================================================================
@@ -928,11 +939,13 @@
                 var val = row[col.key] || '';
                 if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
             });
-            return filterStatus === '' || row.status === filterStatus;
+            var statusMatch = filterStatus === '' || row.status === filterStatus;
+            return matchText && statusMatch;
         });
 
         if (!filtered.length) {
-            tbody.innerHTML = '<tr><td colspan="' + (columns.length + 2) + '"><div class="empty-state"><span class="emoji">📭</span><p>Нет записей</p><p style="font-size:12px;color:#374151;margin-top:4px;">Нажмите «➕ Добавить» или импортируйте CSV</p></div></td></tr>';
+            var colCount = columns.length + 2;
+            tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><p>Нет записей</p><p style="font-size:12px;color:#374151;margin-top:4px;">Нажмите «➕ Добавить» или импортируйте CSV</p></div></td></tr>';
             document.getElementById('countBadge').textContent = data.length;
             updateCounters();
             return;
@@ -991,7 +1004,8 @@
 
     function updateCounters() {
         document.getElementById('rowCounter').textContent = data.length;
-        document.getElementById('agreedCounter').textContent = data.filter(function(r) { return r.agreed; }).length;
+        var agreedCount = data.filter(function(r) { return r.agreed === true; }).length;
+        document.getElementById('agreedCounter').textContent = agreedCount;
     }
 
     function escapeHtml(text) {
@@ -1055,7 +1069,8 @@
         render();
         closeModal();
         showToast('✅ Столбец "' + label + '" добавлен', 'success');
-        scheduleSave();
+        // Пытаемся сохранить в облако, если есть соединение
+        if (isOnline) scheduleSave();
     }
 
     function removeColumn(key) {
@@ -1075,7 +1090,7 @@
         saveToLocalStorage();
         render();
         showToast('🗑️ Столбец удалён', 'success');
-        scheduleSave();
+        if (isOnline) scheduleSave();
     }
 
     // ================================================================
@@ -1085,6 +1100,8 @@
         var row = data.find(function(r) { return r.id === id; });
         if (row) {
             row[field] = value;
+            // Обновляем отображение без полного рендера (для производительности)
+            // но для гарантии сохранения вызываем render и scheduleSave
             render();
             scheduleSave();
         }
@@ -1114,6 +1131,7 @@
         data.push(newRow);
         render();
         scheduleSave();
+        // Прокрутка к новой строке
         var tbody = document.getElementById('tableBody');
         var last = tbody.lastElementChild;
         if (last) last.scrollIntoView({ behavior: 'smooth' });
@@ -1142,7 +1160,7 @@
         nextId = data.length + 1;
         saveToLocalStorage();
         render();
-        scheduleSave();
+        if (isOnline) scheduleSave();
         showToast('🔄 Данные сброшены к примеру', 'success');
     }
 
@@ -1203,7 +1221,10 @@
                 var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, ''); });
                 var row = { id: nextId++ };
                 columns.forEach(function(col) {
-                    row[col.key] = col.type === 'checkbox' ? false : (col.type === 'number' ? 0 : '');
+                    if (col.type === 'checkbox') row[col.key] = false;
+                    else if (col.type === 'number') row[col.key] = 0;
+                    else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
+                    else row[col.key] = '';
                 });
                 // Заполняем из CSV
                 for (var j = 0; j < cols.length; j++) {
@@ -1224,7 +1245,8 @@
                 // Проверяем, что запись не пустая
                 var hasData = false;
                 columns.forEach(function(col) {
-                    if (row[col.key] && row[col.key] !== '' && row[col.key] !== 0 && row[col.key] !== false) {
+                    var val = row[col.key];
+                    if (val && val !== '' && val !== 0 && val !== false) {
                         hasData = true;
                     }
                 });
@@ -1235,7 +1257,7 @@
                 data = imported;
                 saveToLocalStorage();
                 render();
-                scheduleSave();
+                if (isOnline) scheduleSave();
                 showToast('✅ Импортировано ' + imported.length + ' записей', 'success');
             } else {
                 showToast('Не удалось импортировать данные', 'error');
@@ -1299,6 +1321,7 @@
     console.log('🔑 BIN_ID:', BIN_ID);
     console.log('🔑 API_KEY:', API_KEY ? '✅ Установлен' : '❌ НЕ УСТАНОВЛЕН');
     console.log('📊 Колонок:', columns.length);
+    console.log('💾 Данные сохранены в localStorage');
 </script>
 </body>
 </html>
