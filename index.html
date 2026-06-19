@@ -6,7 +6,7 @@
     <title>CRM — Клиентская база</title>
     <style>
         /* ============================================================
-           СОВРЕМЕННЫЙ МИНИМАЛИСТИЧНЫЙ ДИЗАЙН
+           СОВРЕМЕННЫЙ ДИЗАЙН — 2025
            ============================================================ */
         * {
             margin: 0;
@@ -15,31 +15,33 @@
         }
 
         :root {
-            --bg-primary: #0a0c0f;
-            --bg-secondary: #12161b;
-            --bg-card: #181e26;
-            --bg-hover: #1f2630;
-            --bg-input: #0f1318;
-            --border-color: #282f3a;
-            --border-light: #1e2430;
+            --bg-primary: #07090b;
+            --bg-secondary: #0d1117;
+            --bg-card: #141920;
+            --bg-hover: #1c232b;
+            --bg-input: #0f141a;
+            --border-color: #212830;
+            --border-light: #161d24;
             --text-primary: #f0f4f8;
-            --text-secondary: #94a3b8;
-            --text-muted: #4b5563;
+            --text-secondary: #8b9bb5;
+            --text-muted: #4a5568;
             --accent: #3b82f6;
             --accent-hover: #2563eb;
-            --accent-glow: rgba(59, 130, 246, 0.15);
+            --accent-glow: rgba(59, 130, 246, 0.12);
             --success: #22c55e;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --radius: 12px;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+            --radius: 14px;
             --radius-sm: 8px;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
 
-        /* Светлая тема */
         [data-theme="light"] {
-            --bg-primary: #f1f5f9;
+            --bg-primary: #f0f4f8;
             --bg-secondary: #ffffff;
             --bg-card: #ffffff;
             --bg-hover: #f8fafc;
@@ -49,11 +51,11 @@
             --text-primary: #0f172a;
             --text-secondary: #475569;
             --text-muted: #94a3b8;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.05);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -67,27 +69,35 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-family: var(--font);
             background: var(--bg-primary);
             color: var(--text-primary);
             padding: 20px;
             min-height: 100vh;
             transition: var(--transition);
-            line-height: 1.5;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1440px;
+            max-width: 1480px;
             margin: 0 auto;
-            animation: fadeIn 0.4s ease;
+            animation: fadeIn 0.5s ease;
         }
 
-        /* ===== HEADER ===== */
+        /* ============================================================
+           HEADER
+           ============================================================ */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -95,32 +105,34 @@
             justify-content: space-between;
             gap: 16px;
             margin-bottom: 24px;
-            padding: 16px 24px;
+            padding: 16px 28px;
             background: var(--bg-secondary);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             transition: var(--transition);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+            background: rgba(var(--bg-secondary-rgb), 0.85);
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
         }
 
         .logo {
-            font-size: 28px;
-            filter: drop-shadow(0 0 12px var(--accent-glow));
+            font-size: 30px;
+            filter: drop-shadow(0 0 20px var(--accent-glow));
             transition: var(--transition);
         }
-
-        .logo:hover {
-            transform: scale(1.1) rotate(-4deg);
-        }
+        .logo:hover { transform: scale(1.1) rotate(-4deg); }
 
         .header h1 {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
             letter-spacing: -0.5px;
             background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
@@ -128,20 +140,24 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .badge {
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             background: var(--accent);
             color: #fff;
             font-size: 12px;
             font-weight: 600;
-            padding: 2px 12px;
+            padding: 2px 14px;
             border-radius: 20px;
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 24px var(--accent-glow);
         }
 
         .header-right {
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
         .status-indicator {
@@ -163,7 +179,6 @@
             display: inline-block;
             transition: var(--transition);
         }
-
         .dot.online { background: var(--success); box-shadow: 0 0 12px rgba(34, 197, 94, 0.3); }
         .dot.offline { background: var(--danger); box-shadow: 0 0 12px rgba(239, 68, 68, 0.3); }
         .dot.loading { background: var(--warning); animation: pulse 1s infinite; }
@@ -172,8 +187,8 @@
             background: var(--bg-input);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 16px;
@@ -182,13 +197,11 @@
             align-items: center;
             justify-content: center;
         }
+        .theme-btn:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
 
-        .theme-btn:hover {
-            background: var(--bg-hover);
-            border-color: var(--text-secondary);
-        }
-
-        /* ===== TOOLBAR ===== */
+        /* ============================================================
+           TOOLBAR
+           ============================================================ */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -200,6 +213,7 @@
             border: 1px solid var(--border-color);
             align-items: center;
             box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
         .toolbar .search-wrap {
@@ -210,7 +224,7 @@
 
         .toolbar .search-wrap input {
             width: 100%;
-            padding: 8px 16px 8px 36px;
+            padding: 9px 16px 9px 40px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
@@ -226,20 +240,20 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        .toolbar .search-wrap::before {
-            content: '🔍';
+        .toolbar .search-wrap .search-icon {
             position: absolute;
-            left: 12px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 14px;
-            opacity: 0.5;
+            opacity: 0.4;
+            pointer-events: none;
         }
 
         .toolbar select,
         .toolbar input[type="number"],
         .toolbar input[type="date"] {
-            padding: 8px 12px;
+            padding: 9px 12px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
@@ -258,10 +272,7 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        .toolbar select option {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-        }
+        .toolbar select option { background: var(--bg-secondary); color: var(--text-primary); }
 
         .filter-group {
             display: flex;
@@ -271,14 +282,34 @@
         }
 
         .filter-group label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
-        /* ===== BUTTONS ===== */
+        .filter-group .filter-separator {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .quick-filters {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .quick-filters .btn {
+            font-size: 11px;
+            padding: 4px 12px;
+        }
+
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
         .btn {
-            padding: 8px 16px;
+            padding: 9px 18px;
             border: none;
             border-radius: var(--radius-sm);
             font-weight: 500;
@@ -290,9 +321,11 @@
             gap: 6px;
             font-family: inherit;
             white-space: nowrap;
+            text-decoration: none;
+            line-height: 1;
         }
 
-        .btn:active { transform: scale(0.96); }
+        .btn:active { transform: scale(0.95); }
 
         .btn-primary {
             background: var(--accent);
@@ -302,35 +335,36 @@
         .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 0 30px var(--accent-glow); }
 
         .btn-success { background: var(--success); color: #fff; }
-        .btn-success:hover { filter: brightness(1.1); }
+        .btn-success:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(34, 197, 94, 0.2); }
 
         .btn-danger { background: var(--danger); color: #fff; }
-        .btn-danger:hover { filter: brightness(1.1); }
+        .btn-danger:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
 
         .btn-warning { background: var(--warning); color: #fff; }
-        .btn-warning:hover { filter: brightness(1.1); }
+        .btn-warning:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
+
+        .btn-purple { background: var(--purple); color: #fff; }
+        .btn-purple:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+
+        .btn-pink { background: var(--pink); color: #fff; }
+        .btn-pink:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(236, 72, 153, 0.2); }
 
         .btn-outline {
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
         }
-        .btn-outline:hover {
-            background: var(--bg-hover);
-            border-color: var(--text-secondary);
-        }
-
-        .btn-sm {
-            padding: 4px 10px;
-            font-size: 12px;
-        }
+        .btn-outline:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
 
         .btn-ghost {
             background: transparent;
             color: var(--text-secondary);
-            padding: 4px 8px;
+            padding: 4px 10px;
         }
         .btn-ghost:hover { color: var(--text-primary); background: var(--bg-hover); border-radius: var(--radius-sm); }
+
+        .btn-sm { padding: 5px 12px; font-size: 12px; }
+        .btn-xs { padding: 3px 10px; font-size: 11px; }
 
         .save-status {
             display: flex;
@@ -338,10 +372,11 @@
             gap: 8px;
             font-size: 12px;
             color: var(--text-secondary);
-            padding: 4px 12px;
+            padding: 4px 14px;
             border-radius: 20px;
             background: var(--bg-input);
             border: 1px solid var(--border-color);
+            margin-left: auto;
         }
 
         .save-status .spinner {
@@ -354,29 +389,32 @@
             display: none;
         }
 
-        /* ===== TABLE ===== */
+        /* ============================================================
+           TABLE
+           ============================================================ */
         .table-wrap {
             background: var(--bg-secondary);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
             overflow: auto;
             box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
-            min-width: 900px;
+            min-width: 950px;
         }
 
         th {
             background: var(--bg-input);
             color: var(--text-secondary);
             font-weight: 600;
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.5px;
             padding: 12px 14px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
@@ -386,6 +424,7 @@
             cursor: pointer;
             user-select: none;
             transition: var(--transition);
+            white-space: nowrap;
         }
 
         th:hover { background: var(--bg-hover); }
@@ -393,7 +432,7 @@
         th .sort-icon {
             margin-left: 4px;
             opacity: 0.3;
-            font-size: 10px;
+            font-size: 9px;
         }
         th.sort-asc .sort-icon { opacity: 1; }
         th.sort-asc .sort-icon::after { content: '▲'; }
@@ -403,7 +442,7 @@
         th .col-actions {
             display: inline-flex;
             gap: 4px;
-            margin-left: 8px;
+            margin-left: 6px;
         }
 
         th .col-actions button {
@@ -415,7 +454,6 @@
             padding: 0 4px;
             transition: var(--transition);
         }
-
         th .col-actions button:hover { color: var(--danger); }
 
         td {
@@ -439,11 +477,11 @@
             font-weight: 500;
         }
 
-        .status-согласовано .status-cell { background: rgba(34, 197, 94, 0.15); color: var(--success); }
-        .status-отказ .status-cell { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-        .status-вработе .status-cell { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
-        .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.15); color: var(--accent); }
-        .status-черновик .status-cell { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); }
+        .status-согласовано .status-cell { background: rgba(34, 197, 94, 0.12); color: var(--success); }
+        .status-отказ .status-cell { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
+        .status-вработе .status-cell { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
+        .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.12); color: var(--accent); }
+        .status-черновик .status-cell { background: rgba(148, 163, 184, 0.12); color: var(--text-secondary); }
 
         tr.status-согласовано td:first-child { border-left: 3px solid var(--success); }
         tr.status-отказ td:first-child { border-left: 3px solid var(--danger); }
@@ -451,7 +489,6 @@
         tr.status-отправлено td:first-child { border-left: 3px solid var(--accent); }
         tr.status-черновик td:first-child { border-left: 3px solid var(--text-muted); }
 
-        /* Инпуты в таблице */
         .table-input {
             width: 100%;
             padding: 4px 8px;
@@ -507,7 +544,7 @@
 
         .action-btns {
             display: flex;
-            gap: 4px;
+            gap: 2px;
             flex-wrap: wrap;
         }
 
@@ -523,26 +560,38 @@
         }
 
         .action-btns .btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
-        .action-btns .btn-icon.danger:hover { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-        .action-btns .btn-icon.success:hover { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+        .action-btns .btn-icon.danger:hover { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
+        .action-btns .btn-icon.success:hover { background: rgba(34, 197, 94, 0.12); color: var(--success); }
+        .action-btns .btn-icon.warning:hover { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
+        .action-btns .btn-icon.info:hover { background: rgba(59, 130, 246, 0.12); color: var(--accent); }
 
-        /* ===== FOOTER ===== */
+        /* Row number */
+        .row-number {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
         .footer {
             display: flex;
             flex-wrap: wrap;
             gap: 16px;
             align-items: center;
             margin-top: 20px;
-            padding: 14px 20px;
+            padding: 14px 24px;
             background: var(--bg-secondary);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
         .footer .stats {
             display: flex;
-            gap: 20px;
+            gap: 24px;
             flex-wrap: wrap;
         }
 
@@ -560,6 +609,10 @@
             color: var(--accent);
             font-weight: 600;
         }
+
+        .footer .stat-item .value.success { color: var(--success); }
+        .footer .stat-item .value.danger { color: var(--danger); }
+        .footer .stat-item .value.warning { color: var(--warning); }
 
         .footer .mass-actions {
             display: flex;
@@ -590,7 +643,15 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        /* ===== EMPTY STATE ===== */
+        .footer .right-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           EMPTY STATE
+           ============================================================ */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -609,25 +670,31 @@
             color: var(--text-secondary);
             margin-bottom: 6px;
         }
+        .empty-state p { font-size: 14px; }
 
-        /* ===== TOAST ===== */
+        /* ============================================================
+           TOAST
+           ============================================================ */
         .toast {
             position: fixed;
             bottom: 24px;
             left: 50%;
-            transform: translateX(-50%) translateY(20px);
+            transform: translateX(-50%) translateY(30px);
             background: var(--bg-secondary);
             color: var(--text-primary);
-            padding: 12px 24px;
+            padding: 12px 28px;
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 16px 56px rgba(0, 0, 0, 0.5);
             z-index: 999;
             opacity: 0;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
             font-size: 13px;
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .toast.show {
@@ -637,8 +704,13 @@
 
         .toast.success { border-color: var(--success); }
         .toast.error { border-color: var(--danger); }
+        .toast.warning { border-color: var(--warning); }
 
-        /* ===== MODAL ===== */
+        .toast .toast-icon { font-size: 18px; }
+
+        /* ============================================================
+           MODAL
+           ============================================================ */
         .modal {
             display: none;
             position: fixed;
@@ -651,6 +723,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
         .modal.active { display: flex; }
@@ -659,22 +732,28 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 28px;
-            max-width: 440px;
-            width: 92%;
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+            padding: 32px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
             animation: slideUp 0.3s ease;
         }
 
         .modal-content h3 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
+        }
+
+        .modal-content .modal-sub {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 20px;
         }
 
         .modal-content label {
             display: block;
-            margin: 10px 0 4px;
+            margin: 12px 0 4px;
             color: var(--text-secondary);
             font-size: 13px;
             font-weight: 500;
@@ -683,7 +762,7 @@
         .modal-content input,
         .modal-content select {
             width: 100%;
-            padding: 8px 12px;
+            padding: 9px 12px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
@@ -703,11 +782,11 @@
         .modal-actions {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 24px;
             justify-content: flex-end;
         }
 
-        .modal-actions .btn { padding: 8px 20px; }
+        .modal-actions .btn { padding: 9px 24px; }
 
         .column-settings {
             display: flex;
@@ -731,18 +810,23 @@
         }
 
         .column-settings label:hover { background: var(--bg-hover); }
+        .column-settings label input[type="checkbox"] { width: 14px; height: 14px; }
 
-        .column-settings label input[type="checkbox"] {
-            width: 14px;
-            height: 14px;
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .toolbar .search-wrap { min-width: 140px; }
+            .toolbar select,
+            .toolbar input[type="number"],
+            .toolbar input[type="date"] { min-width: 80px; }
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             body { padding: 12px; }
             .header { flex-direction: column; align-items: stretch; padding: 14px; }
             .header h1 { font-size: 18px; }
-            .header-right { justify-content: space-between; }
+            .header-right { justify-content: space-between; flex-wrap: wrap; }
 
             .toolbar { flex-direction: column; align-items: stretch; padding: 12px 16px; }
             .toolbar .search-wrap { min-width: auto; }
@@ -755,6 +839,10 @@
 
             .footer { flex-direction: column; align-items: stretch; }
             .footer .mass-actions { margin-left: 0; flex-wrap: wrap; }
+            .footer .right-actions { justify-content: center; }
+            .footer .stats { gap: 12px; }
+
+            .save-status { margin-left: 0; }
 
             /* Карточки на телефонах */
             table, thead, tbody, th, td, tr { display: block; }
@@ -800,13 +888,12 @@
             .td-checkbox::before { display: none; }
             .td-checkbox input[type="checkbox"] { width: 20px; height: 20px; }
             .action-btns { justify-content: flex-end; }
+            .row-number { display: none; }
         }
 
         @media (max-width: 480px) {
             .header h1 { font-size: 16px; }
-            .badge { font-size: 10px; padding: 1px 10px; }
             .btn { font-size: 12px; padding: 6px 12px; }
-            .footer .stats { gap: 12px; }
             .footer .stat-item { font-size: 12px; }
         }
 
@@ -815,6 +902,50 @@
         .table-wrap::-webkit-scrollbar-track { background: var(--bg-input); }
         .table-wrap::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* Скелетон загрузки */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-input) 25%, var(--bg-hover) 50%, var(--bg-input) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-sm);
+            height: 20px;
+            width: 100%;
+        }
+
+        /* Бейдж приоритета */
+        .priority-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .priority-badge.high { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .priority-badge.medium { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .priority-badge.low { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+
+        /* Progress bar mini */
+        .progress-mini {
+            width: 60px;
+            height: 4px;
+            background: var(--bg-input);
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .progress-mini .fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+            background: var(--accent);
+        }
+        .progress-mini .fill.success { background: var(--success); }
+        .progress-mini .fill.warning { background: var(--warning); }
+        .progress-mini .fill.danger { background: var(--danger); }
     </style>
 </head>
 <body>
@@ -825,7 +956,7 @@
         <div class="header-left">
             <span class="logo">⚡</span>
             <h1>CRM</h1>
-            <span class="badge" id="countBadge">0</span>
+            <span class="header-badge" id="countBadge">0</span>
         </div>
         <div class="header-right">
             <button class="theme-btn" onclick="toggleTheme()" title="Сменить тему">🌓</button>
@@ -839,6 +970,7 @@
     <!-- TOOLBAR -->
     <div class="toolbar">
         <div class="search-wrap">
+            <span class="search-icon">🔍</span>
             <input type="text" id="filterInput" placeholder="Поиск по всем полям..." />
         </div>
 
@@ -854,18 +986,28 @@
         <div class="filter-group">
             <label>Сумма</label>
             <input type="number" id="filterAmountMin" placeholder="от" style="min-width:70px;" />
+            <span class="filter-separator">—</span>
             <input type="number" id="filterAmountMax" placeholder="до" style="min-width:70px;" />
         </div>
 
         <div class="filter-group">
             <label>Дата</label>
             <input type="date" id="filterDateFrom" style="min-width:100px;" />
+            <span class="filter-separator">—</span>
             <input type="date" id="filterDateTo" style="min-width:100px;" />
+        </div>
+
+        <div class="quick-filters">
+            <button class="btn btn-xs btn-outline" onclick="setQuickFilter('high')">🔥 Высокие</button>
+            <button class="btn btn-xs btn-outline" onclick="setQuickFilter('agreed')">✅ Согласны</button>
+            <button class="btn btn-xs btn-outline" onclick="setQuickFilter('today')">📅 Сегодня</button>
+            <button class="btn btn-xs btn-outline" onclick="clearQuickFilters()">✕ Очистить</button>
         </div>
 
         <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
         <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
         <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
+        <button class="btn btn-outline" onclick="exportJSON()">💾 JSON</button>
 
         <div class="save-status">
             <span class="spinner" id="savingSpinner"></span>
@@ -891,6 +1033,8 @@
             <span class="stat-item">Всего: <strong id="rowCounter">0</strong></span>
             <span class="stat-item">Согласны: <strong id="agreedCounter">0</strong></span>
             <span class="stat-item">Общая сумма: <strong class="value" id="totalAmount">0</strong></span>
+            <span class="stat-item">Средняя: <strong class="value" id="avgAmount">0</strong></span>
+            <span class="stat-item">Макс: <strong class="value success" id="maxAmount">0</strong></span>
         </div>
 
         <div class="mass-actions" id="massActions" style="display:none;">
@@ -905,12 +1049,14 @@
             </select>
             <button class="btn btn-warning btn-sm" onclick="massStatus()">Применить</button>
             <button class="btn btn-danger btn-sm" onclick="massDelete()">🗑 Удалить</button>
+            <button class="btn btn-sm btn-outline" onclick="massExport()">📤 Экспорт</button>
         </div>
 
-        <div style="display:flex;gap:6px;margin-left:auto;">
+        <div class="right-actions">
             <button class="btn btn-outline btn-sm" onclick="exportToClipboard()">📋 Копировать</button>
             <button class="btn btn-outline btn-sm" onclick="showColumnSettings()">⚙️ Столбцы</button>
             <button class="btn btn-outline btn-sm" onclick="showAddColumnModal()">➕ Столбец</button>
+            <button class="btn btn-outline btn-sm" onclick="showStats()">📊 Статистика</button>
         </div>
     </div>
 </div>
@@ -919,6 +1065,7 @@
 <div class="modal" id="addColumnModal">
     <div class="modal-content">
         <h3>➕ Добавить столбец</h3>
+        <p class="modal-sub">Создайте пользовательское поле для таблицы</p>
         <label>Название (ключ):</label>
         <input type="text" id="newColumnKey" placeholder="например: city" />
         <label>Отображаемое имя:</label>
@@ -945,6 +1092,7 @@
 <div class="modal" id="columnSettingsModal">
     <div class="modal-content">
         <h3>⚙️ Настройка столбцов</h3>
+        <p class="modal-sub">Показывать или скрывать колонки таблицы</p>
         <div class="column-settings" id="columnSettingsList"></div>
         <div class="modal-actions">
             <button class="btn btn-primary" onclick="closeModal()">Закрыть</button>
@@ -952,8 +1100,42 @@
     </div>
 </div>
 
+<div class="modal" id="statsModal">
+    <div class="modal-content">
+        <h3>📊 Статистика</h3>
+        <p class="modal-sub">Общая аналитика по данным</p>
+        <div id="statsContent" style="margin: 16px 0;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                    <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Всего записей</div>
+                    <div style="font-size:28px;font-weight:700;" id="statTotal">0</div>
+                </div>
+                <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                    <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Сумма всех КП</div>
+                    <div style="font-size:28px;font-weight:700;color:var(--accent);" id="statSum">0</div>
+                </div>
+                <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                    <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Средняя сумма</div>
+                    <div style="font-size:28px;font-weight:700;color:var(--warning);" id="statAvg">0</div>
+                </div>
+                <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                    <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Согласовано</div>
+                    <div style="font-size:28px;font-weight:700;color:var(--success);" id="statAgreed">0</div>
+                </div>
+            </div>
+            <div style="margin-top:12px;background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+                <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px;">Статусы</div>
+                <div id="statStatuses" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>
+</div>
+
 <div id="toast" class="toast"></div>
-<input type="file" id="fileInput" accept=".csv" style="display:none" onchange="handleImport(event)" />
+<input type="file" id="fileInput" accept=".csv,.json" style="display:none" onchange="handleImport(event)" />
 
 <script>
     // ================================================================
@@ -984,7 +1166,8 @@
         { key: 'agreed', label: 'Согласен', type: 'checkbox' },
         { key: 'comment', label: 'Комментарий', type: 'text' },
         { key: 'phone', label: 'Телефон', type: 'text' },
-        { key: 'email', label: 'Email', type: 'text' }
+        { key: 'email', label: 'Email', type: 'text' },
+        { key: 'priority', label: 'Приоритет', type: 'select', options: ['Низкий', 'Средний', 'Высокий'] }
     ];
 
     columns.forEach(function(col) { visibleColumns[col.key] = true; });
@@ -1042,6 +1225,7 @@
                     if (row.email === undefined) row.email = '';
                     if (row.comment === undefined) row.comment = '';
                     if (row.phone === undefined) row.phone = '';
+                    if (row.priority === undefined) row.priority = 'Средний';
                 });
                 nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
                 isOnline = true;
@@ -1101,6 +1285,7 @@
                     if (row.email === undefined) row.email = '';
                     if (row.comment === undefined) row.comment = '';
                     if (row.phone === undefined) row.phone = '';
+                    if (row.priority === undefined) row.priority = 'Средний';
                 });
                 if (storedId) {
                     nextId = parseInt(storedId, 10);
@@ -1209,6 +1394,7 @@
 
         // Заголовки
         var headerHtml = '<th style="width:30px;"><input type="checkbox" onchange="toggleAllSelect(this.checked)" /></th>';
+        headerHtml += '<th style="width:30px;text-align:center;">#</th>';
         columns.forEach(function(col) {
             if (visibleColumns[col.key] === false) return;
             var sortClass = '';
@@ -1220,7 +1406,7 @@
             headerHtml += '<span class="col-actions"><button onclick="event.stopPropagation();removeColumn(\'' + col.key + '\')" title="Удалить">✕</button></span>';
             headerHtml += '</th>';
         });
-        headerHtml += '<th style="width:100px;">Действия</th>';
+        headerHtml += '<th style="width:110px;">Действия</th>';
         thead.innerHTML = headerHtml;
 
         // Фильтрация
@@ -1254,8 +1440,8 @@
         }
 
         if (!filtered.length) {
-            var colCount = columns.filter(function(c) { return visibleColumns[c.key] !== false; }).length + 2;
-            tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3></div></td></tr>';
+            var colCount = columns.filter(function(c) { return visibleColumns[c.key] !== false; }).length + 3;
+            tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3><p>Нажмите «➕ Добавить» чтобы создать первую запись</p></div></td></tr>';
             document.getElementById('countBadge').textContent = data.length;
             updateCounters();
             updateMassActions();
@@ -1268,6 +1454,7 @@
             var isSelected = selectedIds.indexOf(row.id) !== -1;
             html += '<tr class="status-' + statusClass + (isSelected ? ' selected' : '') + '">';
             html += '<td class="td-checkbox"><input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleSelect(' + row.id + ', this.checked)" /></td>';
+            html += '<td style="text-align:center;"><span class="row-number">' + (idx + 1) + '</span></td>';
 
             columns.forEach(function(col) {
                 if (visibleColumns[col.key] === false) return;
@@ -1278,6 +1465,7 @@
 
             html += '<td data-label="Действия"><div class="action-btns">';
             html += '<button class="btn-icon success" onclick="copyRow(' + row.id + ')" title="Копировать">📋</button>';
+            html += '<button class="btn-icon info" onclick="togglePriority(' + row.id + ')" title="Сменить приоритет">🏷️</button>';
             html += '<button class="btn-icon danger" onclick="deleteRow(' + row.id + ')" title="Удалить">🗑</button>';
             html += '</div></td>';
             html += '</tr>';
@@ -1325,6 +1513,14 @@
                     };
                     return '<span class="status-cell">' + (labels[value] || value) + '</span>';
                 }
+                if (key === 'priority') {
+                    var priorityLabels = {
+                        'Низкий': '<span class="priority-badge low">Низкий</span>',
+                        'Средний': '<span class="priority-badge medium">Средний</span>',
+                        'Высокий': '<span class="priority-badge high">Высокий</span>'
+                    };
+                    return priorityLabels[value] || value;
+                }
                 return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
         }
     }
@@ -1335,6 +1531,10 @@
         document.getElementById('agreedCounter').textContent = agreedCount;
         var total = data.reduce(function(sum, r) { return sum + (r.amount || 0); }, 0);
         document.getElementById('totalAmount').textContent = total.toLocaleString('ru-RU');
+        var avg = data.length ? total / data.length : 0;
+        document.getElementById('avgAmount').textContent = avg.toLocaleString('ru-RU');
+        var max = data.reduce(function(max, r) { return Math.max(max, r.amount || 0); }, 0);
+        document.getElementById('maxAmount').textContent = max.toLocaleString('ru-RU');
     }
 
     function escapeHtml(text) {
@@ -1352,6 +1552,33 @@
             sortColumn = key;
             sortDirection = 1;
         }
+        render();
+    }
+
+    // ================================================================
+    // БЫСТРЫЕ ФИЛЬТРЫ (НОВАЯ ФИЧА)
+    // ================================================================
+    function setQuickFilter(type) {
+        var today = new Date().toISOString().slice(0, 10);
+        if (type === 'high') {
+            document.getElementById('filterAmountMin').value = '100000';
+            document.getElementById('filterAmountMax').value = '';
+        } else if (type === 'agreed') {
+            document.getElementById('filterStatus').value = 'Согласовано';
+        } else if (type === 'today') {
+            document.getElementById('filterDateFrom').value = today;
+            document.getElementById('filterDateTo').value = today;
+        }
+        render();
+    }
+
+    function clearQuickFilters() {
+        document.getElementById('filterInput').value = '';
+        document.getElementById('filterStatus').value = '';
+        document.getElementById('filterAmountMin').value = '';
+        document.getElementById('filterAmountMax').value = '';
+        document.getElementById('filterDateFrom').value = '';
+        document.getElementById('filterDateTo').value = '';
         render();
     }
 
@@ -1436,6 +1663,77 @@
         render();
         scheduleSave();
         showToast('📝 Статус обновлён для ' + count + ' записей', 'success');
+    }
+
+    function massExport() {
+        if (!selectedIds.length) return;
+        var selectedData = data.filter(function(r) { return selectedIds.indexOf(r.id) !== -1; });
+        var visible = columns.filter(function(c) { return visibleColumns[c.key] !== false; });
+        var headers = visible.map(function(c) { return c.label; });
+        var rows = selectedData.map(function(r) {
+            return visible.map(function(c) {
+                var val = r[c.key] !== undefined ? r[c.key] : '';
+                if (c.type === 'checkbox') val = val ? 'Да' : 'Нет';
+                return '"' + String(val).replace(/"/g, '""') + '"';
+            });
+        });
+        var csv = [headers.join(',')];
+        rows.forEach(function(row) { csv.push(row.join(',')); });
+        csv = csv.join('\n');
+        var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'выбранные_клиенты_' + new Date().toISOString().slice(0, 10) + '.csv';
+        link.click();
+        URL.revokeObjectURL(link.href);
+        showToast('📤 Экспортировано ' + selectedData.length + ' записей', 'success');
+    }
+
+    // ================================================================
+    // ПРИОРИТЕТЫ (НОВАЯ ФИЧА)
+    // ================================================================
+    function togglePriority(id) {
+        var row = data.find(function(r) { return r.id === id; });
+        if (!row) return;
+        var priorities = ['Низкий', 'Средний', 'Высокий'];
+        var current = priorities.indexOf(row.priority || 'Средний');
+        row.priority = priorities[(current + 1) % priorities.length];
+        render();
+        scheduleSave();
+        showToast('🏷️ Приоритет: ' + row.priority, 'success');
+    }
+
+    // ================================================================
+    // СТАТИСТИКА (НОВАЯ ФИЧА)
+    // ================================================================
+    function showStats() {
+        var modal = document.getElementById('statsModal');
+        document.getElementById('statTotal').textContent = data.length;
+        var total = data.reduce(function(sum, r) { return sum + (r.amount || 0); }, 0);
+        document.getElementById('statSum').textContent = total.toLocaleString('ru-RU');
+        var avg = data.length ? total / data.length : 0;
+        document.getElementById('statAvg').textContent = avg.toLocaleString('ru-RU');
+        var agreed = data.filter(function(r) { return r.agreed === true; }).length;
+        document.getElementById('statAgreed').textContent = agreed;
+
+        var statuses = {};
+        data.forEach(function(r) {
+            var s = r.status || 'Черновик';
+            statuses[s] = (statuses[s] || 0) + 1;
+        });
+        var html = '';
+        for (var s in statuses) {
+            var labels = {
+                'Согласовано': '✅',
+                'Отказ': '❌',
+                'В работе': '⚡',
+                'Отправлено': '📤',
+                'Черновик': '📝'
+            };
+            html += '<span style="background:var(--bg-input);padding:4px 14px;border-radius:20px;border:1px solid var(--border-color);font-size:13px;">' + (labels[s] || '') + ' ' + s + ': ' + statuses[s] + '</span>';
+        }
+        document.getElementById('statStatuses').innerHTML = html || 'Нет данных';
+        modal.classList.add('active');
     }
 
     // ================================================================
@@ -1574,6 +1872,7 @@
         if (!newRow.client) newRow.client = 'Новый клиент';
         if (!newRow.proposal) newRow.proposal = 'Новое КП';
         if (!newRow.status) newRow.status = 'Черновик';
+        if (!newRow.priority) newRow.priority = 'Средний';
 
         data.push(newRow);
         render();
@@ -1595,13 +1894,14 @@
             { key: 'agreed', label: 'Согласен', type: 'checkbox' },
             { key: 'comment', label: 'Комментарий', type: 'text' },
             { key: 'phone', label: 'Телефон', type: 'text' },
-            { key: 'email', label: 'Email', type: 'text' }
+            { key: 'email', label: 'Email', type: 'text' },
+            { key: 'priority', label: 'Приоритет', type: 'select', options: ['Низкий', 'Средний', 'Высокий'] }
         ];
         columns.forEach(function(col) { visibleColumns[col.key] = true; });
 
         var defaultData = [
-            { client: 'ИП Иванов', proposal: 'Ремонт оборудования', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Доп. согласование', phone: '+7 912 345-67-89', email: 'ivanov@mail.ru' },
-            { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', phone: '+7 912 345-67-90', email: 'logist@pro.ru' }
+            { client: 'ИП Иванов', proposal: 'Ремонт оборудования', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Доп. согласование', phone: '+7 912 345-67-89', email: 'ivanov@mail.ru', priority: 'Средний' },
+            { client: 'ООО ЛогистикПро', proposal: 'Транспортные услуги', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', phone: '+7 912 345-67-90', email: 'logist@pro.ru', priority: 'Высокий' }
         ];
 
         data = defaultData.map(function(r, i) {
@@ -1620,7 +1920,7 @@
     }
 
     // ================================================================
-    // CSV
+    // CSV / JSON
     // ================================================================
     function exportCSV() {
         if (!data.length) return showToast('Нет данных для экспорта', 'error');
@@ -1645,70 +1945,102 @@
         showToast('📤 CSV скачан', 'success');
     }
 
+    function exportJSON() {
+        if (!data.length) return showToast('Нет данных для экспорта', 'error');
+        var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json;charset=utf-8;' });
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'клиенты_' + new Date().toISOString().slice(0, 10) + '.json';
+        link.click();
+        URL.revokeObjectURL(link.href);
+        showToast('💾 JSON скачан', 'success');
+    }
+
     function handleImport(event) {
         var file = event.target.files[0];
         if (!file) return;
         var reader = new FileReader();
         reader.onload = function(ev) {
             var text = ev.target.result;
-            var lines = text.split('\n').filter(function(l) { return l.trim(); });
+            try {
+                // Пробуем как JSON
+                var parsed = JSON.parse(text);
+                if (Array.isArray(parsed) && parsed.length) {
+                    parsed.forEach(function(row) {
+                        row.id = nextId++;
+                        if (row.email === undefined) row.email = '';
+                        if (row.comment === undefined) row.comment = '';
+                        if (row.phone === undefined) row.phone = '';
+                        if (row.priority === undefined) row.priority = 'Средний';
+                    });
+                    data = parsed;
+                    saveToLocalStorage();
+                    render();
+                    if (isOnline) scheduleSave();
+                    showToast('✅ Импортировано ' + data.length + ' записей (JSON)', 'success');
+                    return;
+                }
+            } catch(e) {
+                // Пробуем как CSV
+                var lines = text.split('\n').filter(function(l) { return l.trim(); });
+                if (lines.length < 2) { showToast('Файл пуст или неверный формат', 'error'); return; }
 
-            if (lines.length < 2) { showToast('Файл пуст или неверный формат', 'error'); return; }
+                var headerLine = lines[0];
+                var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
 
-            var headerLine = lines[0];
-            var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
-
-            var colMap = {};
-            headers.forEach(function(h, index) {
-                columns.forEach(function(col) {
-                    if (col.label === h || col.key === h) colMap[index] = col.key;
+                var colMap = {};
+                headers.forEach(function(h, index) {
+                    columns.forEach(function(col) {
+                        if (col.label === h || col.key === h) colMap[index] = col.key;
+                    });
                 });
-            });
 
-            var imported = [];
-            for (var i = 1; i < lines.length; i++) {
-                var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, ''); });
-                var row = { id: nextId++ };
-                columns.forEach(function(col) {
-                    if (col.type === 'checkbox') row[col.key] = false;
-                    else if (col.type === 'number') row[col.key] = 0;
-                    else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
-                    else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
-                    else row[col.key] = '';
-                });
+                var imported = [];
+                for (var i = 1; i < lines.length; i++) {
+                    var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, ''); });
+                    var row = { id: nextId++ };
+                    columns.forEach(function(col) {
+                        if (col.type === 'checkbox') row[col.key] = false;
+                        else if (col.type === 'number') row[col.key] = 0;
+                        else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
+                        else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
+                        else row[col.key] = '';
+                    });
+                    if (!row.priority) row.priority = 'Средний';
 
-                for (var j = 0; j < cols.length; j++) {
-                    var key = colMap[j];
-                    if (key) {
-                        var col = columns.find(function(c) { return c.key === key; });
-                        if (col) {
-                            if (col.type === 'checkbox') {
-                                row[key] = cols[j] === 'Да' || cols[j] === 'TRUE' || cols[j] === 'true' || cols[j] === '1';
-                            } else if (col.type === 'number') {
-                                row[key] = parseFloat(cols[j]) || 0;
-                            } else {
-                                row[key] = cols[j] || '';
+                    for (var j = 0; j < cols.length; j++) {
+                        var key = colMap[j];
+                        if (key) {
+                            var col = columns.find(function(c) { return c.key === key; });
+                            if (col) {
+                                if (col.type === 'checkbox') {
+                                    row[key] = cols[j] === 'Да' || cols[j] === 'TRUE' || cols[j] === 'true' || cols[j] === '1';
+                                } else if (col.type === 'number') {
+                                    row[key] = parseFloat(cols[j]) || 0;
+                                } else {
+                                    row[key] = cols[j] || '';
+                                }
                             }
                         }
                     }
+
+                    var hasData = false;
+                    columns.forEach(function(col) {
+                        var val = row[col.key];
+                        if (val && val !== '' && val !== 0 && val !== false) hasData = true;
+                    });
+                    if (hasData) imported.push(row);
                 }
 
-                var hasData = false;
-                columns.forEach(function(col) {
-                    var val = row[col.key];
-                    if (val && val !== '' && val !== 0 && val !== false) hasData = true;
-                });
-                if (hasData) imported.push(row);
-            }
-
-            if (imported.length) {
-                data = imported;
-                saveToLocalStorage();
-                render();
-                if (isOnline) scheduleSave();
-                showToast('✅ Импортировано ' + imported.length + ' записей', 'success');
-            } else {
-                showToast('Не удалось импортировать данные', 'error');
+                if (imported.length) {
+                    data = imported;
+                    saveToLocalStorage();
+                    render();
+                    if (isOnline) scheduleSave();
+                    showToast('✅ Импортировано ' + imported.length + ' записей (CSV)', 'success');
+                } else {
+                    showToast('Не удалось импортировать данные', 'error');
+                }
             }
         };
         reader.readAsText(file, 'UTF-8');
@@ -1742,12 +2074,14 @@
     function showToast(msg, type) {
         type = type || '';
         var el = document.getElementById('toast');
-        el.textContent = msg;
+        var icons = { success: '✅', error: '❌', warning: '⚠️' };
+        var icon = icons[type] || 'ℹ️';
+        el.innerHTML = '<span class="toast-icon">' + icon + '</span> ' + msg;
         el.className = 'toast';
         if (type) el.classList.add(type);
         el.classList.add('show');
         clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(function() { el.classList.remove('show'); }, 3000);
+        toastTimeout = setTimeout(function() { el.classList.remove('show'); }, 3500);
     }
 
     // ================================================================
@@ -1772,6 +2106,7 @@
     console.log('⚡ CRM загружена');
     console.log('🔑 BIN_ID:', BIN_ID);
     console.log('📊 Колонок:', columns.length);
+    console.log('🆕 Добавлены фичи: приоритеты, статистика, быстрые фильтры, масс-экспорт, JSON-экспорт');
 </script>
 </body>
 </html>
