@@ -611,6 +611,7 @@
 <body>
 
 <div class="container">
+    <!-- ШАПКА -->
     <header class="header">
         <div class="header-left">
             <span class="logo">⚡</span>
@@ -623,6 +624,7 @@
         </div>
     </header>
 
+    <!-- ПАНЕЛЬ -->
     <div class="toolbar">
         <input type="text" id="filterInput" placeholder="🔍 Поиск..." />
         <select id="filterStatus">
@@ -645,6 +647,7 @@
         </span>
     </div>
 
+    <!-- ТАБЛИЦА -->
     <div class="table-wrap">
         <table>
             <thead id="tableHead">
@@ -660,6 +663,7 @@
         </table>
     </div>
 
+    <!-- ПОДВАЛ -->
     <div class="footer-actions">
         <span class="counter">Всего: <strong id="rowCounter">0</strong></span>
         <span class="counter">Согласны: <strong id="agreedCounter">0</strong></span>
@@ -667,6 +671,7 @@
     </div>
 </div>
 
+<!-- Модальное окно -->
 <div class="modal" id="addColumnModal">
     <div class="modal-content">
         <h3>➕ Добавить столбец</h3>
@@ -698,7 +703,7 @@
 
 <script>
     // ================================================================
-    // КОНФИГУРАЦИЯ
+    // КОНФИГУРАЦИЯ (НЕ ТРОГАТЬ!)
     // ================================================================
     var BIN_ID = '6a34730dda38895dfeda3121';
     var API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
@@ -725,7 +730,7 @@
     ];
 
     // ================================================================
-    // ЗАГРУЗКА
+    // ЗАГРУЗКА ИЗ ОБЛАКА
     // ================================================================
     async function loadFromCloud() {
         try {
@@ -742,16 +747,19 @@
             var loaded = result.record;
 
             if (loaded && Array.isArray(loaded) && loaded.length > 0) {
-                // ОЧИСТКА ДАННЫХ: исправляем перепутанные поля
                 data = loaded.map(function(row) {
                     return cleanRow(row);
+                });
+                // Убедимся, что у всех записей есть поле email
+                data.forEach(function(row) {
+                    if (row.email === undefined) row.email = '';
                 });
                 nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
                 isOnline = true;
                 setStatus('online', 'Онлайн ✅');
                 render();
                 saveToLocalStorage();
-                showToast('✅ Данные загружены и очищены', 'success');
+                showToast('✅ Данные загружены из облака', 'success');
                 return;
             }
             loadFromLocalStorage();
@@ -763,37 +771,25 @@
         }
     }
 
-    // ФУНКЦИЯ ОЧИСТКИ ДАННЫХ — исправляет перепутанные поля
+    // ОЧИСТКА ДАННЫХ
     function cleanRow(row) {
         var clean = {};
-
-        // ID
         clean.id = row.id || 0;
-
-        // Клиент
         clean.client = row.client || '';
-
-        // КП
         clean.proposal = row.proposal || '';
-
-        // Сумма — если в поле amount число, оставляем, иначе ищем в других полях
+        
         var amountVal = parseFloat(row.amount);
         if (!isNaN(amountVal) && row.amount !== '') {
             clean.amount = amountVal;
         } else {
-            // Проверяем, может быть сумма записана в поле date или status
             var possibleAmount = parseFloat(row.date) || parseFloat(row.status) || parseFloat(row.comment) || 0;
             clean.amount = possibleAmount || 0;
         }
 
-        // Дата — должна быть в формате YYYY-MM-DD
         var dateStr = row.date || '';
-        // Проверяем, является ли date корректной датой
-        var dateTest = new Date(dateStr);
-        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/) && !isNaN(dateTest.getTime())) {
+        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/) && !isNaN(new Date(dateStr).getTime())) {
             clean.date = dateStr;
         } else {
-            // Ищем дату в других полях
             var foundDate = '';
             var fields = [row.status, row.comment, row.phone, row.email];
             for (var i = 0; i < fields.length; i++) {
@@ -806,11 +802,9 @@
             clean.date = foundDate || new Date().toISOString().slice(0, 10);
         }
 
-        // Статус
         var statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
         var statusVal = row.status || 'Черновик';
         if (statusOptions.indexOf(statusVal) === -1) {
-            // Ищем статус в других полях
             var foundStatus = 'Черновик';
             var allFields = [row.client, row.proposal, row.comment, row.phone];
             for (var j = 0; j < allFields.length; j++) {
@@ -824,21 +818,13 @@
         }
         clean.status = statusVal;
 
-        // Согласен
         clean.agreed = row.agreed === true || row.agreed === 'true' || row.agreed === 'Да' || row.agreed === '1';
-
-        // Комментарий
         clean.comment = row.comment || '';
         if (clean.comment === 'Нет' || clean.comment === 'Да' || clean.comment === 'TRUE') {
             clean.comment = '';
         }
-
-        // Телефон
         clean.phone = row.phone || '';
-
-        // Email
         clean.email = row.email || '';
-
         return clean;
     }
 
@@ -852,7 +838,6 @@
             localStorage.setItem('crm_columns', JSON.stringify(columns));
             document.getElementById('savingText').textContent = '💾 Сохранено';
             document.getElementById('savingSpinner').style.display = 'none';
-            showToast('💾 Данные сохранены локально', 'success');
         } catch (e) {
             console.error('Ошибка сохранения в localStorage:', e);
         }
@@ -873,6 +858,10 @@
 
             if (stored) {
                 data = JSON.parse(stored);
+                // Убедимся, что у всех записей есть поле email
+                data.forEach(function(row) {
+                    if (row.email === undefined) row.email = '';
+                });
                 if (storedId) {
                     nextId = parseInt(storedId, 10);
                 } else {
