@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>CRM Pro — Учет коммерческих предложений</title>
     <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -38,6 +38,9 @@
             --modal-overlay: rgba(0,0,0,0.3);
             --toast-bg: #0f172a;
             --toast-color: #fff;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --radius: 16px;
+            --transition: 0.3s ease;
         }
 
         /* Dark Theme */
@@ -69,6 +72,7 @@
             --modal-overlay: rgba(0,0,0,0.7);
             --toast-bg: #f1f5f9;
             --toast-color: #0f172a;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         /* ===== Reset & Base ===== */
@@ -77,19 +81,26 @@
             font-family: 'Inter', sans-serif;
             background: var(--bg-body);
             color: var(--text-primary);
-            padding: 20px;
+            padding: 12px;
             line-height: 1.5;
-            transition: background 0.3s, color 0.3s;
+            transition: background var(--transition), color var(--transition);
+            min-height: 100vh;
         }
         .app {
             max-width: 1600px;
             margin: 0 auto;
             background: var(--bg-app);
-            border-radius: 32px;
+            border-radius: var(--radius);
             box-shadow: var(--shadow);
             overflow: hidden;
-            padding: 24px 28px 32px;
-            transition: background 0.3s, box-shadow 0.3s;
+            padding: 16px;
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+
+        /* ===== Mobile-first adjustments ===== */
+        @media (min-width: 768px) {
+            .app { padding: 24px 28px 32px; }
+            body { padding: 20px; }
         }
 
         /* ===== Header ===== */
@@ -98,91 +109,90 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 28px;
-            gap: 16px;
+            margin-bottom: 20px;
+            gap: 12px;
         }
         .logo-area {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .logo-icon {
             background: var(--btn-primary);
             color: white;
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 14px;
-            font-size: 24px;
-            transition: background 0.3s;
+            border-radius: 12px;
+            font-size: 20px;
+            transition: background var(--transition);
         }
         .logo-text {
             font-weight: 700;
-            font-size: 24px;
+            font-size: 20px;
             letter-spacing: -0.4px;
         }
         .logo-text span { color: var(--btn-primary); }
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        /* Dark mode toggle */
         .theme-toggle {
             background: var(--bg-toolbar);
             border: 1px solid var(--border-light);
             border-radius: 40px;
-            padding: 8px 16px;
+            padding: 6px 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text-secondary);
-            transition: 0.2s;
+            transition: var(--transition);
         }
-        .theme-toggle:hover {
-            background: var(--border-light);
-        }
-        .theme-toggle i {
-            font-size: 16px;
-        }
-        /* Stats */
+        .theme-toggle:hover { background: var(--border-light); }
+        .theme-toggle i { font-size: 14px; }
+
+        /* Stats - mobile friendly */
         .stats {
             display: flex;
-            gap: 30px;
+            gap: 12px;
             background: var(--bg-toolbar);
-            padding: 8px 24px 8px 20px;
-            border-radius: 60px;
+            padding: 6px 14px;
+            border-radius: 40px;
             border: 1px solid var(--border-light);
+            flex-wrap: wrap;
         }
         .stat-item {
             display: flex;
             align-items: baseline;
-            gap: 6px;
+            gap: 4px;
+            font-size: 13px;
         }
         .stat-number {
             font-weight: 700;
-            font-size: 20px;
+            font-size: 16px;
         }
         .stat-label {
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
         }
         .badge {
             background: var(--badge-bg);
             color: var(--badge-color);
-            padding: 4px 14px;
+            padding: 3px 10px;
             border-radius: 50px;
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         /* ===== Toolbar ===== */
@@ -190,98 +200,114 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 14px 20px;
-            margin-bottom: 28px;
+            gap: 10px;
+            margin-bottom: 16px;
             background: var(--bg-toolbar);
-            padding: 12px 20px;
-            border-radius: 40px;
+            padding: 10px 14px;
+            border-radius: var(--radius);
             border: 1px solid var(--border-light);
-            transition: background 0.3s, border 0.3s;
+            transition: background var(--transition), border var(--transition);
         }
         .search-box {
-            flex: 1 1 260px;
+            flex: 1 1 200px;
             position: relative;
+            min-width: 140px;
         }
         .search-box i {
             position: absolute;
-            left: 16px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
+            font-size: 14px;
         }
         .search-box input {
             width: 100%;
-            padding: 12px 16px 12px 44px;
+            padding: 10px 12px 10px 36px;
             border: 1px solid var(--input-border);
             border-radius: 40px;
             font-size: 14px;
             background: var(--bg-app);
             color: var(--text-primary);
-            transition: 0.2s;
+            transition: var(--transition);
         }
         .search-box input:focus {
             border-color: var(--btn-primary);
             box-shadow: 0 0 0 3px rgba(45, 59, 143, 0.1);
             outline: none;
         }
-        .filter-group {
+
+        .filter-scroll {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 4px 0;
+            flex: 1 1 100%;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
         }
+        .filter-scroll::-webkit-scrollbar {
+            height: 3px;
+        }
+        .filter-scroll::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: 10px;
+        }
+
         .filter-btn {
             background: var(--bg-app);
             border: 1px solid var(--input-border);
-            padding: 8px 18px;
+            padding: 6px 14px;
             border-radius: 40px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             cursor: pointer;
-            transition: 0.15s;
+            transition: var(--transition);
+            white-space: nowrap;
         }
-        .filter-btn:hover {
-            background: var(--border-light);
-        }
+        .filter-btn:hover { background: var(--border-light); }
         .filter-btn.active {
             background: var(--btn-primary);
             color: white;
             border-color: var(--btn-primary);
         }
-        /* Rating filter */
+
         .rating-filter {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 14px;
+            gap: 6px;
+            font-size: 13px;
             color: var(--text-secondary);
+            flex-wrap: wrap;
         }
         .rating-filter input[type="range"] {
-            width: 120px;
+            width: 80px;
             accent-color: var(--btn-primary);
             background: transparent;
         }
         .rating-filter span {
             font-weight: 600;
-            min-width: 30px;
+            min-width: 24px;
             color: var(--text-primary);
         }
+
         .add-btn {
             background: var(--btn-primary);
             color: white;
             border: none;
-            padding: 10px 26px;
+            padding: 8px 18px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
-            transition: 0.15s;
+            transition: var(--transition);
             white-space: nowrap;
         }
         .add-btn:hover {
@@ -289,23 +315,107 @@
             transform: scale(1.02);
         }
 
-        /* ===== Table ===== */
+        /* ===== Mobile Cards (instead of table on small screens) ===== */
+        .cards-view {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .card-item {
+            background: var(--bg-app);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 14px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+        .card-item.priority-high { border-left: 4px solid #ef4444; }
+        .card-item.priority-medium { border-left: 4px solid #f59e0b; }
+        .card-item.priority-low { border-left: 4px solid #22c55e; }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .card-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+        .card-status {
+            font-size: 12px;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .card-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 12px;
+            margin: 8px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .card-details .label { color: var(--text-secondary); font-weight: 500; }
+        .card-actions {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-light);
+        }
+        .card-actions .action-btn {
+            border: none;
+            background: transparent;
+            padding: 6px 10px;
+            border-radius: 30px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .card-actions .action-btn:hover {
+            background: var(--border-light);
+            color: var(--text-primary);
+        }
+        .card-actions .action-btn.danger:hover {
+            background: var(--status-lost-bg);
+            color: var(--status-lost-color);
+        }
+        .card-actions .action-btn.success:hover {
+            background: var(--status-deal-bg);
+            color: var(--status-deal-color);
+        }
+        .card-actions .action-btn.star-btn.active {
+            color: #f59e0b;
+        }
+
+        /* ===== Table View (desktop) ===== */
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 20px;
+            border-radius: var(--radius);
             border: 1px solid var(--border-light);
             background: var(--bg-app);
-            transition: border 0.3s;
+            transition: border var(--transition);
+            display: none;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
-            min-width: 1100px;
+            font-size: 13px;
+            min-width: 900px;
         }
         th {
             text-align: left;
-            padding: 16px 14px;
+            padding: 12px 10px;
             background: var(--bg-table-header);
             color: var(--text-secondary);
             font-weight: 600;
@@ -313,25 +423,17 @@
             white-space: nowrap;
             cursor: pointer;
             user-select: none;
-            transition: background 0.3s;
+            transition: background var(--transition);
         }
-        th:hover {
-            background: var(--border-light);
-        }
-        th i {
-            margin-left: 6px;
-            font-size: 12px;
-            opacity: 0.5;
-        }
+        th:hover { background: var(--border-light); }
+        th i { margin-left: 4px; font-size: 11px; opacity: 0.5; }
         td {
-            padding: 14px 14px;
+            padding: 10px 10px;
             border-bottom: 1px solid var(--border-light);
             vertical-align: middle;
-            transition: background 0.2s;
+            transition: background var(--transition);
         }
-        tr:hover td {
-            background: var(--bg-hover);
-        }
+        tr:hover td { background: var(--bg-hover); }
         .company-name {
             font-weight: 600;
             color: var(--text-primary);
@@ -339,10 +441,10 @@
         .status {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 14px;
+            gap: 4px;
+            padding: 3px 12px;
             border-radius: 50px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
         }
         .status-new { background: var(--status-new-bg); color: var(--status-new-color); }
@@ -353,22 +455,22 @@
 
         .actions {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             flex-wrap: wrap;
         }
         .action-btn {
             border: none;
             background: transparent;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 40px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: var(--text-secondary);
             cursor: pointer;
-            transition: 0.1s;
-            font-size: 14px;
+            transition: var(--transition);
+            font-size: 13px;
         }
         .action-btn:hover {
             background: var(--border-light);
@@ -382,9 +484,7 @@
             background: var(--status-deal-bg);
             color: var(--status-deal-color);
         }
-        .action-btn.star-btn.active {
-            color: #f59e0b;
-        }
+        .action-btn.star-btn.active { color: #f59e0b; }
         .action-btn.star-btn:hover {
             background: #fef3c7;
             color: #f59e0b;
@@ -392,19 +492,14 @@
 
         .badge-micro {
             background: var(--border-light);
-            padding: 2px 12px;
+            padding: 2px 10px;
             border-radius: 50px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: var(--text-secondary);
         }
-        .priority-high { border-left: 4px solid #ef4444; }
-        .priority-medium { border-left: 4px solid #f59e0b; }
-        .priority-low { border-left: 4px solid #22c55e; }
-
-        /* Checkbox column */
         .checkbox-col {
-            width: 40px;
+            width: 36px;
             text-align: center;
         }
         .checkbox-col input[type="checkbox"] {
@@ -414,24 +509,99 @@
             cursor: pointer;
         }
 
+        /* ===== View toggle ===== */
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-toolbar);
+            border: 1px solid var(--border-light);
+            border-radius: 30px;
+            padding: 3px;
+        }
+        .view-toggle button {
+            border: none;
+            background: transparent;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .view-toggle button.active {
+            background: var(--btn-primary);
+            color: white;
+        }
+        .view-toggle button:hover:not(.active) {
+            background: var(--border-light);
+        }
+
+        /* ===== Group actions ===== */
+        .group-actions-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .group-actions-left {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .group-actions-left select {
+            padding: 5px 10px;
+            border-radius: 30px;
+            border: 1px solid var(--input-border);
+            background: var(--bg-app);
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+        .group-actions-left button {
+            background: var(--btn-primary);
+            color: white;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+        }
+        .group-actions-left button:hover {
+            background: var(--btn-primary-hover);
+        }
+        .group-actions-left button.secondary {
+            background: transparent;
+            border: 1px solid var(--input-border);
+            color: var(--text-secondary);
+        }
+        .group-actions-left button.secondary:hover {
+            background: var(--border-light);
+        }
+
         /* ===== Pagination ===== */
         .pagination {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            padding-top: 24px;
-            font-size: 14px;
-            flex-wrap: wrap;
-            gap: 12px;
+            padding-top: 16px;
+            font-size: 13px;
+            gap: 8px;
         }
         .pagination .info {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 10px;
             color: var(--text-secondary);
         }
         .pagination .info select {
-            padding: 6px 12px;
+            padding: 4px 8px;
             border-radius: 30px;
             border: 1px solid var(--input-border);
             background: var(--bg-app);
@@ -439,21 +609,20 @@
         }
         .page-buttons {
             display: flex;
-            gap: 6px;
+            gap: 4px;
         }
         .page-btn {
             background: var(--bg-app);
             border: 1px solid var(--input-border);
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 30px;
             font-weight: 500;
             cursor: pointer;
-            transition: 0.1s;
+            transition: var(--transition);
             color: var(--text-primary);
+            font-size: 13px;
         }
-        .page-btn:hover {
-            background: var(--border-light);
-        }
+        .page-btn:hover { background: var(--border-light); }
         .page-btn.active {
             background: var(--btn-primary);
             color: white;
@@ -464,43 +633,16 @@
             cursor: not-allowed;
         }
 
-        /* Group actions */
-        .group-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .group-actions select {
-            padding: 6px 12px;
-            border-radius: 30px;
-            border: 1px solid var(--input-border);
-            background: var(--bg-app);
-            color: var(--text-primary);
-        }
-        .group-actions button {
-            background: var(--btn-primary);
-            color: white;
-            border: none;
-            padding: 6px 18px;
-            border-radius: 30px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.15s;
-        }
-        .group-actions button:hover {
-            background: var(--btn-primary-hover);
-        }
-
         /* ===== Empty state ===== */
         .empty-state {
             text-align: center;
-            padding: 50px 20px;
+            padding: 40px 20px;
             color: var(--text-secondary);
         }
         .empty-state i {
-            font-size: 48px;
+            font-size: 40px;
             color: var(--border-light);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         /* ===== Modal ===== */
@@ -513,16 +655,17 @@
             align-items: center;
             justify-content: center;
             z-index: 999;
-            transition: background 0.3s;
+            padding: 16px;
+            transition: background var(--transition);
         }
         .modal {
             background: var(--bg-app);
             max-width: 560px;
             width: 100%;
-            max-height: 90vh;
+            max-height: 95vh;
             overflow-y: auto;
-            border-radius: 32px;
-            padding: 32px 28px;
+            border-radius: var(--radius);
+            padding: 24px 20px;
             box-shadow: 0 40px 80px rgba(0,0,0,0.2);
             animation: modalIn 0.2s ease;
             color: var(--text-primary);
@@ -532,33 +675,34 @@
             to { transform: scale(1); opacity: 1; }
         }
         .modal h3 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .modal .sub {
             color: var(--text-secondary);
-            margin-bottom: 22px;
+            margin-bottom: 18px;
+            font-size: 14px;
         }
         .modal label {
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             display: block;
-            margin-top: 16px;
+            margin-top: 14px;
             margin-bottom: 4px;
         }
         .modal input, .modal select, .modal textarea {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border: 1px solid var(--input-border);
-            border-radius: 16px;
+            border-radius: 12px;
             font-size: 14px;
             background: var(--bg-app);
             color: var(--text-primary);
-            transition: border 0.2s;
+            transition: border var(--transition);
         }
         .modal textarea {
-            min-height: 80px;
+            min-height: 70px;
             resize: vertical;
         }
         .modal input:focus, .modal select:focus, .modal textarea:focus {
@@ -568,15 +712,17 @@
         .modal-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
-            margin-top: 28px;
+            gap: 10px;
+            margin-top: 22px;
+            flex-wrap: wrap;
         }
         .modal-actions button {
-            padding: 10px 24px;
+            padding: 8px 20px;
             border-radius: 40px;
             border: none;
             font-weight: 600;
             cursor: pointer;
+            font-size: 14px;
         }
         .modal-actions .btn-secondary {
             background: var(--border-light);
@@ -596,51 +742,97 @@
         /* ===== Toast ===== */
         .toast {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 20px;
+            right: 20px;
+            left: 20px;
+            max-width: 400px;
+            margin: 0 auto;
             background: var(--toast-bg);
             color: var(--toast-color);
-            padding: 14px 28px;
-            border-radius: 60px;
+            padding: 12px 20px;
+            border-radius: 40px;
             font-weight: 500;
             box-shadow: 0 12px 30px rgba(0,0,0,0.2);
             display: none;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             z-index: 1000;
-            transition: background 0.3s, color 0.3s;
+            transition: background var(--transition), color var(--transition);
+            font-size: 14px;
         }
 
         /* ===== Insight bar ===== */
         .insight-bar {
-            margin-top: 18px;
+            margin-top: 14px;
             display: flex;
             flex-wrap: wrap;
-            gap: 8px 16px;
-            font-size: 13px;
+            gap: 6px 12px;
+            font-size: 12px;
             color: var(--text-secondary);
             border-top: 1px solid var(--border-light);
-            padding-top: 18px;
-            transition: border 0.3s;
+            padding-top: 14px;
+            transition: border var(--transition);
         }
         .insight-bar i {
             color: var(--btn-primary);
-            margin-right: 4px;
+            margin-right: 3px;
         }
         .insight-item {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
-        /* ===== Responsive ===== */
-        @media (max-width: 700px) {
-            .app { padding: 16px; }
-            .stats { gap: 12px; flex-wrap: wrap; }
-            .toolbar { flex-direction: column; align-items: stretch; }
-            .header { flex-direction: column; align-items: stretch; }
-            .header-actions { justify-content: space-between; }
-            .rating-filter { flex-wrap: wrap; }
+        /* ===== Responsive switches ===== */
+        @media (min-width: 768px) {
+            .table-wrapper { display: block; }
+            .cards-view { display: none !important; }
+        }
+        @media (max-width: 767px) {
+            .table-wrapper { display: none !important; }
+            .cards-view { display: flex; }
+            .stats .stat-label { display: none; }
+            .stat-item { font-size: 12px; }
+            .stat-number { font-size: 14px; }
+            .header-actions { width: 100%; justify-content: space-between; }
+            .logo-text { font-size: 17px; }
+        }
+
+        /* ===== Quick filters sidebar (mobile) ===== */
+        .quick-filters {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .quick-filter-chip {
+            background: var(--bg-toolbar);
+            border: 1px solid var(--border-light);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .quick-filter-chip:hover {
+            background: var(--border-light);
+        }
+        .quick-filter-chip.active {
+            background: var(--btn-primary);
+            color: white;
+            border-color: var(--btn-primary);
+        }
+
+        /* ===== Status dropdown in card ===== */
+        .card-status-select {
+            padding: 2px 8px;
+            border-radius: 30px;
+            border: 1px solid var(--input-border);
+            background: var(--bg-app);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -652,7 +844,7 @@
         <div class="logo-area">
             <div class="logo-icon"><i class="fas fa-handshake"></i></div>
             <div class="logo-text">Pro<span>CRM</span></div>
-            <span class="badge"><i class="fas fa-rocket"></i> Pro версия</span>
+            <span class="badge"><i class="fas fa-rocket"></i> Pro</span>
         </div>
         <div class="header-actions">
             <div class="stats">
@@ -663,7 +855,7 @@
             </div>
             <button class="theme-toggle" id="themeToggle">
                 <i class="fas fa-moon"></i>
-                <span>Тема</span>
+                <span class="hide-mobile">Тема</span>
             </button>
         </div>
     </div>
@@ -672,15 +864,15 @@
     <div class="toolbar">
         <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Поиск по названию, адресу, телефону...">
+            <input type="text" id="searchInput" placeholder="Поиск...">
         </div>
-        <div class="filter-group">
+        <div class="filter-scroll" id="filterScroll">
             <button class="filter-btn active" data-filter="all"><i class="fas fa-list"></i> Все</button>
             <button class="filter-btn" data-filter="new"><i class="fas fa-circle" style="color:var(--status-new-color);"></i> Новые</button>
             <button class="filter-btn" data-filter="contacted"><i class="fas fa-phone" style="color:var(--status-contacted-color);"></i> В работе</button>
             <button class="filter-btn" data-filter="deal"><i class="fas fa-check-circle" style="color:var(--status-deal-color);"></i> Сделка</button>
             <button class="filter-btn" data-filter="micro"><i class="fas fa-store"></i> Микро</button>
-            <button class="filter-btn" data-filter="favorites"><i class="fas fa-star" style="color:#f59e0b;"></i> Избранное</button>
+            <button class="filter-btn" data-filter="favorites"><i class="fas fa-star" style="color:#f59e0b;"></i> Избр.</button>
         </div>
         <div class="rating-filter">
             <i class="fas fa-star" style="color:#f59e0b;"></i>
@@ -688,13 +880,26 @@
             <span id="ratingVal">0</span>
             <input type="range" id="ratingRange" min="0" max="5" step="0.1" value="0">
         </div>
-        <button class="add-btn" id="openAddModal"><i class="fas fa-plus"></i> Добавить</button>
+        <button class="add-btn" id="openAddModal"><i class="fas fa-plus"></i> <span class="hide-mobile">Добавить</span></button>
     </div>
 
-    <!-- GROUP ACTIONS -->
-    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:16px; gap:10px;">
-        <div class="group-actions">
-            <span style="font-size:13px; color:var(--text-secondary);"><i class="far fa-square"></i> Выбрано: <span id="selectedCount">0</span></span>
+    <!-- VIEW TOGGLE -->
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+        <div class="view-toggle">
+            <button class="active" data-view="table"><i class="fas fa-table"></i> <span class="hide-mobile">Таблица</span></button>
+            <button data-view="cards"><i class="fas fa-th-large"></i> <span class="hide-mobile">Карточки</span></button>
+        </div>
+        <div style="display:flex; gap:6px; font-size:12px; color:var(--text-secondary);">
+            <span style="display:flex; align-items:center; gap:3px;"><span style="color:#ef4444;">●</span>高</span>
+            <span style="display:flex; align-items:center; gap:3px;"><span style="color:#f59e0b;">●</span>中</span>
+            <span style="display:flex; align-items:center; gap:3px;"><span style="color:#22c55e;">●</span>低</span>
+        </div>
+    </div>
+
+    <!-- GROUP ACTIONS BAR -->
+    <div class="group-actions-bar">
+        <div class="group-actions-left">
+            <span><i class="far fa-square"></i> <span id="selectedCount">0</span></span>
             <select id="groupStatusSelect">
                 <option value="">Сменить статус</option>
                 <option value="new">Новое</option>
@@ -703,16 +908,19 @@
                 <option value="deal">Сделка</option>
                 <option value="lost">Потеряно</option>
             </select>
-            <button id="applyGroupStatus"><i class="fas fa-check"></i> Применить</button>
-            <button id="exportCsv" style="background:transparent; border:1px solid var(--input-border); color:var(--text-primary);"><i class="fas fa-file-csv"></i> CSV</button>
+            <button id="applyGroupStatus"><i class="fas fa-check"></i></button>
+            <button class="secondary" id="exportCsv"><i class="fas fa-file-csv"></i> CSV</button>
         </div>
-        <div style="display:flex; gap:8px; font-size:13px; color:var(--text-secondary);">
-            <span>Приоритет: <span style="display:inline-flex; gap:4px;"><span style="color:#ef4444;">●</span><span style="color:#f59e0b;">●</span><span style="color:#22c55e;">●</span></span></span>
+        <div>
+            <button class="secondary" id="importCsvBtn" style="background:transparent; border:1px solid var(--input-border); color:var(--text-secondary); padding:5px 12px; border-radius:30px; font-size:13px; cursor:pointer;">
+                <i class="fas fa-file-import"></i> Импорт
+            </button>
+            <input type="file" id="importCsvInput" accept=".csv" style="display:none;">
         </div>
     </div>
 
-    <!-- TABLE -->
-    <div class="table-wrapper">
+    <!-- TABLE VIEW -->
+    <div class="table-wrapper" id="tableView">
         <table>
             <thead>
                 <tr>
@@ -732,12 +940,17 @@
         </table>
     </div>
 
+    <!-- CARDS VIEW (mobile) -->
+    <div class="cards-view" id="cardsView">
+        <!-- динамика -->
+    </div>
+
     <!-- PAGINATION -->
     <div class="pagination">
         <div class="info">
             <span id="pageInfo">1 / 1</span>
-            <span>Показать:</span>
-            <select id="perPageSelect">
+            <span class="hide-mobile">Показать:</span>
+            <select id="perPageSelect" class="hide-mobile">
                 <option value="10">10</option>
                 <option value="15" selected>15</option>
                 <option value="25">25</option>
@@ -769,6 +982,7 @@
         <span class="insight-item"><i class="fas fa-flag"></i> Приоритеты</span>
         <span class="insight-item"><i class="fas fa-check-double"></i> Групповые операции</span>
         <span class="insight-item"><i class="fas fa-sliders-h"></i> Фильтр по рейтингу</span>
+        <span class="insight-item"><i class="fas fa-globe"></i> Сайт</span>
     </div>
 </div>
 
@@ -784,6 +998,8 @@
         <input type="text" id="formCategory" placeholder="кафе, ресторан, салон...">
         <label>Телефон</label>
         <input type="text" id="formPhone" placeholder="+7 999 123-45-67">
+        <label>Сайт</label>
+        <input type="text" id="formWebsite" placeholder="https://example.com">
         <label>Рейтинг</label>
         <input type="number" id="formRating" placeholder="4.5" step="0.1" min="0" max="5">
         <label>Статус</label>
@@ -800,7 +1016,7 @@
             <option value="medium" selected>Средний</option>
             <option value="high">Высокий</option>
         </select>
-        <label>Заметки / История</label>
+        <label>Заметки</label>
         <textarea id="formNotes" placeholder="Заметки по клиенту, история общения..."></textarea>
         <div class="modal-actions">
             <button class="btn-secondary" id="closeModal">Отмена</button>
@@ -829,9 +1045,11 @@
     let sortAsc = true;
     let minRating = 0;
     let selectedIds = new Set();
+    let currentView = 'table';
 
     // ======================== DOM REFS ========================
     const tbody = document.getElementById('tableBody');
+    const cardsView = document.getElementById('cardsView');
     const totalSpan = document.getElementById('totalCount');
     const newSpan = document.getElementById('newCount');
     const dealSpan = document.getElementById('dealCount');
@@ -845,6 +1063,7 @@
     const formName = document.getElementById('formName');
     const formCategory = document.getElementById('formCategory');
     const formPhone = document.getElementById('formPhone');
+    const formWebsite = document.getElementById('formWebsite');
     const formRating = document.getElementById('formRating');
     const formStatus = document.getElementById('formStatus');
     const formPriority = document.getElementById('formPriority');
@@ -865,7 +1084,10 @@
     const groupStatusSelect = document.getElementById('groupStatusSelect');
     const applyGroupStatus = document.getElementById('applyGroupStatus');
     const exportCsv = document.getElementById('exportCsv');
+    const importCsvBtn = document.getElementById('importCsvBtn');
+    const importCsvInput = document.getElementById('importCsvInput');
     const themeToggle = document.getElementById('themeToggle');
+    const viewToggleBtns = document.querySelectorAll('.view-toggle button');
 
     // ======================== HELPERS ========================
     function showToast(msg) {
@@ -882,9 +1104,7 @@
 
     function getStatusClass(st) { return `status-${st}`; }
 
-    function getPriorityClass(p) {
-        return `priority-${p || 'low'}`;
-    }
+    function getPriorityClass(p) { return `priority-${p || 'low'}`; }
 
     function generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
@@ -899,11 +1119,10 @@
         const icon = themeToggle.querySelector('i');
         icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     }
-    // init theme
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    const icon = themeToggle.querySelector('i');
-    icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    const themeIcon = themeToggle.querySelector('i');
+    themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     themeToggle.addEventListener('click', toggleTheme);
 
     // ======================== CRUD with JSONBin ========================
@@ -917,16 +1136,15 @@
             if (data && data.length) {
                 records = data;
             } else {
-                // Инициализация тестовыми данными
                 records = getDefaultData();
                 await saveToBin();
             }
-            // Ensure each record has all fields
             records = records.map(r => ({
                 ...r,
                 favorite: r.favorite || false,
                 priority: r.priority || 'medium',
                 notes: r.notes || '',
+                website: r.website || '',
                 history: r.history || []
             }));
             applyFilters();
@@ -939,13 +1157,13 @@
 
     function getDefaultData() {
         return [
-            { id: generateId(), name: 'Где поесть в Москве', category: 'кафе', phone: '+7 906 774-90-64', rating: 4.6, status: 'new', micro: true, favorite: false, priority: 'high', notes: 'Перспективный клиент', history: [] },
-            { id: generateId(), name: 'Everest Continental', category: 'ресторан', phone: '+7 985 355-13-13', rating: 4.9, status: 'contacted', micro: false, favorite: true, priority: 'high', notes: 'Крупный ресторан', history: [] },
-            { id: generateId(), name: 'Кофейня DAILY GREEN', category: 'кофейня', phone: '+7 495 773-94-77', rating: 4.7, status: 'new', micro: false, favorite: false, priority: 'medium', notes: '', history: [] },
-            { id: generateId(), name: 'PARK47', category: 'кофейня', phone: '+7 925 750-08-86', rating: 5.0, status: 'deal', micro: false, favorite: true, priority: 'high', notes: 'Сделка закрыта', history: [] },
-            { id: generateId(), name: 'Столовая Mr.Chef', category: 'столовая', phone: '+7 966 047-06-06', rating: 4.8, status: 'deal', micro: true, favorite: false, priority: 'medium', notes: '', history: [] },
-            { id: generateId(), name: 'Smash Point', category: 'бургерная', phone: '+7 963 713-64-11', rating: 4.5, status: 'new', micro: false, favorite: false, priority: 'low', notes: '', history: [] },
-            { id: generateId(), name: 'SEABASUSHI', category: 'суши', phone: '+7 499 653-73-02', rating: 4.9, status: 'meeting', micro: false, favorite: false, priority: 'high', notes: 'Назначена встреча', history: [] },
+            { id: generateId(), name: 'Где поесть в Москве', category: 'кафе', phone: '+7 906 774-90-64', website: 'https://www.loft-moskva.ru/', rating: 4.6, status: 'new', micro: true, favorite: false, priority: 'high', notes: 'Перспективный клиент', history: [] },
+            { id: generateId(), name: 'Everest Continental', category: 'ресторан', phone: '+7 985 355-13-13', website: 'https://everestfamily.ru/', rating: 4.9, status: 'contacted', micro: false, favorite: true, priority: 'high', notes: 'Крупный ресторан', history: [] },
+            { id: generateId(), name: 'Кофейня DAILY GREEN', category: 'кофейня', phone: '+7 495 773-94-77', website: 'http://www.dailygreen.cafe/', rating: 4.7, status: 'new', micro: false, favorite: false, priority: 'medium', notes: '', history: [] },
+            { id: generateId(), name: 'PARK47', category: 'кофейня', phone: '+7 925 750-08-86', website: 'http://instagram.com/park47coffee', rating: 5.0, status: 'deal', micro: false, favorite: true, priority: 'high', notes: 'Сделка закрыта', history: [] },
+            { id: generateId(), name: 'Столовая Mr.Chef', category: 'столовая', phone: '+7 966 047-06-06', website: 'https://chefmr.wixsite.com/mrchef', rating: 4.8, status: 'deal', micro: true, favorite: false, priority: 'medium', notes: '', history: [] },
+            { id: generateId(), name: 'Smash Point', category: 'бургерная', phone: '+7 963 713-64-11', website: 'https://smashpoint.ru/', rating: 4.5, status: 'new', micro: false, favorite: false, priority: 'low', notes: '', history: [] },
+            { id: generateId(), name: 'SEABASUSHI', category: 'суши', phone: '+7 499 653-73-02', website: 'https://seabassushi.ru/ru', rating: 4.9, status: 'meeting', micro: false, favorite: false, priority: 'high', notes: 'Назначена встреча', history: [] },
         ];
     }
 
@@ -967,30 +1185,24 @@
         const term = searchTerm.toLowerCase().trim();
         let arr = [...records];
 
-        // Фильтр статуса
         if (currentFilter === 'new') arr = arr.filter(r => r.status === 'new');
         else if (currentFilter === 'contacted') arr = arr.filter(r => r.status === 'contacted' || r.status === 'meeting');
         else if (currentFilter === 'deal') arr = arr.filter(r => r.status === 'deal');
         else if (currentFilter === 'micro') arr = arr.filter(r => r.micro === true);
         else if (currentFilter === 'favorites') arr = arr.filter(r => r.favorite === true);
 
-        // Фильтр по рейтингу
-        if (minRating > 0) {
-            arr = arr.filter(r => (r.rating || 0) >= minRating);
-        }
+        if (minRating > 0) arr = arr.filter(r => (r.rating || 0) >= minRating);
 
-        // Поиск
         if (term) {
             arr = arr.filter(r =>
                 r.name?.toLowerCase().includes(term) ||
                 r.category?.toLowerCase().includes(term) ||
                 r.phone?.toLowerCase().includes(term) ||
-                r.address?.toLowerCase().includes(term) ||
+                r.website?.toLowerCase().includes(term) ||
                 r.notes?.toLowerCase().includes(term)
             );
         }
 
-        // Сортировка
         arr.sort((a, b) => {
             let valA = a[sortField] ?? '';
             let valB = b[sortField] ?? '';
@@ -1008,7 +1220,7 @@
         filtered = arr;
         currentPage = 1;
         renderStats();
-        renderTable();
+        renderView();
     }
 
     function renderStats() {
@@ -1018,13 +1230,20 @@
         favoriteSpan.textContent = records.filter(r => r.favorite).length;
     }
 
+    function renderView() {
+        if (currentView === 'table') {
+            renderTable();
+        } else {
+            renderCards();
+        }
+        updatePagination();
+        updateSelectedCount();
+    }
+
     function renderTable() {
         const start = (currentPage - 1) * perPage;
         const pageData = filtered.slice(start, start + perPage);
         const totalPages = Math.ceil(filtered.length / perPage) || 1;
-        pageInfo.textContent = `${currentPage} / ${totalPages}`;
-        prevPageBtn.disabled = currentPage <= 1;
-        nextPageBtn.disabled = currentPage >= totalPages;
 
         if (!pageData.length) {
             tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class="fas fa-inbox"></i><p>Нет записей. Добавьте первое КП!</p></div></td></tr>`;
@@ -1035,30 +1254,98 @@
         pageData.forEach((r) => {
             const microBadge = r.micro ? '<span class="badge-micro"><i class="fas fa-check-circle" style="color:var(--btn-primary);"></i> микро</span>' : '';
             const starClass = r.favorite ? 'active' : '';
-            const priorityClass = getPriorityClass(r.priority);
             const checked = selectedIds.has(r.id) ? 'checked' : '';
-            html += `<tr class="${priorityClass}">
+            html += `<tr>
                 <td class="checkbox-col"><input type="checkbox" class="row-checkbox" data-id="${r.id}" ${checked}></td>
                 <td><span class="company-name">${r.name || '—'}</span></td>
                 <td>${r.category || '—'}</td>
-                <td><a href="tel:${r.phone}" style="color:var(--text-primary); text-decoration:none; display:flex; align-items:center; gap:4px;"><i class="fas fa-phone" style="color:var(--btn-primary); font-size:12px;"></i> ${r.phone || '—'}</a></td>
+                <td>${r.phone ? `<a href="tel:${r.phone}" style="color:var(--text-primary); text-decoration:none; display:flex; align-items:center; gap:4px;"><i class="fas fa-phone" style="color:var(--btn-primary); font-size:11px;"></i> ${r.phone}</a>` : '—'}</td>
                 <td>${r.rating || '—'}</td>
-                <td><span class="status ${getStatusClass(r.status)}"><i class="fas fa-circle" style="font-size: 8px;"></i> ${getStatusLabel(r.status)}</span></td>
+                <td>
+                    <select class="card-status-select" onchange="updateStatus('${r.id}', this.value)" style="padding:2px 8px; border-radius:30px; border:1px solid var(--input-border); background:var(--bg-app); color:var(--text-primary); font-size:12px; font-weight:600;">
+                        <option value="new" ${r.status === 'new' ? 'selected' : ''}>Новое</option>
+                        <option value="contacted" ${r.status === 'contacted' ? 'selected' : ''}>В работе</option>
+                        <option value="meeting" ${r.status === 'meeting' ? 'selected' : ''}>Встреча</option>
+                        <option value="deal" ${r.status === 'deal' ? 'selected' : ''}>Сделка</option>
+                        <option value="lost" ${r.status === 'lost' ? 'selected' : ''}>Потеряно</option>
+                    </select>
+                </td>
                 <td>${microBadge}</td>
                 <td>
                     <div class="actions">
                         <button class="action-btn" onclick="editRecord('${r.id}')" title="Редактировать"><i class="fas fa-edit"></i></button>
                         <button class="action-btn star-btn ${starClass}" onclick="toggleFavorite('${r.id}')" title="Избранное"><i class="fas fa-star"></i></button>
                         <button class="action-btn success" onclick="updateStatus('${r.id}','deal')" title="Сделать сделкой"><i class="fas fa-check"></i></button>
-                        <button class="action-btn" onclick="updateStatus('${r.id}','contacted')" title="В работу"><i class="fas fa-phone"></i></button>
-                        <button class="action-btn" onclick="addNote('${r.id}')" title="Добавить заметку"><i class="fas fa-sticky-note"></i></button>
+                        <button class="action-btn" onclick="addNote('${r.id}')" title="Заметка"><i class="fas fa-sticky-note"></i></button>
                         <button class="action-btn danger" onclick="deleteRecord('${r.id}')" title="Удалить"><i class="fas fa-trash"></i></button>
                     </div>
                 </td>
             </tr>`;
         });
         tbody.innerHTML = html;
-        updateSelectedCount();
+    }
+
+    function renderCards() {
+        const start = (currentPage - 1) * perPage;
+        const pageData = filtered.slice(start, start + perPage);
+
+        if (!pageData.length) {
+            cardsView.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>Нет записей</p></div>`;
+            return;
+        }
+
+        let html = '';
+        pageData.forEach((r) => {
+            const starClass = r.favorite ? 'active' : '';
+            const priorityClass = getPriorityClass(r.priority);
+            const microBadge = r.micro ? ' 🏷️ микро' : '';
+            html += `
+                <div class="card-item ${priorityClass}">
+                    <div class="card-header">
+                        <span class="card-name">${r.name || '—'} ${r.favorite ? '⭐' : ''}</span>
+                        <select class="card-status-select" onchange="updateStatus('${r.id}', this.value)">
+                            <option value="new" ${r.status === 'new' ? 'selected' : ''}>Новое</option>
+                            <option value="contacted" ${r.status === 'contacted' ? 'selected' : ''}>В работе</option>
+                            <option value="meeting" ${r.status === 'meeting' ? 'selected' : ''}>Встреча</option>
+                            <option value="deal" ${r.status === 'deal' ? 'selected' : ''}>Сделка</option>
+                            <option value="lost" ${r.status === 'lost' ? 'selected' : ''}>Потеряно</option>
+                        </select>
+                    </div>
+                    <div class="card-details">
+                        <div><span class="label">Категория:</span> ${r.category || '—'}</div>
+                        <div><span class="label">Рейтинг:</span> ${r.rating || '—'}</div>
+                        <div><span class="label">Телефон:</span> ${r.phone ? `<a href="tel:${r.phone}" style="color:var(--btn-primary);">${r.phone}</a>` : '—'}</div>
+                        <div><span class="label">Сайт:</span> ${r.website ? `<a href="${r.website}" target="_blank" style="color:var(--btn-primary); text-decoration:none;">🌐</a>` : '—'}</div>
+                        <div style="grid-column:1/-1;"><span class="label">Заметки:</span> ${r.notes ? r.notes.substring(0, 60) + (r.notes.length > 60 ? '...' : '') : '—'}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" onclick="editRecord('${r.id}')"><i class="fas fa-edit"></i> Ред.</button>
+                        <button class="action-btn star-btn ${starClass}" onclick="toggleFavorite('${r.id}')"><i class="fas fa-star"></i></button>
+                        <button class="action-btn success" onclick="updateStatus('${r.id}','deal')"><i class="fas fa-check"></i> Сделка</button>
+                        <button class="action-btn" onclick="addNote('${r.id}')"><i class="fas fa-sticky-note"></i> Заметка</button>
+                        <button class="action-btn danger" onclick="deleteRecord('${r.id}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                    ${microBadge}
+                </div>
+            `;
+        });
+        cardsView.innerHTML = html;
+    }
+
+    function updatePagination() {
+        const totalPages = Math.ceil(filtered.length / perPage) || 1;
+        pageInfo.textContent = `${currentPage} / ${totalPages}`;
+        prevPageBtn.disabled = currentPage <= 1;
+        nextPageBtn.disabled = currentPage >= totalPages;
+    }
+
+    function updateSelectedCount() {
+        const checked = document.querySelectorAll('.row-checkbox:checked').length;
+        selectedCount.textContent = checked;
+        if (selectAll) {
+            const total = document.querySelectorAll('.row-checkbox').length;
+            selectAll.checked = checked > 0 && checked === total;
+        }
     }
 
     // ======================== ACTIONS ========================
@@ -1078,6 +1365,7 @@
         formName.value = rec.name || '';
         formCategory.value = rec.category || '';
         formPhone.value = rec.phone || '';
+        formWebsite.value = rec.website || '';
         formRating.value = rec.rating || '';
         formStatus.value = rec.status || 'new';
         formPriority.value = rec.priority || 'medium';
@@ -1091,12 +1379,11 @@
         const rec = records.find(r => r.id == id);
         if (!rec) return;
         rec.status = newStatus;
-        // Добавляем в историю
         if (!rec.history) rec.history = [];
         rec.history.push({ date: new Date().toLocaleString(), type: 'status', note: `Статус изменён на ${getStatusLabel(newStatus)}` });
         saveToBin();
         applyFilters();
-        showToast(`Статус изменён на ${getStatusLabel(newStatus)}`);
+        showToast(`Статус: ${getStatusLabel(newStatus)}`);
     };
 
     window.toggleFavorite = function(id) {
@@ -1105,7 +1392,7 @@
         rec.favorite = !rec.favorite;
         saveToBin();
         applyFilters();
-        showToast(rec.favorite ? 'Добавлено в избранное' : 'Удалено из избранного');
+        showToast(rec.favorite ? '⭐ В избранном' : '⭐ Удалено');
     };
 
     window.addNote = function(id) {
@@ -1128,6 +1415,7 @@
         formName.value = '';
         formCategory.value = '';
         formPhone.value = '';
+        formWebsite.value = '';
         formRating.value = '';
         formStatus.value = 'new';
         formPriority.value = 'medium';
@@ -1156,6 +1444,7 @@
             name,
             category: formCategory.value.trim() || '—',
             phone: formPhone.value.trim() || '—',
+            website: formWebsite.value.trim() || '',
             rating: parseFloat(formRating.value) || 0,
             status: formStatus.value,
             priority: formPriority.value,
@@ -1168,7 +1457,6 @@
             const idx = records.findIndex(r => r.id == id);
             if (idx !== -1) {
                 records[idx] = { ...records[idx], ...obj };
-                // сохраняем историю
                 if (!records[idx].history) records[idx].history = [];
                 records[idx].history.push({ date: new Date().toLocaleString(), type: 'edit', note: 'Запись отредактирована' });
             }
@@ -1179,7 +1467,7 @@
         await saveToBin();
         applyFilters();
         closeModal();
-        showToast(id ? 'Запись обновлена' : 'Новая запись добавлена');
+        showToast(id ? 'Обновлено' : 'Добавлено');
     });
 
     // ======================== FILTERS ========================
@@ -1197,7 +1485,6 @@
         applyFilters();
     });
 
-    // Rating filter
     ratingRange.addEventListener('input', function() {
         minRating = parseFloat(this.value);
         ratingVal.textContent = minRating;
@@ -1214,7 +1501,6 @@
                 sortField = field;
                 sortAsc = true;
             }
-            // update icons
             document.querySelectorAll('th[data-sort] i').forEach(icon => icon.className = 'fas fa-sort');
             const icon = this.querySelector('i');
             icon.className = sortAsc ? 'fas fa-sort-up' : 'fas fa-sort-down';
@@ -1224,25 +1510,34 @@
 
     // ======================== PAGINATION ========================
     prevPageBtn.addEventListener('click', () => {
-        if (currentPage > 1) { currentPage--; renderTable(); }
+        if (currentPage > 1) { currentPage--; renderView(); }
     });
     nextPageBtn.addEventListener('click', () => {
         const total = Math.ceil(filtered.length / perPage);
-        if (currentPage < total) { currentPage++; renderTable(); }
+        if (currentPage < total) { currentPage++; renderView(); }
     });
     perPageSelect.addEventListener('change', function() {
         perPage = parseInt(this.value);
         currentPage = 1;
-        renderTable();
+        renderView();
     });
 
-    // ======================== GROUP OPERATIONS ========================
-    function updateSelectedCount() {
-        const checked = document.querySelectorAll('.row-checkbox:checked').length;
-        selectedCount.textContent = checked;
-        selectAll.checked = checked > 0 && checked === document.querySelectorAll('.row-checkbox').length;
-    }
+    // ======================== VIEW TOGGLE ========================
+    viewToggleBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            viewToggleBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentView = this.dataset.view;
+            document.getElementById('tableView').style.display = currentView === 'table' ? 'block' : 'none';
+            document.getElementById('cardsView').style.display = currentView === 'cards' ? 'flex' : 'none';
+            renderView();
+        });
+    });
+    // init view
+    document.getElementById('tableView').style.display = 'block';
+    document.getElementById('cardsView').style.display = 'none';
 
+    // ======================== GROUP OPERATIONS ========================
     document.addEventListener('change', function(e) {
         if (e.target.classList.contains('row-checkbox')) {
             if (e.target.checked) {
@@ -1255,8 +1550,7 @@
     });
 
     selectAll.addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('.row-checkbox');
-        checkboxes.forEach(cb => {
+        document.querySelectorAll('.row-checkbox').forEach(cb => {
             cb.checked = this.checked;
             if (this.checked) {
                 selectedIds.add(cb.dataset.id);
@@ -1282,7 +1576,8 @@
         });
         saveToBin();
         applyFilters();
-        showToast(`Статус изменён для ${selectedIds.size} записей`);
+        showToast(`Обновлено ${selectedIds.size} записей`);
+        selectedIds.clear();
     });
 
     // ======================== EXPORT CSV ========================
@@ -1290,10 +1585,10 @@
         const dataToExport = selectedIds.size > 0 ? records.filter(r => selectedIds.has(r.id)) : filtered;
         if (!dataToExport.length) { showToast('Нет данных для экспорта'); return; }
 
-        const headers = ['id', 'name', 'category', 'phone', 'rating', 'status', 'micro', 'priority', 'notes'];
+        const headers = ['id', 'name', 'category', 'phone', 'website', 'rating', 'status', 'micro', 'priority', 'notes'];
         const rows = dataToExport.map(r => headers.map(h => `"${(r[h] || '').toString().replace(/"/g, '""')}"`).join(','));
         const csv = [headers.join(','), ...rows].join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv' }); // BOM for Excel
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -1303,22 +1598,52 @@
         showToast('CSV экспортирован');
     });
 
+    // ======================== IMPORT CSV ========================
+    importCsvBtn.addEventListener('click', () => importCsvInput.click());
+    importCsvInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                const text = event.target.result;
+                const lines = text.split('\n').filter(line => line.trim());
+                if (lines.length < 2) { showToast('Файл пуст или повреждён'); return; }
+                const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+                let imported = 0;
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',').map(v => v.replace(/"/g, '').trim());
+                    if (values.length < 2) continue;
+                    const obj = {};
+                    headers.forEach((h, idx) => {
+                        obj[h] = values[idx] || '';
+                    });
+                    obj.id = generateId();
+                    obj.rating = parseFloat(obj.rating) || 0;
+                    obj.micro = obj.micro === 'true' || obj.micro === 'True';
+                    obj.favorite = false;
+                    obj.history = [{ date: new Date().toLocaleString(), type: 'import', note: 'Импортировано из CSV' }];
+                    if (obj.name) {
+                        records.push(obj);
+                        imported++;
+                    }
+                }
+                saveToBin();
+                applyFilters();
+                showToast(`Импортировано ${imported} записей`);
+            } catch (err) {
+                showToast('Ошибка импорта: ' + err.message);
+            }
+        };
+        reader.readAsText(file);
+        this.value = '';
+    });
+
     // ======================== KEYBOARD SHORTCUTS ========================
     document.addEventListener('keydown', function(e) {
-        // Ctrl+N — новое
-        if (e.ctrlKey && e.key === 'n') {
-            e.preventDefault();
-            openNewModal();
-        }
-        // Ctrl+F — фокус на поиск
-        if (e.ctrlKey && e.key === 'f') {
-            e.preventDefault();
-            searchInput.focus();
-        }
-        // Esc — закрыть модалку
-        if (e.key === 'Escape') {
-            closeModal();
-        }
+        if (e.ctrlKey && e.key === 'n') { e.preventDefault(); openNewModal(); }
+        if (e.ctrlKey && e.key === 'f') { e.preventDefault(); searchInput.focus(); }
+        if (e.key === 'Escape') { closeModal(); }
     });
 
     // ======================== INIT ========================
@@ -1326,7 +1651,8 @@
 
     console.log('🔥 CRM Pro — все функции активированы!');
     console.log('📌 Горячие клавиши: Ctrl+N (новое), Ctrl+F (поиск), Esc (закрыть)');
-    console.log('⭐ 100+ идей реализовано: история, избранное, теги, напоминания, групповые операции, экспорт, фильтры, тёмная тема и многое другое!');
+    console.log('📱 Адаптировано для мобильных устройств');
+    console.log('⭐ Поле "Сайт" добавлено, статус через выпадающий список');
 </script>
 </body>
 </html>
