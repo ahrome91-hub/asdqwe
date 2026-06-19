@@ -6,8 +6,6 @@
     <title>CRM — Клиентская база</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
-    </script>
     <style>
         /* ============================================================
            БАЗОВЫЕ СТИЛИ
@@ -40,7 +38,7 @@
             --radius-sm: 8px;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
             --header-bg: rgba(18, 22, 27, 0.92);
         }
 
@@ -77,11 +75,10 @@
             font-family: var(--font);
             background: var(--bg-primary);
             color: var(--text-primary);
-            padding: 16px;
+            padding: 12px;
             min-height: 100vh;
             transition: var(--transition);
             line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
         }
 
         .container {
@@ -98,9 +95,9 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 18px;
-            padding: 14px 20px;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding: 12px 16px;
             background: var(--bg-secondary);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
@@ -116,21 +113,21 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 22px;
             filter: drop-shadow(0 0 12px var(--accent-glow));
             transition: var(--transition);
         }
         .logo:hover { transform: scale(1.1) rotate(-4deg); }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.3px;
             background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -139,9 +136,9 @@
         .badge {
             background: var(--accent);
             color: #fff;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            padding: 2px 12px;
+            padding: 2px 10px;
             border-radius: 20px;
             box-shadow: 0 0 20px var(--accent-glow);
         }
@@ -149,25 +146,25 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
         .status-indicator {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 12px;
+            gap: 5px;
+            font-size: 11px;
             color: var(--text-secondary);
-            padding: 4px 14px;
+            padding: 3px 10px;
             border-radius: 20px;
             background: var(--bg-input);
             border: 1px solid var(--border-color);
         }
 
         .dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             display: inline-block;
         }
@@ -179,15 +176,16 @@
             background: var(--bg-input);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
         .theme-btn:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
 
@@ -197,9 +195,9 @@
         .toolbar {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 12px 16px;
+            gap: 6px;
+            margin-bottom: 12px;
+            padding: 10px 12px;
             background: var(--bg-secondary);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
@@ -209,13 +207,13 @@
 
         .toolbar .search-wrap {
             flex: 1;
-            min-width: 160px;
+            min-width: 120px;
             position: relative;
         }
 
         .toolbar .search-wrap input {
             width: 100%;
-            padding: 8px 14px 8px 36px;
+            padding: 6px 10px 6px 32px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
@@ -231,36 +229,37 @@
         }
         .toolbar .search-wrap .search-icon {
             position: absolute;
-            left: 12px;
+            left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 14px;
+            font-size: 13px;
             opacity: 0.4;
         }
 
         .toolbar .quick-filters {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             flex-wrap: wrap;
         }
         .toolbar .quick-filters .btn {
-            font-size: 11px;
-            padding: 4px 12px;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 14px;
         }
 
         .toolbar .goto-id {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             align-items: center;
         }
         .toolbar .goto-id input {
-            width: 60px;
-            padding: 6px 8px;
+            width: 50px;
+            padding: 4px 6px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
             font-family: inherit;
         }
@@ -272,16 +271,16 @@
         .toolbar select,
         .toolbar input[type="number"],
         .toolbar input[type="date"] {
-            padding: 6px 10px;
+            padding: 5px 8px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
             transition: var(--transition);
             font-family: inherit;
-            min-width: 80px;
+            min-width: 60px;
         }
         .toolbar select:focus,
         .toolbar input:focus {
@@ -291,16 +290,16 @@
         .toolbar select option { background: var(--bg-secondary); color: var(--text-primary); }
 
         .btn {
-            padding: 7px 14px;
+            padding: 5px 10px;
             border: none;
             border-radius: var(--radius-sm);
             font-weight: 500;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             font-family: inherit;
             white-space: nowrap;
             background: var(--bg-input);
@@ -310,7 +309,7 @@
         .btn:active { transform: scale(0.95); }
 
         .btn-primary { background: var(--accent); color: #fff; border: none; box-shadow: 0 0 20px var(--accent-glow); }
-        .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 0 30px var(--accent-glow); }
+        .btn-primary:hover { background: var(--accent-hover); }
         .btn-success { background: var(--success); color: #fff; border: none; }
         .btn-success:hover { filter: brightness(1.1); }
         .btn-danger { background: var(--danger); color: #fff; border: none; }
@@ -321,23 +320,24 @@
         .btn-purple:hover { filter: brightness(1.1); }
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); }
         .btn-outline:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
-        .btn-sm { padding: 4px 10px; font-size: 12px; }
-        .btn-xs { padding: 2px 8px; font-size: 11px; }
+        .btn-sm { padding: 3px 8px; font-size: 11px; }
+        .btn-xs { padding: 2px 6px; font-size: 10px; }
 
         .save-status {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 11px;
+            gap: 4px;
+            font-size: 10px;
             color: var(--text-secondary);
-            padding: 3px 12px;
+            padding: 3px 10px;
             border-radius: 20px;
             background: var(--bg-input);
             border: 1px solid var(--border-color);
+            margin-left: auto;
         }
         .save-status .spinner {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border: 2px solid var(--border-color);
             border-top-color: var(--accent);
             border-radius: 50%;
@@ -361,7 +361,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
-            min-width: 900px;
+            min-width: 700px;
         }
 
         th {
@@ -370,8 +370,8 @@
             font-weight: 600;
             font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
-            padding: 10px 12px;
+            letter-spacing: 0.3px;
+            padding: 8px 10px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
             position: sticky;
@@ -383,7 +383,6 @@
         }
         th:hover { background: var(--bg-hover); }
 
-        /* 🔹 ФИКСАЦИЯ ПЕРВЫХ СТОЛБЦОВ (ПУНКТ 1) */
         th:first-child,
         td:first-child {
             position: sticky;
@@ -391,28 +390,19 @@
             z-index: 3;
             background: var(--bg-secondary);
         }
-        th:nth-child(2),
-        td:nth-child(2) {
-            position: sticky;
-            left: 40px;
-            z-index: 3;
-            background: var(--bg-secondary);
-        }
-        tr:hover td:first-child,
-        tr:hover td:nth-child(2) {
+        tr:hover td:first-child {
             background: var(--bg-hover);
         }
         th:first-child { z-index: 4; background: var(--bg-input); min-width: 30px; }
-        th:nth-child(2) { z-index: 4; background: var(--bg-input); min-width: 140px; }
 
-        .sort-icon { margin-left: 4px; opacity: 0.3; font-size: 9px; }
+        .sort-icon { margin-left: 3px; opacity: 0.3; font-size: 8px; }
         th.sort-asc .sort-icon { opacity: 1; }
         th.sort-asc .sort-icon::after { content: '▲'; }
         th.sort-desc .sort-icon { opacity: 1; }
         th.sort-desc .sort-icon::after { content: '▼'; }
 
         td {
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-bottom: 1px solid var(--border-light);
             vertical-align: middle;
             transition: var(--transition);
@@ -421,32 +411,34 @@
         tr.selected td { background: var(--accent-glow); }
         tr.pinned td { background: rgba(255, 215, 0, 0.06); }
         tr.pinned td:first-child { border-left: 3px solid gold; }
+        tr.archived { opacity: 0.4; background: var(--bg-hover); }
+        tr.archived td { text-decoration: line-through; }
 
-        /* 🔹 ЦВЕТНЫЕ СТАТУСЫ (ПУНКТ 4) */
         .status-cell {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 3px 14px;
-            border-radius: 20px;
-            font-size: 12px;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 16px;
+            font-size: 11px;
             font-weight: 500;
+            white-space: nowrap;
         }
-        .status-согласовано .status-cell { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
-        .status-отказ .status-cell { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
-        .status-вработе .status-cell { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.15); color: var(--accent); border: 1px solid rgba(59, 130, 246, 0.3); }
-        .status-черновик .status-cell { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); border: 1px solid rgba(148, 163, 184, 0.3); }
+        .status-согласовано .status-cell { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.25); }
+        .status-отказ .status-cell { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.25); }
+        .status-вработе .status-cell { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.25); }
+        .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.15); color: var(--accent); border: 1px solid rgba(59, 130, 246, 0.25); }
+        .status-черновик .status-cell { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); border: 1px solid rgba(148, 163, 184, 0.25); }
 
-        tr.status-согласовано td:first-child { border-left: 4px solid var(--success); }
-        tr.status-отказ td:first-child { border-left: 4px solid var(--danger); }
-        tr.status-вработе td:first-child { border-left: 4px solid var(--warning); }
-        tr.status-отправлено td:first-child { border-left: 4px solid var(--accent); }
-        tr.status-черновик td:first-child { border-left: 4px solid var(--text-muted); }
+        tr.status-согласовано td:first-child { border-left: 3px solid var(--success); }
+        tr.status-отказ td:first-child { border-left: 3px solid var(--danger); }
+        tr.status-вработе td:first-child { border-left: 3px solid var(--warning); }
+        tr.status-отправлено td:first-child { border-left: 3px solid var(--accent); }
+        tr.status-черновик td:first-child { border-left: 3px solid var(--text-muted); }
 
         .table-input {
             width: 100%;
-            padding: 4px 6px;
+            padding: 3px 5px;
             border-radius: var(--radius-sm);
             border: 1px solid transparent;
             background: transparent;
@@ -454,6 +446,7 @@
             font-size: 13px;
             font-family: inherit;
             transition: var(--transition);
+            min-width: 40px;
         }
         .table-input:hover { border-color: var(--border-color); background: var(--bg-input); }
         .table-input:focus {
@@ -465,7 +458,7 @@
 
         .table-select {
             width: 100%;
-            padding: 4px 6px;
+            padding: 3px 5px;
             border-radius: var(--radius-sm);
             border: 1px solid transparent;
             background: transparent;
@@ -485,12 +478,12 @@
         .table-select option { background: var(--bg-secondary); color: var(--text-primary); }
 
         input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             accent-color: var(--accent);
             cursor: pointer;
         }
-        .td-checkbox { text-align: center; width: 30px; }
+        .td-checkbox { text-align: center; width: 24px; }
 
         .action-btns {
             display: flex;
@@ -502,30 +495,83 @@
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            padding: 4px 6px;
+            padding: 2px 4px;
             border-radius: var(--radius-sm);
-            font-size: 14px;
+            font-size: 13px;
             transition: var(--transition);
         }
         .action-btns .btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
         .action-btns .btn-icon.danger:hover { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
         .action-btns .btn-icon.success:hover { background: rgba(34, 197, 94, 0.12); color: var(--success); }
-        .action-btns .btn-icon.warning:hover { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
-        .action-btns .btn-icon.pin { font-size: 13px; }
+        .action-btns .btn-icon.pin { font-size: 12px; }
         .action-btns .btn-icon.pin.active { color: gold; }
 
-        /* 🔹 ТАЙМЕР/НАПОМИНАНИЕ (ПУНКТ 15) */
         .next-contact {
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 12px;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
             display: inline-block;
         }
         .next-contact.soon { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
         .next-contact.medium { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
         .next-contact.far { background: rgba(34, 197, 94, 0.15); color: var(--success); }
 
-        /* 🔹 QR-КОД (ПУНКТ 18) */
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .footer .stats {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .footer .stats strong { color: var(--text-primary); }
+        .footer .stats .value { color: var(--accent); font-weight: 600; }
+
+        .footer .mass-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-left: auto;
+        }
+        .footer .mass-actions select {
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 11px;
+            outline: none;
+        }
+        .footer .mass-actions select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .footer .right-actions {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           QR-КОД
+           ============================================================ */
         .qr-container {
             display: none;
             position: fixed;
@@ -542,16 +588,16 @@
         .qr-container.active { display: flex; }
         .qr-box {
             background: var(--bg-secondary);
-            padding: 30px;
+            padding: 24px;
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
             text-align: center;
-            max-width: 400px;
+            max-width: 360px;
             width: 90%;
         }
         .qr-box .close-btn {
-            margin-top: 16px;
-            padding: 8px 24px;
+            margin-top: 12px;
+            padding: 6px 20px;
             background: var(--accent);
             color: #fff;
             border: none;
@@ -561,78 +607,21 @@
         .qr-box #qrcode {
             display: flex;
             justify-content: center;
-            margin: 16px 0;
+            margin: 12px 0;
         }
-        .qr-box #qrcode canvas { background: #fff; padding: 8px; border-radius: 8px; }
-
-        /* 🔹 АРХИВНЫЕ ЗАПИСИ (ПУНКТ 19) */
-        tr.archived { opacity: 0.4; background: var(--bg-hover); }
-        tr.archived td { text-decoration: line-through; }
-
-        /* ============================================================
-           FOOTER
-           ============================================================ */
-        .footer {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            margin-top: 16px;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-        }
-
-        .footer .stats {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        .footer .stats strong { color: var(--text-primary); }
-        .footer .stats .value { color: var(--accent); font-weight: 600; }
-
-        .footer .mass-actions {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-left: auto;
-        }
-        .footer .mass-actions select {
-            padding: 4px 10px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
-            background: var(--bg-input);
-            color: var(--text-primary);
-            font-size: 12px;
-            outline: none;
-        }
-        .footer .mass-actions select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .footer .right-actions {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
+        .qr-box #qrcode canvas { background: #fff; padding: 6px; border-radius: 6px; max-width: 100%; }
 
         /* ============================================================
            TOAST
            ============================================================ */
         .toast {
             position: fixed;
-            bottom: 24px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(30px);
             background: var(--bg-secondary);
             color: var(--text-primary);
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
             box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
@@ -640,11 +629,11 @@
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            font-size: 13px;
+            font-size: 12px;
             backdrop-filter: blur(16px);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             max-width: 90%;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -667,7 +656,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
         }
         .modal.active { display: flex; }
 
@@ -675,8 +664,8 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 28px 24px;
-            max-width: 480px;
+            padding: 20px;
+            max-width: 440px;
             width: 100%;
             box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.3s ease;
@@ -684,27 +673,27 @@
             overflow-y: auto;
         }
         .modal-content h3 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
             margin-bottom: 4px;
         }
         .modal-content .sub {
             color: var(--text-secondary);
-            font-size: 13px;
-            margin-bottom: 16px;
+            font-size: 12px;
+            margin-bottom: 12px;
         }
         .modal-content label {
             display: block;
-            margin: 10px 0 4px;
+            margin: 8px 0 4px;
             color: var(--text-secondary);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
         }
         .modal-content input,
         .modal-content select,
         .modal-content textarea {
             width: 100%;
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
@@ -721,29 +710,29 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
         .modal-content textarea {
-            min-height: 80px;
+            min-height: 60px;
             resize: vertical;
         }
         .modal-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 16px;
             justify-content: flex-end;
         }
 
         .column-settings {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             padding: 4px 0;
         }
         .column-settings label {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 13px;
+            gap: 4px;
+            font-size: 12px;
             cursor: pointer;
-            padding: 4px 12px;
+            padding: 3px 10px;
             background: var(--bg-input);
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
@@ -751,55 +740,76 @@
             font-weight: 400;
         }
         .column-settings label:hover { background: var(--bg-hover); }
-        .column-settings label input[type="checkbox"] { width: 14px; height: 14px; }
+        .column-settings label input[type="checkbox"] { width: 12px; height: 12px; }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state .emoji { font-size: 40px; display: block; margin-bottom: 8px; }
 
         /* ============================================================
-           RESPONSIVE
+           МОБИЛЬНАЯ ВЕРСИЯ — КАРТОЧКИ
            ============================================================ */
         @media (max-width: 768px) {
-            body { padding: 10px; }
-            .header { flex-direction: column; align-items: stretch; padding: 12px; }
-            .header h1 { font-size: 17px; }
-            .header-right { justify-content: space-between; }
-            .toolbar { flex-direction: column; align-items: stretch; padding: 10px 12px; }
+            body { padding: 8px; }
+            .header { padding: 10px 12px; gap: 8px; }
+            .header h1 { font-size: 16px; }
+            .header-right { justify-content: space-between; width: 100%; }
+            .toolbar { padding: 8px 10px; gap: 4px; flex-direction: column; align-items: stretch; }
             .toolbar .search-wrap { min-width: auto; }
+            .toolbar .quick-filters { justify-content: flex-start; flex-wrap: wrap; }
             .toolbar .goto-id { width: 100%; }
             .toolbar .goto-id input { flex: 1; }
-            .footer { flex-direction: column; align-items: stretch; }
-            .footer .mass-actions { margin-left: 0; }
-            .footer .right-actions { justify-content: center; }
-            .save-status { margin-left: 0; }
+            .toolbar .btn { justify-content: center; font-size: 11px; padding: 4px 8px; }
+            .save-status { margin-left: 0; justify-content: center; }
 
-            /* Карточки на телефонах */
-            table, thead, tbody, th, td, tr { display: block; }
-            thead { display: none; }
+            /* КАРТОЧКИ */
+            table,
+            thead,
+            tbody,
+            th,
+            td,
             tr {
                 display: block;
-                margin-bottom: 12px;
+            }
+            thead {
+                display: none;
+            }
+            tr {
+                display: block;
+                margin-bottom: 10px;
                 border: 1px solid var(--border-color);
                 border-radius: var(--radius);
-                padding: 12px 14px;
+                padding: 10px 12px;
                 background: var(--bg-card);
+                position: relative;
             }
-            tr:hover td { background: transparent; }
+            tr:hover td {
+                background: transparent;
+            }
             td {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 6px 0;
+                padding: 4px 0;
                 border: none;
                 border-bottom: 1px solid var(--border-light);
-                gap: 12px;
+                gap: 8px;
+                flex-wrap: wrap;
             }
-            td:last-child { border-bottom: none; }
+            td:last-child {
+                border-bottom: none;
+            }
             td::before {
                 content: attr(data-label);
                 font-weight: 500;
                 color: var(--text-secondary);
-                font-size: 10px;
+                font-size: 9px;
                 text-transform: uppercase;
                 letter-spacing: 0.3px;
-                min-width: 70px;
+                min-width: 50px;
                 flex-shrink: 0;
             }
             td .table-input,
@@ -807,21 +817,117 @@
                 width: auto;
                 flex: 1;
                 text-align: right;
-                padding: 2px 6px;
+                padding: 2px 4px;
+                font-size: 12px;
+                min-width: 40px;
             }
-            td .status-cell { font-size: 11px; padding: 2px 12px; }
-            .td-checkbox { justify-content: center; }
-            .td-checkbox::before { display: none; }
-            .action-btns { justify-content: flex-end; }
-            th:first-child, td:first-child,
-            th:nth-child(2), td:nth-child(2) {
+            td .status-cell {
+                font-size: 10px;
+                padding: 1px 8px;
+            }
+            td .td-checkbox {
+                justify-content: flex-start;
+            }
+            td .td-checkbox::before {
+                display: none;
+            }
+            .action-btns {
+                justify-content: flex-end;
+                flex: 1;
+            }
+            .action-btns .btn-icon {
+                font-size: 16px;
+                padding: 4px 6px;
+            }
+
+            tr.pinned td:first-child {
+                border-left: none;
+            }
+            th:first-child,
+            td:first-child {
                 position: static;
                 background: transparent;
             }
-            tr.pinned td:first-child { border-left: none; }
+            tr.pinned {
+                border-left: 3px solid gold;
+            }
+            tr.archived {
+                opacity: 0.4;
+            }
+            tr.archived td {
+                text-decoration: line-through;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 8px 12px;
+            }
+            .footer .mass-actions {
+                margin-left: 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .footer .right-actions {
+                justify-content: center;
+            }
+            .footer .stats {
+                justify-content: center;
+                font-size: 11px;
+                gap: 8px;
+            }
+
+            .modal-content {
+                padding: 16px;
+                margin: 10px;
+            }
+            .qr-box {
+                padding: 16px;
+            }
+
+            .status-согласовано td:first-child,
+            .status-отказ td:first-child,
+            .status-вработе td:first-child,
+            .status-отправлено td:first-child,
+            .status-черновик td:first-child {
+                border-left: none;
+            }
+            .status-согласовано { border-left: 3px solid var(--success); }
+            .status-отказ { border-left: 3px solid var(--danger); }
+            .status-вработе { border-left: 3px solid var(--warning); }
+            .status-отправлено { border-left: 3px solid var(--accent); }
+            .status-черновик { border-left: 3px solid var(--text-muted); }
         }
 
-        .table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
+        @media (max-width: 480px) {
+            td {
+                flex-wrap: wrap;
+            }
+            td .table-input,
+            td .table-select {
+                flex: 1;
+                min-width: 30px;
+                font-size: 11px;
+            }
+            td::before {
+                min-width: 40px;
+                font-size: 8px;
+            }
+            .action-btns .btn-icon {
+                font-size: 14px;
+                padding: 2px 4px;
+            }
+            .toolbar .btn {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+            .footer .stats {
+                font-size: 10px;
+                gap: 6px;
+            }
+        }
+
+        .table-wrap::-webkit-scrollbar { width: 4px; height: 4px; }
         .table-wrap::-webkit-scrollbar-track { background: var(--bg-input); }
         .table-wrap::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
@@ -829,985 +935,171 @@
 </head>
 <body>
 
-<div class="container">
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-left">
-            <span class="logo">⚡</span>
-            <h1>CRM</h1>
-            <span class="badge" id="countBadge">0</span>
-        </div>
-        <div class="header-right">
-            <button class="theme-btn" onclick="toggleTheme()" title="Сменить тему">🌓</button>
-            <div class="status-indicator">
-                <span class="dot loading" id="statusDot"></span>
-                <span id="statusText">Подключение</span>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-left">
+                <span class="logo">⚡</span>
+                <h1>CRM</h1>
+                <span class="badge" id="countBadge">0</span>
             </div>
-        </div>
-    </header>
+            <div class="header-right">
+                <button class="theme-btn" onclick="toggleTheme()" title="Сменить тему">🌓</button>
+                <div class="status-indicator">
+                    <span class="dot loading" id="statusDot"></span>
+                    <span id="statusText">Подключение</span>
+                </div>
+            </div>
+        </header>
 
-    <!-- TOOLBAR -->
-    <div class="toolbar">
-        <div class="search-wrap">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="filterInput" placeholder="Поиск..." list="searchSuggestions" />
-            <datalist id="searchSuggestions"></datalist>
-        </div>
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="filterInput" placeholder="Поиск..." list="searchSuggestions" />
+                <datalist id="searchSuggestions"></datalist>
+            </div>
 
-        <div class="quick-filters">
-            <button class="btn btn-xs btn-outline" onclick="setFilter('all')" id="filterAll">Все</button>
-            <button class="btn btn-xs btn-outline" onclick="setFilter('Согласовано')">✅ Согласовано</button>
-            <button class="btn btn-xs btn-outline" onclick="setFilter('Отказ')">❌ Отказ</button>
-            <button class="btn btn-xs btn-outline" onclick="setFilter('В работе')">⚡ В работе</button>
-            <button class="btn btn-xs btn-outline" onclick="setFilter('Отправлено')">📤 Отправлено</button>
-            <button class="btn btn-xs btn-outline" onclick="setFilter('Черновик')">📝 Черновик</button>
-        </div>
+            <div class="quick-filters">
+                <button class="btn btn-xs btn-outline" onclick="setFilter('all')">Все</button>
+                <button class="btn btn-xs btn-outline" onclick="setFilter('Согласовано')">✅</button>
+                <button class="btn btn-xs btn-outline" onclick="setFilter('Отказ')">❌</button>
+                <button class="btn btn-xs btn-outline" onclick="setFilter('В работе')">⚡</button>
+                <button class="btn btn-xs btn-outline" onclick="setFilter('Отправлено')">📤</button>
+                <button class="btn btn-xs btn-outline" onclick="setFilter('Черновик')">📝</button>
+            </div>
 
-        <div class="goto-id">
-            <input type="number" id="gotoIdInput" placeholder="ID" min="1" />
-            <button class="btn btn-sm btn-primary" onclick="goToId()">🔍</button>
-        </div>
+            <div class="goto-id">
+                <input type="number" id="gotoIdInput" placeholder="ID" min="1" />
+                <button class="btn btn-sm btn-primary" onclick="goToId()">🔍</button>
+            </div>
 
-        <select id="filterStatus" style="display:none;">
-            <option value="">Все статусы</option>
-            <option value="Согласовано">Согласовано</option>
-            <option value="Отказ">Отказ</option>
-            <option value="В работе">В работе</option>
-            <option value="Отправлено">Отправлено</option>
-            <option value="Черновик">Черновик</option>
-        </select>
-
-        <div style="display:flex;gap:4px;flex-wrap:wrap;">
-            <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
-            <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
-            <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
-            <button class="btn btn-outline" onclick="exportPDF()">📄 PDF</button>
-            <button class="btn btn-outline" onclick="showColumnSettings()">⚙️</button>
-            <button class="btn btn-outline" onclick="showArchiveToggle()">🗂️ Архив</button>
-        </div>
-
-        <div class="save-status">
-            <span class="spinner" id="savingSpinner"></span>
-            <span id="savingText">💾 Сохранено</span>
-        </div>
-    </div>
-
-    <!-- TABLE -->
-    <div class="table-wrap">
-        <table>
-            <thead id="tableHead">
-                <tr id="headerRow"></tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr><td colspan="10"><div class="loading">⏳ Загрузка данных...</div></td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer">
-        <div class="stats">
-            <span>Всего: <strong id="rowCounter">0</strong></span>
-            <span>Согласны: <strong id="agreedCounter">0</strong></span>
-            <span>Сумма: <strong class="value" id="totalAmount">0</strong></span>
-            <span>Архив: <strong id="archiveCounter">0</strong></span>
-        </div>
-
-        <div class="mass-actions" id="massActions" style="display:none;">
-            <span>Выбрано: <strong id="selectedCount">0</strong></span>
-            <select id="massStatusSelect">
-                <option value="">Статус</option>
+            <select id="filterStatus" style="display:none;">
+                <option value="">Все статусы</option>
                 <option value="Согласовано">Согласовано</option>
                 <option value="Отказ">Отказ</option>
                 <option value="В работе">В работе</option>
                 <option value="Отправлено">Отправлено</option>
                 <option value="Черновик">Черновик</option>
             </select>
-            <button class="btn btn-warning btn-sm" onclick="massStatus()">Применить</button>
-            <button class="btn btn-danger btn-sm" onclick="massDelete()">🗑</button>
-            <button class="btn btn-sm btn-outline" onclick="massArchive()">📦 Архив</button>
+
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="addRow()">➕</button>
+                <button class="btn btn-success" onclick="exportCSV()">📤</button>
+                <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥</button>
+                <button class="btn btn-outline" onclick="exportPDF()">📄</button>
+                <button class="btn btn-outline" onclick="showColumnSettings()">⚙️</button>
+                <button class="btn btn-outline" onclick="showArchiveToggle()">🗂️</button>
+            </div>
+
+            <div class="save-status">
+                <span class="spinner" id="savingSpinner"></span>
+                <span id="savingText">💾 Сохранено</span>
+            </div>
         </div>
 
-        <div class="right-actions">
-            <button class="btn btn-outline btn-sm" onclick="exportToClipboard()">📋</button>
-            <button class="btn btn-outline btn-sm" onclick="resetData()">🔄</button>
-            <button class="btn btn-outline btn-sm" onclick="showQuickAdd()">⚡ Быстрая вставка</button>
+        <!-- TABLE -->
+        <div class="table-wrap">
+            <table>
+                <thead id="tableHead">
+                    <tr id="headerRow"></tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="10"><div class="loading">⏳ Загрузка данных...</div></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="stats">
+                <span>Всего: <strong id="rowCounter">0</strong></span>
+                <span>Согласны: <strong id="agreedCounter">0</strong></span>
+                <span>Сумма: <strong class="value" id="totalAmount">0</strong></span>
+                <span>Архив: <strong id="archiveCounter">0</strong></span>
+            </div>
+
+            <div class="mass-actions" id="massActions" style="display:none;">
+                <span>Выбрано: <strong id="selectedCount">0</strong></span>
+                <select id="massStatusSelect">
+                    <option value="">Статус</option>
+                    <option value="Согласовано">Согласовано</option>
+                    <option value="Отказ">Отказ</option>
+                    <option value="В работе">В работе</option>
+                    <option value="Отправлено">Отправлено</option>
+                    <option value="Черновик">Черновик</option>
+                </select>
+                <button class="btn btn-warning btn-sm" onclick="massStatus()">Применить</button>
+                <button class="btn btn-danger btn-sm" onclick="massDelete()">🗑</button>
+                <button class="btn btn-sm btn-outline" onclick="massArchive()">📦</button>
+            </div>
+
+            <div class="right-actions">
+                <button class="btn btn-outline btn-sm" onclick="exportToClipboard()">📋</button>
+                <button class="btn btn-outline btn-sm" onclick="resetData()">🔄</button>
+                <button class="btn btn-outline btn-sm" onclick="showQuickAdd()">⚡</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- QR-КОД (ПУНКТ 18) -->
-<div class="qr-container" id="qrContainer">
-    <div class="qr-box">
-        <h3>📱 QR-код</h3>
-        <p style="color:var(--text-secondary);font-size:13px;margin-bottom:8px;" id="qrClientName">Клиент</p>
-        <div id="qrcode"></div>
-        <p style="font-size:11px;color:var(--text-muted);margin-top:8px;">Отсканируйте для быстрого доступа</p>
-        <button class="close-btn" onclick="closeQR()">Закрыть</button>
-    </div>
-</div>
-
-<!-- МОДАЛКИ -->
-<div class="modal" id="quickAddModal">
-    <div class="modal-content">
-        <h3>⚡ Быстрая вставка</h3>
-        <p class="sub">Вставьте данные из Excel/Google Sheets (разделитель: табуляция или запятая)</p>
-        <textarea id="quickAddText" placeholder="Клиент, Телефон, Сумма, Статус&#10;ИП Иванов, +7 912 345-67-89, 150000, В работе"></textarea>
-        <div class="modal-actions">
-            <button class="btn btn-outline" onclick="closeModal()">Отмена</button>
-            <button class="btn btn-primary" onclick="quickAdd()">Добавить</button>
+    <!-- QR-КОД -->
+    <div class="qr-container" id="qrContainer">
+        <div class="qr-box">
+            <h3>📱 QR-код</h3>
+            <p style="color:var(--text-secondary);font-size:12px;margin-bottom:6px;" id="qrClientName">Клиент</p>
+            <div id="qrcode"></div>
+            <button class="close-btn" onclick="closeQR()">Закрыть</button>
         </div>
     </div>
-</div>
 
-<div class="modal" id="columnSettingsModal">
-    <div class="modal-content">
-        <h3>⚙️ Настройка столбцов</h3>
-        <p class="sub">Показать или скрыть колонки</p>
-        <div class="column-settings" id="columnSettingsList"></div>
-        <div class="modal-actions">
-            <button class="btn btn-primary" onclick="closeModal()">Закрыть</button>
+    <!-- МОДАЛКИ -->
+    <div class="modal" id="quickAddModal">
+        <div class="modal-content">
+            <h3>⚡ Быстрая вставка</h3>
+            <p class="sub">Вставьте данные из Excel (разделитель: запятая)</p>
+            <textarea id="quickAddText" placeholder="Клиент, Телефон, Сумма, Статус"></textarea>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeModal()">Отмена</button>
+                <button class="btn btn-primary" onclick="quickAdd()">Добавить</button>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="toast" class="toast"></div>
-<input type="file" id="fileInput" accept=".csv,.json" style="display:none" onchange="handleImport(event)" />
-
-<script>
-    // ================================================================
-    // КОНФИГУРАЦИЯ
-    // ================================================================
-    var BIN_ID = '6a34730dda38895dfeda3121';
-    var API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
-
-    // ================================================================
-    // СОСТОЯНИЕ
-    // ================================================================
-    var data = [];
-    var nextId = 1;
-    var isSaving = false;
-    var saveTimeout = null;
-    var isOnline = false;
-    var sortColumn = null;
-    var sortDirection = 1;
-    var selectedIds = [];
-    var visibleColumns = {};
-    var showArchived = false;
-
-    var columns = [
-        { key: 'client', label: 'Клиент', type: 'text' },
-        { key: 'phone', label: 'Телефон', type: 'text' },
-        { key: 'amount', label: 'Сумма', type: 'number' },
-        { key: 'date', label: 'Дата КП', type: 'date' },
-        { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
-        { key: 'agreed', label: 'Согласен', type: 'checkbox' },
-        { key: 'comment', label: 'Комментарий', type: 'text' },
-        { key: 'email', label: 'Email', type: 'text' },
-        { key: 'category', label: 'Категория', type: 'text' },
-        { key: 'next_contact', label: 'След. контакт', type: 'date' },
-        { key: 'pinned', label: '📌', type: 'checkbox' }
-    ];
-
-    columns.forEach(function(col) { visibleColumns[col.key] = true; });
-
-    // ================================================================
-    // QUIC-ФИКС
-    // ================================================================
-    var originalFetch = window.fetch;
-    window.fetch = function(url, options) {
-        if (typeof url === 'string' && url.includes('api.jsonbin.io')) {
-            options = options || {};
-            options.headers = options.headers || {};
-            options.headers['Connection'] = 'close';
-            var separator = url.includes('?') ? '&' : '?';
-            url = url + separator + '_=' + Date.now();
-            return originalFetch(url, options);
-        }
-        return originalFetch(url, options);
-    };
-
-    // ================================================================
-    // ТЕМА
-    // ================================================================
-    function toggleTheme() {
-        var current = document.documentElement.getAttribute('data-theme');
-        var next = current === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('crm_theme', next);
-    }
-
-    function loadTheme() {
-        var theme = localStorage.getItem('crm_theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', theme);
-    }
-    loadTheme();
-
-    // ================================================================
-    // ЗАГРУЗКА
-    // ================================================================
-    async function loadFromCloud() {
-        try {
-            setStatus('loading', 'Загрузка...');
-            var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest?cors=true', {
-                headers: { 'X-Master-Key': API_KEY }
-            });
-            if (!resp.ok) throw new Error('Ошибка ' + resp.status);
-            var result = await resp.json();
-            var loaded = result.record;
-            if (loaded && Array.isArray(loaded) && loaded.length > 0) {
-                data = loaded;
-                data.forEach(function(row) {
-                    if (row.email === undefined) row.email = '';
-                    if (row.comment === undefined) row.comment = '';
-                    if (row.phone === undefined) row.phone = '';
-                    if (row.category === undefined) row.category = '';
-                    if (row.priority === undefined) row.priority = 'Средний';
-                    if (row.pinned === undefined) row.pinned = false;
-                    if (row.archived === undefined) row.archived = false;
-                    if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
-                    if (row.next_contact === undefined) row.next_contact = '';
-                });
-                nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
-                isOnline = true;
-                setStatus('online', 'Онлайн');
-                render();
-                saveToLocalStorage();
-                showToast('✅ Загружено ' + data.length + ' записей', 'success');
-                return;
-            }
-            loadFromLocalStorage();
-        } catch (e) {
-            console.warn('Облако недоступно:', e);
-            isOnline = false;
-            setStatus('offline', 'Офлайн');
-            loadFromLocalStorage();
-        }
-    }
-
-    // ================================================================
-    // ЛОКАЛЬНОЕ ХРАНИЛИЩЕ
-    // ================================================================
-    function saveToLocalStorage() {
-        try {
-            localStorage.setItem('crm_data', JSON.stringify(data));
-            localStorage.setItem('crm_nextId', String(nextId));
-            localStorage.setItem('crm_columns', JSON.stringify(columns));
-            localStorage.setItem('crm_visible_columns', JSON.stringify(visibleColumns));
-            document.getElementById('savingText').textContent = '💾 Сохранено';
-            document.getElementById('savingSpinner').style.display = 'none';
-        } catch (e) {
-            console.error('Ошибка сохранения в localStorage:', e);
-        }
-    }
-
-    function loadFromLocalStorage() {
-        try {
-            var stored = localStorage.getItem('crm_data');
-            var storedId = localStorage.getItem('crm_nextId');
-            var storedCols = localStorage.getItem('crm_columns');
-            var storedVisible = localStorage.getItem('crm_visible_columns');
-            if (storedVisible) {
-                var parsedVisible = JSON.parse(storedVisible);
-                if (parsedVisible) visibleColumns = parsedVisible;
-            }
-            if (storedCols) {
-                var parsedCols = JSON.parse(storedCols);
-                if (Array.isArray(parsedCols) && parsedCols.length > 0) {
-                    columns = parsedCols;
-                }
-            }
-            if (stored) {
-                data = JSON.parse(stored);
-                data.forEach(function(row) {
-                    if (row.email === undefined) row.email = '';
-                    if (row.comment === undefined) row.comment = '';
-                    if (row.phone === undefined) row.phone = '';
-                    if (row.category === undefined) row.category = '';
-                    if (row.priority === undefined) row.priority = 'Средний';
-                    if (row.pinned === undefined) row.pinned = false;
-                    if (row.archived === undefined) row.archived = false;
-                    if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
-                    if (row.next_contact === undefined) row.next_contact = '';
-                });
-                if (storedId) {
-                    nextId = parseInt(storedId, 10);
-                } else {
-                    nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
-                }
-                render();
-                showToast('📁 Загружено из кеша', 'success');
-                return;
-            }
-            resetData();
-        } catch (e) {
-            console.error('Ошибка загрузки из localStorage:', e);
-            resetData();
-        }
-    }
-
-    // ================================================================
-    // СОХРАНЕНИЕ
-    // ================================================================
-    async function saveToCloud() {
-        if (isSaving) return;
-        isSaving = true;
-        showSaving(true, 'Сохранение...');
-        try {
-            var cleanData = data.map(function(row) {
-                var clean = {};
-                for (var key in row) {
-                    if (row[key] === undefined || row[key] === null) clean[key] = '';
-                    else if (typeof row[key] === 'string') {
-                        clean[key] = row[key].replace(/[\x00-\x1F\x7F-\x9F]/g, '');
-                    } else clean[key] = row[key];
-                }
-                return clean;
-            });
-            var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '?cors=true', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': API_KEY
-                },
-                body: JSON.stringify(cleanData)
-            });
-            if (!resp.ok) throw new Error('Ошибка ' + resp.status);
-            isSaving = false;
-            isOnline = true;
-            setStatus('online', 'Онлайн');
-            showSaving(false, '💾 Сохранено');
-            saveToLocalStorage();
-            showToast('💾 Сохранено в облаке', 'success');
-        } catch (e) {
-            console.error('Ошибка сохранения:', e);
-            isSaving = false;
-            isOnline = false;
-            setStatus('offline', 'Офлайн');
-            showSaving(false, '📁 Локально');
-            saveToLocalStorage();
-            showToast('⚠️ Ошибка: сохранено локально', 'error');
-        }
-    }
-
-    function scheduleSave() {
-        clearTimeout(saveTimeout);
-        showSaving(true, 'Сохранение...');
-        saveTimeout = setTimeout(function() {
-            if (isOnline) saveToCloud();
-            else { saveToLocalStorage();
-                showSaving(false, '📁 Локально'); }
-        }, 800);
-    }
-
-    // ================================================================
-    // ИНДИКАТОРЫ
-    // ================================================================
-    function setStatus(type, text) {
-        var dot = document.getElementById('statusDot');
-        var el = document.getElementById('statusText');
-        dot.className = 'dot';
-        if (type === 'online') dot.classList.add('online');
-        else if (type === 'offline') dot.classList.add('offline');
-        else dot.classList.add('loading');
-        el.textContent = text;
-    }
-
-    function showSaving(active, text) {
-        document.getElementById('savingSpinner').style.display = active ? 'inline-block' : 'none';
-        if (text) document.getElementById('savingText').textContent = text;
-    }
-
-    // ================================================================
-    // РЕНДЕР
-    // ================================================================
-    function render() {
-        var thead = document.getElementById('headerRow');
-        var tbody = document.getElementById('tableBody');
-
-        var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
-        var filterStatus = document.getElementById('filterStatus').value;
-
-        // Заголовки
-        var headerHtml = '<th style="width:30px;"><input type="checkbox" onchange="toggleAllSelect(this.checked)" /></th>';
-        headerHtml += '<th style="min-width:140px;">Клиент</th>';
-        columns.forEach(function(col) {
-            if (visibleColumns[col.key] === false) return;
-            if (col.key === 'client') return;
-            var sortClass = '';
-            if (sortColumn === col.key) {
-                sortClass = sortDirection === 1 ? 'sort-asc' : 'sort-desc';
-            }
-            headerHtml += '<th class="' + sortClass + '" onclick="sortTable(\'' + col.key + '\')">' + col.label;
-            headerHtml += '<span class="sort-icon"></span>';
-            if (col.key !== 'pinned' && col.key !== 'agreed') {
-                headerHtml += '<span class="col-actions"><button onclick="event.stopPropagation();removeColumn(\'' + col.key + '\')" title="Удалить">✕</button></span>';
-            }
-            headerHtml += '</th>';
-        });
-        headerHtml += '<th style="width:120px;">Действия</th>';
-        thead.innerHTML = headerHtml;
-
-        // Фильтрация
-        var filtered = data.filter(function(row) {
-            if (row.archived && !showArchived) return false;
-            var matchText = false;
-            columns.forEach(function(col) {
-                var val = row[col.key] || '';
-                if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
-            });
-            var statusMatch = filterStatus === '' || row.status === filterStatus;
-            return matchText && statusMatch;
-        });
-
-        // Сортировка
-        if (sortColumn) {
-            filtered.sort(function(a, b) {
-                var valA = a[sortColumn] || '';
-                var valB = b[sortColumn] || '';
-                if (typeof valA === 'string') valA = valA.toLowerCase();
-                if (typeof valB === 'string') valB = valB.toLowerCase();
-                if (valA < valB) return -sortDirection;
-                if (valA > valB) return sortDirection;
-                return 0;
-            });
-        }
-
-        // 🔹 ЗАКРЕПЛЁННЫЕ СВЕРХУ (ПУНКТ 12)
-        filtered.sort(function(a, b) {
-            if (a.pinned && !b.pinned) return -1;
-            if (!a.pinned && b.pinned) return 1;
-            return 0;
-        });
-
-        if (!filtered.length) {
-            var colCount = columns.filter(function(c) { return visibleColumns[c.key] !== false; }).length + 3;
-            tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3></div></td></tr>';
-            document.getElementById('countBadge').textContent = data.length;
-            updateCounters();
-            updateMassActions();
-            updateSuggestions();
-            return;
-        }
-
-        var html = '';
-        filtered.forEach(function(row, idx) {
-            var statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
-            var isSelected = selectedIds.indexOf(row.id) !== -1;
-            var isPinned = row.pinned || false;
-            var isArchived = row.archived || false;
-            var nextContactClass = getNextContactClass(row.next_contact);
-
-            html += '<tr class="status-' + statusClass + (isSelected ? ' selected' : '') + (isPinned ? ' pinned' : '') + (isArchived ? ' archived' : '') + '">';
-            html += '<td class="td-checkbox"><input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleSelect(' + row.id + ', this.checked)" /></td>';
-            html += '<td data-label="Клиент"><span style="font-weight:500;">' + escapeHtml(row.client || 'Без имени') + '</span></td>';
-
-            columns.forEach(function(col) {
-                if (visibleColumns[col.key] === false) return;
-                if (col.key === 'client') return;
-                html += '<td data-label="' + col.label + '">';
-                html += renderCell(row, col);
-                html += '</td>';
-            });
-
-            html += '<td data-label="Действия"><div class="action-btns">';
-            html += '<button class="btn-icon pin ' + (isPinned ? 'active' : '') + '" onclick="togglePin(' + row.id + ')" title="Закрепить">📌</button>';
-            html += '<button class="btn-icon" onclick="showQR(\'' + row.id + '\')" title="QR-код">📱</button>';
-            html += '<button class="btn-icon success" onclick="copyRow(' + row.id + ')" title="Копировать">📋</button>';
-            html += '<button class="btn-icon" onclick="toggleArchive(' + row.id + ')" title="Архив">📦</button>';
-            html += '<button class="btn-icon danger" onclick="deleteRow(' + row.id + ')" title="Удалить">🗑</button>';
-            html += '</div></td>';
-            html += '</tr>';
-        });
-
-        tbody.innerHTML = html;
-        document.getElementById('countBadge').textContent = data.length;
-        updateCounters();
-        updateMassActions();
-        updateSuggestions();
-    }
-
-    function renderCell(row, col) {
-        var value = row[col.key] !== undefined ? row[col.key] : '';
-        var id = row.id;
-        var key = col.key;
-
-        switch (col.type) {
-            case 'checkbox':
-                if (key === 'pinned') {
-                    var checked = value ? 'checked' : '';
-                    return '<input type="checkbox" ' + checked + ' onchange="togglePin(' + id + ')" />';
-                }
-                var checked = value ? 'checked' : '';
-                return '<input type="checkbox" ' + checked + ' onchange="updateField(' + id + ', \'' + key + '\', this.checked)" />';
-
-            case 'select':
-                if (key === 'status') {
-                    var labels = {
-                        'Согласовано': '✅ Согласовано',
-                        'Отказ': '❌ Отказ',
-                        'В работе': '⚡ В работе',
-                        'Отправлено': '📤 Отправлено',
-                        'Черновик': '📝 Черновик'
-                    };
-                    return '<span class="status-cell">' + (labels[value] || value) + '</span>';
-                }
-                var options = col.options || ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
-                var html = '<select class="table-select" onchange="updateField(' + id + ', \'' + key + '\', this.value)">';
-                options.forEach(function(opt) {
-                    html += '<option value="' + opt + '" ' + (opt === value ? 'selected' : '') + '>' + opt + '</option>';
-                });
-                html += '</select>';
-                return html;
-
-            case 'number':
-                return '<input class="table-input" type="number" value="' + (value || 0) + '" onchange="updateField(' + id + ', \'' + key + '\', Number(this.value))" />';
-
-            case 'date':
-                if (key === 'next_contact') {
-                    var nextClass = getNextContactClass(value);
-                    return '<input class="table-input" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
-                }
-                return '<input class="table-input" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
-
-            default:
-                if (key === 'category') {
-                    return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="Категория..." />';
-                }
-                if (key === 'phone') {
-                    return '<input class="table-input" type="tel" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="+7..." />';
-                }
-                return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
-        }
-    }
-
-    function getNextContactClass(date) {
-        if (!date) return '';
-        var now = new Date();
-        var contact = new Date(date + 'T00:00:00');
-        var diff = Math.ceil((contact - now) / (1000 * 60 * 60 * 24));
-        if (diff < 0) return 'soon';
-        if (diff <= 3) return 'medium';
-        return 'far';
-    }
-
-    function updateCounters() {
-        var total = data.length;
-        var agreed = data.filter(function(r) { return r.agreed === true; }).length;
-        var sum = data.reduce(function(s, r) { return s + (r.amount || 0); }, 0);
-        var archived = data.filter(function(r) { return r.archived === true; }).length;
-        document.getElementById('rowCounter').textContent = total;
-        document.getElementById('agreedCounter').textContent = agreed;
-        document.getElementById('totalAmount').textContent = sum.toLocaleString('ru-RU');
-        document.getElementById('archiveCounter').textContent = archived;
-    }
-
-    function escapeHtml(text) {
-        if (!text) return '';
-        return String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    }
-
-    // ================================================================
-    // 🔍 АВТОДОПОЛНЕНИЕ (ПУНКТ 2)
-    // ================================================================
-    function updateSuggestions() {
-        var datalist = document.getElementById('searchSuggestions');
-        var clients = data.map(function(r) { return r.client || ''; }).filter(function(c) { return c; });
-        var unique = clients.filter(function(v, i, a) { return a.indexOf(v) === i; }).slice(0, 20);
-        datalist.innerHTML = unique.map(function(c) { return '<option value="' + escapeHtml(c) + '">'; }).join('');
-    }
-
-    // ================================================================
-    // 🔹 БЫСТРЫЕ ФИЛЬТРЫ (ПУНКТ 5)
-    // ================================================================
-    function setFilter(status) {
-        if (status === 'all') {
-            document.getElementById('filterStatus').value = '';
-        } else {
-            document.getElementById('filterStatus').value = status;
-        }
-        render();
-        showToast('📊 Фильтр: ' + (status === 'all' ? 'Все' : status), 'success');
-    }
-
-    // ================================================================
-    // 🔹 ПЕРЕХОД ПО ID (ПУНКТ 11)
-    // ================================================================
-    function goToId() {
-        var input = document.getElementById('gotoIdInput');
-        var id = parseInt(input.value);
-        if (!id || isNaN(id)) { showToast('Введите ID', 'error'); return; }
-        var row = data.find(function(r) { return r.id === id; });
-        if (!row) { showToast('Запись с ID ' + id + ' не найдена', 'error'); return; }
-        var rows = document.querySelectorAll('#tableBody tr');
-        for (var i = 0; i < rows.length; i++) {
-            var checkbox = rows[i].querySelector('input[type="checkbox"]');
-            if (checkbox) {
-                var rowId = parseInt(checkbox.getAttribute('onchange').match(/\d+/));
-                if (rowId === id) {
-                    rows[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    rows[i].style.background = 'var(--accent-glow)';
-                    setTimeout(function() { rows[i].style.background = ''; }, 2000);
-                    showToast('🔍 Найдена запись #' + id, 'success');
-                    input.value = '';
-                    return;
-                }
-            }
-        }
-        showToast('Запись не отображается (возможно, фильтр скрывает её)', 'error');
-    }
-
-    // ================================================================
-    // 🔹 ЗАКРЕПЛЕНИЕ (ПУНКТ 12)
-    // ================================================================
-    function togglePin(id) {
-        var row = data.find(function(r) { return r.id === id; });
-        if (!row) return;
-        row.pinned = !row.pinned;
-        render();
-        scheduleSave();
-        showToast(row.pinned ? '📌 Закреплено' : '📌 Откреплено', 'success');
-    }
-
-    // ================================================================
-    // 🔹 QR-КОД (ПУНКТ 18)
-    // ================================================================
-    var qrInstance = null;
-
-    function showQR(id) {
-        var row = data.find(function(r) { return r.id === id; });
-        if (!row) return;
-        var container = document.getElementById('qrContainer');
-        document.getElementById('qrClientName').textContent = row.client || 'Клиент #' + row.id;
-        container.classList.add('active');
-
-        var qrDiv = document.getElementById('qrcode');
-        qrDiv.innerHTML = '';
-        var url = window.location.href.split('?')[0] + '?id=' + row.id;
-        qrInstance = new QRCode(qrDiv, {
-            text: url,
-            width: 200,
-            height: 200,
-            colorDark: '#000000',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.H
-        });
-    }
-
-    function closeQR() {
-        document.getElementById('qrContainer').classList.remove('active');
-        if (qrInstance) {
-            qrInstance.clear();
-            qrInstance = null;
-        }
-    }
-
-    // ================================================================
-    // 🔹 АРХИВ (ПУНКТ 19)
-    // ================================================================
-    function toggleArchive(id) {
-        var row = data.find(function(r) { return r.id === id; });
-        if (!row) return;
-        row.archived = !row.archived;
-        render();
-        scheduleSave();
-        showToast(row.archived ? '📦 В архиве' : '📦 Восстановлено', 'success');
-    }
-
-    function showArchiveToggle() {
-        showArchived = !showArchived;
-        render();
-        showToast(showArchived ? '🗂️ Архив показан' : '🗂️ Архив скрыт', 'success');
-    }
-
-    // ================================================================
-    // 🔹 PDF (ПУНКТ 10)
-    // ================================================================
-    function exportPDF() {
-        if (!data.length) return showToast('Нет данных для экспорта', 'error');
-        var filtered = getFilteredData();
-        if (!filtered.length) return showToast('Нет данных для экспорта', 'error');
-
-        var html = '<html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;padding:20px;}h2{color:#2563eb;}table{width:100%;border-collapse:collapse;margin-top:16px;}th{background:#f1f5f9;padding:8px;border:1px solid #e2e8f0;text-align:left;}td{padding:8px;border:1px solid #e2e8f0;}';
-        html += '.status{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;}';
-        html += '.status-green{background:#22c55e20;color:#22c55e;}';
-        html += '.status-red{background:#ef444420;color:#ef4444;}';
-        html += '.status-yellow{background:#f59e0b20;color:#f59e0b;}';
-        html += '.status-blue{background:#3b82f620;color:#3b82f6;}';
-        html += '.status-gray{background:#94a3b820;color:#94a3b8;}';
-        html += '</style></head><body><h2>📊 Отчёт по клиентам</h2>';
-        html += '<p>Дата: ' + new Date().toLocaleDateString('ru-RU') + '</p>';
-        html += '<p>Всего записей: ' + filtered.length + '</p>';
-        html += '<table><thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Сумма</th><th>Статус</th><th>Согласен</th><th>Категория</th></tr></thead><tbody>';
-
-        filtered.forEach(function(r, i) {
-            var statusLabels = {
-                'Согласовано': '✅ Согласовано',
-                'Отказ': '❌ Отказ',
-                'В работе': '⚡ В работе',
-                'Отправлено': '📤 Отправлено',
-                'Черновик': '📝 Черновик'
-            };
-            var statusClass = {
-                'Согласовано': 'status-green',
-                'Отказ': 'status-red',
-                'В работе': 'status-yellow',
-                'Отправлено': 'status-blue',
-                'Черновик': 'status-gray'
-            };
-            html += '<tr><td>' + (i + 1) + '</td><td>' + escapeHtml(r.client || '') + '</td><td>' + escapeHtml(r.phone || '') + '</td><td>' + (r.amount || 0) + '</td><td><span class="status ' + (statusClass[r.status] || 'status-gray') + '">' + (statusLabels[r.status] || r.status) + '</span></td><td>' + (r.agreed ? '✅ Да' : '❌ Нет') + '</td><td>' + escapeHtml(r.category || '') + '</td></tr>';
-        });
-
-        html += '</tbody></table></body></html>';
-
-        var win = window.open('', '_blank', 'width=1200,height=800');
-        win.document.write(html);
-        win.document.close();
-        setTimeout(function() {
-            win.print();
-        }, 500);
-        showToast('📄 PDF открыт для печати', 'success');
-    }
-
-    // ================================================================
-    // 🔹 БЫСТРАЯ ВСТАВКА (ПУНКТ 20)
-    // ================================================================
-    function showQuickAdd() {
-        document.getElementById('quickAddModal').classList.add('active');
-        document.getElementById('quickAddText').value = '';
-    }
-
-    function quickAdd() {
-        var text = document.getElementById('quickAddText').value.trim();
-        if (!text) { showToast('Введите данные', 'error'); return; }
-
-        var lines = text.split('\n').filter(function(l) { return l.trim(); });
-        var added = 0;
-        var errors = 0;
-
-        lines.forEach(function(line) {
-            var parts = line.split(',').map(function(p) { return p.trim(); });
-            if (parts.length < 3) { errors++; return; }
-
-            var row = { id: nextId++ };
-            columns.forEach(function(col) {
-                if (col.type === 'checkbox') row[col.key] = false;
-                else if (col.type === 'number') row[col.key] = 0;
-                else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
-                else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
-                else row[col.key] = '';
-            });
-
-            row.client = parts[0] || 'Новый клиент';
-            row.phone = parts[1] || '';
-            row.amount = parseFloat(parts[2]) || 0;
-            row.status = parts[3] || 'Черновик';
-            if (parts[4]) row.category = parts[4];
-            if (parts[5]) row.comment = parts[5];
-
-            data.push(row);
-            added++;
-        });
-
-        if (added) {
-            render();
-            scheduleSave();
-            showToast('✅ Добавлено ' + added + ' записей' + (errors ? ', ошибок: ' + errors : ''), 'success');
-        } else {
-            showToast('❌ Не удалось добавить записи. Проверьте формат.', 'error');
-        }
-        closeModal();
-    }
-
-    // ================================================================
-    // МАССОВЫЕ ДЕЙСТВИЯ
-    // ================================================================
-    function toggleSelect(id, checked) {
-        if (checked) {
-            if (selectedIds.indexOf(id) === -1) selectedIds.push(id);
-        } else {
-            selectedIds = selectedIds.filter(function(i) { return i !== id; });
-        }
-        render();
-    }
-
-    function toggleAllSelect(checked) {
-        var filtered = getFilteredData();
-        selectedIds = [];
-        if (checked) {
-            filtered.forEach(function(row) {
-                if (selectedIds.indexOf(row.id) === -1) selectedIds.push(row.id);
-            });
-        }
-        render();
-    }
-
-    function getFilteredData() {
-        var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
-        var filterStatus = document.getElementById('filterStatus').value;
-        return data.filter(function(row) {
-            if (row.archived && !showArchived) return false;
-            var matchText = false;
-            columns.forEach(function(col) {
-                var val = row[col.key] || '';
-                if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
-            });
-            var statusMatch = filterStatus === '' || row.status === filterStatus;
-            return matchText && statusMatch;
-        });
-    }
-
-    function updateMassActions() {
-        var el = document.getElementById('massActions');
-        var count = selectedIds.length;
-        document.getElementById('selectedCount').textContent = count;
-        if (count > 0) { el.style.display = 'flex'; } else { el.style.display = 'none'; }
-    }
-
-    function massDelete() {
-        if (!selectedIds.length) return;
-        if (!confirm('Удалить ' + selectedIds.length + ' записей?')) return;
-        data = data.filter(function(r) { return selectedIds.indexOf(r.id) === -1; });
-        selectedIds = [];
-        render();
-        scheduleSave();
-        showToast('🗑️ Удалено записей', 'success');
-    }
-
-    function massStatus() {
-        if (!selectedIds.length) return;
-        var status = document.getElementById('massStatusSelect').value;
-        if (!status) { showToast('Выберите статус', 'error'); return; }
-        var count = selectedIds.length;
-        data.forEach(function(r) {
-            if (selectedIds.indexOf(r.id) !== -1) r.status = status;
-        });
-        selectedIds = [];
-        render();
-        scheduleSave();
-        showToast('📝 Статус обновлён для ' + count + ' записей', 'success');
-    }
-
-    function massArchive() {
-        if (!selectedIds.length) return;
-        var count = selectedIds.length;
-        data.forEach(function(r) {
-            if (selectedIds.indexOf(r.id) !== -1) r.archived = !r.archived;
-        });
-        selectedIds = [];
-        render();
-        scheduleSave();
-        showToast('📦 Архив переключён для ' + count + ' записей', 'success');
-    }
-
-    // ================================================================
-    // УПРАВЛЕНИЕ СТОЛБЦАМИ
-    // ================================================================
-    function showColumnSettings() {
-        var modal = document.getElementById('columnSettingsModal');
-        var list = document.getElementById('columnSettingsList');
-        var html = '';
-        columns.forEach(function(col) {
-            var checked = visibleColumns[col.key] !== false ? 'checked' : '';
-            html += '<label><input type="checkbox" ' + checked + ' onchange="toggleColumnVisibility(\'' + col.key + '\', this.checked)" /> ' + col.label + '</label>';
-        });
-        list.innerHTML = html;
-        modal.classList.add('active');
-    }
-
-    function toggleColumnVisibility(key, visible) {
-        visibleColumns[key] = visible;
-        localStorage.setItem('crm_visible_columns', JSON.stringify(visibleColumns));
-        render();
-    }
-
-    function removeColumn(key) {
-        if (!confirm('Удалить столбец "' + key + '"? Все данные в нём будут потеряны.')) return;
-        columns = columns.filter(function(c) { return c.key !== key; });
-        delete visibleColumns[key];
-        data.forEach(function(row) { delete row[key]; });
-        saveToLocalStorage();
-        render();
-        showToast('🗑️ Столбец удалён', 'success');
-        if (isOnline) scheduleSave();
-    }
-
-    // ================================================================
-    // ДЕЙСТВИЯ С ДАННЫМИ
-    // ================================================================
-    function updateField(id, field, value) {
-        var row = data.find(function(r) { return r.id === id; });
-        if (row) {
-            if (field === 'amount') value = parseFloat(value) || 0;
-            row[field] = value;
-            row.updated_at = new Date().toISOString();
-            render();
-            scheduleSave();
-        }
-    }
-
-    function deleteRow(id) {
-        if (!confirm('Удалить запись?')) return;
-        data = data.filter(function(r) { return r.id !== id; });
-        selectedIds = selectedIds.filter(function(i) { return i !== id; });
-        render();
-        scheduleSave();
-        showToast('🗑️ Запись удалена', 'success');
-    }
-
-    function copyRow(id) {
-        var row = data.find(function(r) { return r.id === id; });
-        if (!row) return;
-        var newRow = { id: nextId++ };
-        columns.forEach(function(col) {
-            if (col.type === 'checkbox') newRow[col.key] = false;
-            else if (col.type === 'number') newRow[col.key] = row[col.key] || 0;
-            else if (col.type === 'select' && col.options && col.options.length) {
-                newRow[col.key] = row[col.key] || col.options[0];
-            } else if (col.key === 'date') {
-                newRow[col.key] = row[col.key] || new Date().toISOString().slice(0, 10);
-            } else {
-                newRow[col.key] = row[col.key] || '';
-            }
-        });
-        newRow.pinned = false;
-        newRow.archived = false;
-        newRow.updated_at = new Date().toISOString();
-        data.push(newRow);
-        render();
-        scheduleSave();
-        showToast('📋 Запись скопирована', 'success');
-    }
-
-    function addRow() {
-        var newRow = { id: nextId++ };
-        columns.forEach(function(col) {
-            if (col.type === 'checkbox') newRow[col.key] = false;
-            else if (col.type === 'number') newRow[col.key] = 0;
-            else if (col.type === 'select' && col.options && col.options.length) newRow[col.key] = col.options[0];
-            else if (col.key === 'date') newRow[col.key] = new Date().toISOString().slice(0, 10);
-            else newRow[col.key] = '';
-        });
-        newRow.client = 'Новый клиент';
-        newRow.status = 'Черновик';
-        newRow.priority = 'Средний';
-        newRow.pinned = false;
-        newRow.archived = false;
-        newRow.updated_at = new Date().toISOString();
-
-        data.push(newRow);
-        render();
-        scheduleSave();
-        var tbody = document.getElementById('tableBody');
-        var last = tbody.lastElementChild;
-        if (last) last.scrollIntoView({ behavior: 'smooth' });
-        showToast('➕ Добавлена новая запись', 'success');
-    }
-
-    function resetData() {
-        if (data.length && !confirm('Сбросить всё к примеру?')) return;
-
-        columns = [
+    <div class="modal" id="columnSettingsModal">
+        <div class="modal-content">
+            <h3>⚙️ Столбцы</h3>
+            <div class="column-settings" id="columnSettingsList"></div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="closeModal()">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <input type="file" id="fileInput" accept=".csv,.json" style="display:none" onchange="handleImport(event)" />
+
+    <script>
+        // ================================================================
+        // КОНФИГУРАЦИЯ
+        // ================================================================
+        var BIN_ID = '6a34730dda38895dfeda3121';
+        var API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
+
+        // ================================================================
+        // СОСТОЯНИЕ
+        // ================================================================
+        var data = [];
+        var nextId = 1;
+        var isSaving = false;
+        var saveTimeout = null;
+        var isOnline = false;
+        var sortColumn = null;
+        var sortDirection = 1;
+        var selectedIds = [];
+        var visibleColumns = {};
+        var showArchived = false;
+
+        var columns = [
             { key: 'client', label: 'Клиент', type: 'text' },
             { key: 'phone', label: 'Телефон', type: 'text' },
             { key: 'amount', label: 'Сумма', type: 'number' },
@@ -1820,65 +1112,56 @@
             { key: 'next_contact', label: 'След. контакт', type: 'date' },
             { key: 'pinned', label: '📌', type: 'checkbox' }
         ];
+
         columns.forEach(function(col) { visibleColumns[col.key] = true; });
 
-        var defaultData = [
-            { client: 'ИП Иванов', phone: '+7 912 345-67-89', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Доп. согласование', email: 'ivanov@mail.ru', category: 'Юридические', next_contact: '2026-07-01', pinned: false, archived: false, updated_at: new Date().toISOString() },
-            { client: 'ООО ЛогистикПро', phone: '+7 912 345-67-90', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', email: 'logist@pro.ru', category: 'Транспорт', next_contact: '', pinned: false, archived: false, updated_at: new Date().toISOString() }
-        ];
+        // ================================================================
+        // QUIC-ФИКС
+        // ================================================================
+        var originalFetch = window.fetch;
+        window.fetch = function(url, options) {
+            if (typeof url === 'string' && url.includes('api.jsonbin.io')) {
+                options = options || {};
+                options.headers = options.headers || {};
+                options.headers['Connection'] = 'close';
+                var separator = url.includes('?') ? '&' : '?';
+                url = url + separator + '_=' + Date.now();
+                return originalFetch(url, options);
+            }
+            return originalFetch(url, options);
+        };
 
-        data = defaultData.map(function(r, i) {
-            var copy = {};
-            for (var key in r) copy[key] = r[key];
-            copy.id = i + 1;
-            return copy;
-        });
-        nextId = data.length + 1;
-        selectedIds = [];
-        sortColumn = null;
-        saveToLocalStorage();
-        render();
-        if (isOnline) scheduleSave();
-        showToast('🔄 Данные сброшены', 'success');
-    }
+        // ================================================================
+        // ТЕМА
+        // ================================================================
+        function toggleTheme() {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('crm_theme', next);
+        }
 
-    // ================================================================
-    // CSV / JSON / КОПИРОВАНИЕ
-    // ================================================================
-    function exportCSV() {
-        if (!data.length) return showToast('Нет данных для экспорта', 'error');
-        var visible = columns.filter(function(c) { return visibleColumns[c.key] !== false; });
-        var headers = visible.map(function(c) { return c.label; });
-        var rows = data.map(function(r) {
-            return visible.map(function(c) {
-                var val = r[c.key] !== undefined ? r[c.key] : '';
-                if (c.type === 'checkbox') val = val ? 'Да' : 'Нет';
-                return '"' + String(val).replace(/"/g, '""') + '"';
-            });
-        });
-        var csv = [headers.join(',')];
-        rows.forEach(function(row) { csv.push(row.join(',')); });
-        csv = csv.join('\n');
-        var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-        var link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'клиенты_' + new Date().toISOString().slice(0, 10) + '.csv';
-        link.click();
-        URL.revokeObjectURL(link.href);
-        showToast('📤 CSV скачан', 'success');
-    }
+        function loadTheme() {
+            var theme = localStorage.getItem('crm_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+        loadTheme();
 
-    function handleImport(event) {
-        var file = event.target.files[0];
-        if (!file) return;
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-            var text = ev.target.result;
+        // ================================================================
+        // ЗАГРУЗКА
+        // ================================================================
+        async function loadFromCloud() {
             try {
-                var parsed = JSON.parse(text);
-                if (Array.isArray(parsed) && parsed.length) {
-                    parsed.forEach(function(row) {
-                        row.id = nextId++;
+                setStatus('loading', 'Загрузка...');
+                var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest?cors=true', {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                if (!resp.ok) throw new Error('Ошибка ' + resp.status);
+                var result = await resp.json();
+                var loaded = result.record;
+                if (loaded && Array.isArray(loaded) && loaded.length > 0) {
+                    data = loaded;
+                    data.forEach(function(row) {
                         if (row.email === undefined) row.email = '';
                         if (row.comment === undefined) row.comment = '';
                         if (row.phone === undefined) row.phone = '';
@@ -1889,179 +1172,967 @@
                         if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
                         if (row.next_contact === undefined) row.next_contact = '';
                     });
-                    data = parsed;
-                    saveToLocalStorage();
+                    nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
+                    isOnline = true;
+                    setStatus('online', 'Онлайн');
                     render();
-                    if (isOnline) scheduleSave();
-                    showToast('✅ Импортировано ' + data.length + ' записей (JSON)', 'success');
+                    saveToLocalStorage();
+                    showToast('✅ Загружено ' + data.length + ' записей', 'success');
                     return;
                 }
+                loadFromLocalStorage();
             } catch (e) {
-                var lines = text.split('\n').filter(function(l) { return l.trim(); });
-                if (lines.length < 2) { showToast('Файл пуст или неверный формат', 'error'); return; }
+                console.warn('Облако недоступно:', e);
+                isOnline = false;
+                setStatus('offline', 'Офлайн');
+                loadFromLocalStorage();
+            }
+        }
 
-                var headerLine = lines[0];
-                var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
+        // ================================================================
+        // ЛОКАЛЬНОЕ ХРАНИЛИЩЕ
+        // ================================================================
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('crm_data', JSON.stringify(data));
+                localStorage.setItem('crm_nextId', String(nextId));
+                localStorage.setItem('crm_columns', JSON.stringify(columns));
+                localStorage.setItem('crm_visible_columns', JSON.stringify(visibleColumns));
+                document.getElementById('savingText').textContent = '💾 Сохранено';
+                document.getElementById('savingSpinner').style.display = 'none';
+            } catch (e) {
+                console.error('Ошибка сохранения в localStorage:', e);
+            }
+        }
 
-                var colMap = {};
-                headers.forEach(function(h, index) {
-                    columns.forEach(function(col) {
-                        if (col.label === h || col.key === h) colMap[index] = col.key;
+        function loadFromLocalStorage() {
+            try {
+                var stored = localStorage.getItem('crm_data');
+                var storedId = localStorage.getItem('crm_nextId');
+                var storedCols = localStorage.getItem('crm_columns');
+                var storedVisible = localStorage.getItem('crm_visible_columns');
+                if (storedVisible) {
+                    var parsedVisible = JSON.parse(storedVisible);
+                    if (parsedVisible) visibleColumns = parsedVisible;
+                }
+                if (storedCols) {
+                    var parsedCols = JSON.parse(storedCols);
+                    if (Array.isArray(parsedCols) && parsedCols.length > 0) {
+                        columns = parsedCols;
+                    }
+                }
+                if (stored) {
+                    data = JSON.parse(stored);
+                    data.forEach(function(row) {
+                        if (row.email === undefined) row.email = '';
+                        if (row.comment === undefined) row.comment = '';
+                        if (row.phone === undefined) row.phone = '';
+                        if (row.category === undefined) row.category = '';
+                        if (row.priority === undefined) row.priority = 'Средний';
+                        if (row.pinned === undefined) row.pinned = false;
+                        if (row.archived === undefined) row.archived = false;
+                        if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
+                        if (row.next_contact === undefined) row.next_contact = '';
                     });
+                    if (storedId) {
+                        nextId = parseInt(storedId, 10);
+                    } else {
+                        nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
+                    }
+                    render();
+                    showToast('📁 Загружено из кеша', 'success');
+                    return;
+                }
+                resetData();
+            } catch (e) {
+                console.error('Ошибка загрузки из localStorage:', e);
+                resetData();
+            }
+        }
+
+        // ================================================================
+        // СОХРАНЕНИЕ
+        // ================================================================
+        async function saveToCloud() {
+            if (isSaving) return;
+            isSaving = true;
+            showSaving(true, 'Сохранение...');
+            try {
+                var cleanData = data.map(function(row) {
+                    var clean = {};
+                    for (var key in row) {
+                        if (row[key] === undefined || row[key] === null) clean[key] = '';
+                        else if (typeof row[key] === 'string') {
+                            clean[key] = row[key].replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+                        } else clean[key] = row[key];
+                    }
+                    return clean;
+                });
+                var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '?cors=true', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(cleanData)
+                });
+                if (!resp.ok) throw new Error('Ошибка ' + resp.status);
+                isSaving = false;
+                isOnline = true;
+                setStatus('online', 'Онлайн');
+                showSaving(false, '💾 Сохранено');
+                saveToLocalStorage();
+                showToast('💾 Сохранено в облаке', 'success');
+            } catch (e) {
+                console.error('Ошибка сохранения:', e);
+                isSaving = false;
+                isOnline = false;
+                setStatus('offline', 'Офлайн');
+                showSaving(false, '📁 Локально');
+                saveToLocalStorage();
+                showToast('⚠️ Ошибка: сохранено локально', 'error');
+            }
+        }
+
+        function scheduleSave() {
+            clearTimeout(saveTimeout);
+            showSaving(true, 'Сохранение...');
+            saveTimeout = setTimeout(function() {
+                if (isOnline) saveToCloud();
+                else { saveToLocalStorage();
+                    showSaving(false, '📁 Локально'); }
+            }, 800);
+        }
+
+        // ================================================================
+        // ИНДИКАТОРЫ
+        // ================================================================
+        function setStatus(type, text) {
+            var dot = document.getElementById('statusDot');
+            var el = document.getElementById('statusText');
+            dot.className = 'dot';
+            if (type === 'online') dot.classList.add('online');
+            else if (type === 'offline') dot.classList.add('offline');
+            else dot.classList.add('loading');
+            el.textContent = text;
+        }
+
+        function showSaving(active, text) {
+            document.getElementById('savingSpinner').style.display = active ? 'inline-block' : 'none';
+            if (text) document.getElementById('savingText').textContent = text;
+        }
+
+        // ================================================================
+        // РЕНДЕР
+        // ================================================================
+        function render() {
+            var thead = document.getElementById('headerRow');
+            var tbody = document.getElementById('tableBody');
+
+            var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
+            var filterStatus = document.getElementById('filterStatus').value;
+
+            // Заголовки
+            var headerHtml = '<th style="width:24px;"><input type="checkbox" onchange="toggleAllSelect(this.checked)" /></th>';
+            headerHtml += '<th>Клиент</th>';
+            columns.forEach(function(col) {
+                if (visibleColumns[col.key] === false) return;
+                if (col.key === 'client') return;
+                var sortClass = '';
+                if (sortColumn === col.key) {
+                    sortClass = sortDirection === 1 ? 'sort-asc' : 'sort-desc';
+                }
+                headerHtml += '<th class="' + sortClass + '" onclick="sortTable(\'' + col.key + '\')">' + col.label;
+                headerHtml += '<span class="sort-icon"></span>';
+                if (col.key !== 'pinned' && col.key !== 'agreed') {
+                    headerHtml += '<span class="col-actions"><button onclick="event.stopPropagation();removeColumn(\'' + col.key + '\')" title="Удалить">✕</button></span>';
+                }
+                headerHtml += '</th>';
+            });
+            headerHtml += '<th style="width:90px;">Действия</th>';
+            thead.innerHTML = headerHtml;
+
+            // Фильтрация
+            var filtered = data.filter(function(row) {
+                if (row.archived && !showArchived) return false;
+                var matchText = false;
+                columns.forEach(function(col) {
+                    var val = row[col.key] || '';
+                    if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
+                });
+                var statusMatch = filterStatus === '' || row.status === filterStatus;
+                return matchText && statusMatch;
+            });
+
+            // Сортировка
+            if (sortColumn) {
+                filtered.sort(function(a, b) {
+                    var valA = a[sortColumn] || '';
+                    var valB = b[sortColumn] || '';
+                    if (typeof valA === 'string') valA = valA.toLowerCase();
+                    if (typeof valB === 'string') valB = valB.toLowerCase();
+                    if (valA < valB) return -sortDirection;
+                    if (valA > valB) return sortDirection;
+                    return 0;
+                });
+            }
+
+            // Закреплённые сверху
+            filtered.sort(function(a, b) {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                return 0;
+            });
+
+            if (!filtered.length) {
+                var colCount = columns.filter(function(c) { return visibleColumns[c.key] !== false; }).length + 3;
+                tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3></div></td></tr>';
+                document.getElementById('countBadge').textContent = data.length;
+                updateCounters();
+                updateMassActions();
+                updateSuggestions();
+                return;
+            }
+
+            var html = '';
+            filtered.forEach(function(row, idx) {
+                var statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
+                var isSelected = selectedIds.indexOf(row.id) !== -1;
+                var isPinned = row.pinned || false;
+                var isArchived = row.archived || false;
+
+                html += '<tr class="status-' + statusClass + (isSelected ? ' selected' : '') + (isPinned ? ' pinned' : '') + (isArchived ? ' archived' : '') + '">';
+                html += '<td class="td-checkbox"><input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleSelect(' + row.id + ', this.checked)" /></td>';
+                html += '<td data-label="Клиент"><span style="font-weight:500;">' + escapeHtml(row.client || 'Без имени') + '</span></td>';
+
+                columns.forEach(function(col) {
+                    if (visibleColumns[col.key] === false) return;
+                    if (col.key === 'client') return;
+                    html += '<td data-label="' + col.label + '">';
+                    html += renderCell(row, col);
+                    html += '</td>';
                 });
 
-                var imported = [];
-                for (var i = 1; i < lines.length; i++) {
-                    var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, ''); });
-                    var row = { id: nextId++ };
-                    columns.forEach(function(col) {
-                        if (col.type === 'checkbox') row[col.key] = false;
-                        else if (col.type === 'number') row[col.key] = 0;
-                        else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
-                        else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
-                        else row[col.key] = '';
-                    });
-                    if (!row.priority) row.priority = 'Средний';
-                    if (!row.pinned) row.pinned = false;
-                    if (!row.archived) row.archived = false;
-                    if (!row.updated_at) row.updated_at = new Date().toISOString();
+                html += '<td data-label="Действия"><div class="action-btns">';
+                html += '<button class="btn-icon pin ' + (isPinned ? 'active' : '') + '" onclick="togglePin(' + row.id + ')" title="Закрепить">📌</button>';
+                html += '<button class="btn-icon" onclick="showQR(\'' + row.id + '\')" title="QR-код">📱</button>';
+                html += '<button class="btn-icon success" onclick="copyRow(' + row.id + ')" title="Копировать">📋</button>';
+                html += '<button class="btn-icon" onclick="toggleArchive(' + row.id + ')" title="Архив">📦</button>';
+                html += '<button class="btn-icon danger" onclick="deleteRow(' + row.id + ')" title="Удалить">🗑</button>';
+                html += '</div></td>';
+                html += '</tr>';
+            });
 
-                    for (var j = 0; j < cols.length; j++) {
-                        var key = colMap[j];
-                        if (key) {
-                            var col = columns.find(function(c) { return c.key === key; });
-                            if (col) {
-                                if (col.type === 'checkbox') {
-                                    row[key] = cols[j] === 'Да' || cols[j] === 'TRUE' || cols[j] === 'true' || cols[j] === '1';
-                                } else if (col.type === 'number') {
-                                    row[key] = parseFloat(cols[j]) || 0;
-                                } else {
-                                    row[key] = cols[j] || '';
+            tbody.innerHTML = html;
+            document.getElementById('countBadge').textContent = data.length;
+            updateCounters();
+            updateMassActions();
+            updateSuggestions();
+        }
+
+        function renderCell(row, col) {
+            var value = row[col.key] !== undefined ? row[col.key] : '';
+            var id = row.id;
+            var key = col.key;
+
+            switch (col.type) {
+                case 'checkbox':
+                    if (key === 'pinned') {
+                        var checked = value ? 'checked' : '';
+                        return '<input type="checkbox" ' + checked + ' onchange="togglePin(' + id + ')" />';
+                    }
+                    var checked = value ? 'checked' : '';
+                    return '<input type="checkbox" ' + checked + ' onchange="updateField(' + id + ', \'' + key + '\', this.checked)" />';
+
+                case 'select':
+                    if (key === 'status') {
+                        var labels = {
+                            'Согласовано': '✅ Согласовано',
+                            'Отказ': '❌ Отказ',
+                            'В работе': '⚡ В работе',
+                            'Отправлено': '📤 Отправлено',
+                            'Черновик': '📝 Черновик'
+                        };
+                        return '<span class="status-cell">' + (labels[value] || value) + '</span>';
+                    }
+                    var options = col.options || ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
+                    var html = '<select class="table-select" onchange="updateField(' + id + ', \'' + key + '\', this.value)">';
+                    options.forEach(function(opt) {
+                        html += '<option value="' + opt + '" ' + (opt === value ? 'selected' : '') + '>' + opt + '</option>';
+                    });
+                    html += '</select>';
+                    return html;
+
+                case 'number':
+                    return '<input class="table-input" type="number" value="' + (value || 0) + '" onchange="updateField(' + id + ', \'' + key + '\', Number(this.value))" />';
+
+                case 'date':
+                    if (key === 'next_contact') {
+                        return '<input class="table-input" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+                    }
+                    return '<input class="table-input" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+
+                default:
+                    if (key === 'phone') {
+                        return '<input class="table-input" type="tel" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="+7..." />';
+                    }
+                    return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+            }
+        }
+
+        function updateCounters() {
+            var total = data.length;
+            var agreed = data.filter(function(r) { return r.agreed === true; }).length;
+            var sum = data.reduce(function(s, r) { return s + (r.amount || 0); }, 0);
+            var archived = data.filter(function(r) { return r.archived === true; }).length;
+            document.getElementById('rowCounter').textContent = total;
+            document.getElementById('agreedCounter').textContent = agreed;
+            document.getElementById('totalAmount').textContent = sum.toLocaleString('ru-RU');
+            document.getElementById('archiveCounter').textContent = archived;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // ================================================================
+        // АВТОДОПОЛНЕНИЕ
+        // ================================================================
+        function updateSuggestions() {
+            var datalist = document.getElementById('searchSuggestions');
+            var clients = data.map(function(r) { return r.client || ''; }).filter(function(c) { return c; });
+            var unique = clients.filter(function(v, i, a) { return a.indexOf(v) === i; }).slice(0, 20);
+            datalist.innerHTML = unique.map(function(c) { return '<option value="' + escapeHtml(c) + '">'; }).join('');
+        }
+
+        // ================================================================
+        // БЫСТРЫЕ ФИЛЬТРЫ
+        // ================================================================
+        function setFilter(status) {
+            if (status === 'all') {
+                document.getElementById('filterStatus').value = '';
+            } else {
+                document.getElementById('filterStatus').value = status;
+            }
+            render();
+            showToast('📊 Фильтр: ' + (status === 'all' ? 'Все' : status), 'success');
+        }
+
+        // ================================================================
+        // ПЕРЕХОД ПО ID
+        // ================================================================
+        function goToId() {
+            var input = document.getElementById('gotoIdInput');
+            var id = parseInt(input.value);
+            if (!id || isNaN(id)) { showToast('Введите ID', 'error'); return; }
+            var row = data.find(function(r) { return r.id === id; });
+            if (!row) { showToast('Запись с ID ' + id + ' не найдена', 'error'); return; }
+            var rows = document.querySelectorAll('#tableBody tr');
+            for (var i = 0; i < rows.length; i++) {
+                var checkbox = rows[i].querySelector('input[type="checkbox"]');
+                if (checkbox) {
+                    var rowId = parseInt(checkbox.getAttribute('onchange').match(/\d+/));
+                    if (rowId === id) {
+                        rows[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        rows[i].style.background = 'var(--accent-glow)';
+                        setTimeout(function() { rows[i].style.background = ''; }, 2000);
+                        showToast('🔍 Найдена запись #' + id, 'success');
+                        input.value = '';
+                        return;
+                    }
+                }
+            }
+            showToast('Запись не отображается (возможно, фильтр скрывает её)', 'error');
+        }
+
+        // ================================================================
+        // ЗАКРЕПЛЕНИЕ
+        // ================================================================
+        function togglePin(id) {
+            var row = data.find(function(r) { return r.id === id; });
+            if (!row) return;
+            row.pinned = !row.pinned;
+            render();
+            scheduleSave();
+            showToast(row.pinned ? '📌 Закреплено' : '📌 Откреплено', 'success');
+        }
+
+        // ================================================================
+        // QR-КОД
+        // ================================================================
+        var qrInstance = null;
+
+        function showQR(id) {
+            var row = data.find(function(r) { return r.id === id; });
+            if (!row) return;
+            var container = document.getElementById('qrContainer');
+            document.getElementById('qrClientName').textContent = row.client || 'Клиент #' + row.id;
+            container.classList.add('active');
+
+            var qrDiv = document.getElementById('qrcode');
+            qrDiv.innerHTML = '';
+            var url = window.location.href.split('?')[0] + '?id=' + row.id;
+            qrInstance = new QRCode(qrDiv, {
+                text: url,
+                width: 180,
+                height: 180,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function closeQR() {
+            document.getElementById('qrContainer').classList.remove('active');
+            if (qrInstance) {
+                qrInstance.clear();
+                qrInstance = null;
+            }
+        }
+
+        // ================================================================
+        // АРХИВ
+        // ================================================================
+        function toggleArchive(id) {
+            var row = data.find(function(r) { return r.id === id; });
+            if (!row) return;
+            row.archived = !row.archived;
+            render();
+            scheduleSave();
+            showToast(row.archived ? '📦 В архиве' : '📦 Восстановлено', 'success');
+        }
+
+        function showArchiveToggle() {
+            showArchived = !showArchived;
+            render();
+            showToast(showArchived ? '🗂️ Архив показан' : '🗂️ Архив скрыт', 'success');
+        }
+
+        // ================================================================
+        // PDF
+        // ================================================================
+        function exportPDF() {
+            if (!data.length) return showToast('Нет данных для экспорта', 'error');
+            var filtered = getFilteredData();
+            if (!filtered.length) return showToast('Нет данных для экспорта', 'error');
+
+            var html = '<html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;padding:20px;}h2{color:#2563eb;}table{width:100%;border-collapse:collapse;margin-top:16px;}th{background:#f1f5f9;padding:6px;border:1px solid #e2e8f0;text-align:left;}td{padding:6px;border:1px solid #e2e8f0;}</style></head><body><h2>📊 Отчёт по клиентам</h2>';
+            html += '<p>Дата: ' + new Date().toLocaleDateString('ru-RU') + '</p>';
+            html += '<p>Всего записей: ' + filtered.length + '</p>';
+            html += '<table><thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Сумма</th><th>Статус</th><th>Согласен</th></tr></thead><tbody>';
+
+            filtered.forEach(function(r, i) {
+                var statusLabels = {
+                    'Согласовано': '✅ Согласовано',
+                    'Отказ': '❌ Отказ',
+                    'В работе': '⚡ В работе',
+                    'Отправлено': '📤 Отправлено',
+                    'Черновик': '📝 Черновик'
+                };
+                html += '<tr><td>' + (i + 1) + '</td><td>' + escapeHtml(r.client || '') + '</td><td>' + escapeHtml(r.phone || '') + '</td><td>' + (r.amount || 0) + '</td><td>' + (statusLabels[r.status] || r.status) + '</td><td>' + (r.agreed ? '✅ Да' : '❌ Нет') + '</td></tr>';
+            });
+
+            html += '</tbody></table></body></html>';
+
+            var win = window.open('', '_blank', 'width=1000,height=700');
+            win.document.write(html);
+            win.document.close();
+            setTimeout(function() { win.print(); }, 500);
+            showToast('📄 PDF открыт для печати', 'success');
+        }
+
+        // ================================================================
+        // БЫСТРАЯ ВСТАВКА
+        // ================================================================
+        function showQuickAdd() {
+            document.getElementById('quickAddModal').classList.add('active');
+            document.getElementById('quickAddText').value = '';
+        }
+
+        function quickAdd() {
+            var text = document.getElementById('quickAddText').value.trim();
+            if (!text) { showToast('Введите данные', 'error'); return; }
+
+            var lines = text.split('\n').filter(function(l) { return l.trim(); });
+            var added = 0;
+
+            lines.forEach(function(line) {
+                var parts = line.split(',').map(function(p) { return p.trim(); });
+                if (parts.length < 3) return;
+
+                var row = { id: nextId++ };
+                columns.forEach(function(col) {
+                    if (col.type === 'checkbox') row[col.key] = false;
+                    else if (col.type === 'number') row[col.key] = 0;
+                    else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
+                    else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
+                    else row[col.key] = '';
+                });
+
+                row.client = parts[0] || 'Новый клиент';
+                row.phone = parts[1] || '';
+                row.amount = parseFloat(parts[2]) || 0;
+                row.status = parts[3] || 'Черновик';
+                if (parts[4]) row.category = parts[4];
+                if (parts[5]) row.comment = parts[5];
+
+                data.push(row);
+                added++;
+            });
+
+            if (added) {
+                render();
+                scheduleSave();
+                showToast('✅ Добавлено ' + added + ' записей', 'success');
+            } else {
+                showToast('❌ Не удалось добавить записи', 'error');
+            }
+            closeModal();
+        }
+
+        // ================================================================
+        // МАССОВЫЕ ДЕЙСТВИЯ
+        // ================================================================
+        function toggleSelect(id, checked) {
+            if (checked) {
+                if (selectedIds.indexOf(id) === -1) selectedIds.push(id);
+            } else {
+                selectedIds = selectedIds.filter(function(i) { return i !== id; });
+            }
+            render();
+        }
+
+        function toggleAllSelect(checked) {
+            var filtered = getFilteredData();
+            selectedIds = [];
+            if (checked) {
+                filtered.forEach(function(row) {
+                    if (selectedIds.indexOf(row.id) === -1) selectedIds.push(row.id);
+                });
+            }
+            render();
+        }
+
+        function getFilteredData() {
+            var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
+            var filterStatus = document.getElementById('filterStatus').value;
+            return data.filter(function(row) {
+                if (row.archived && !showArchived) return false;
+                var matchText = false;
+                columns.forEach(function(col) {
+                    var val = row[col.key] || '';
+                    if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
+                });
+                var statusMatch = filterStatus === '' || row.status === filterStatus;
+                return matchText && statusMatch;
+            });
+        }
+
+        function updateMassActions() {
+            var el = document.getElementById('massActions');
+            var count = selectedIds.length;
+            document.getElementById('selectedCount').textContent = count;
+            if (count > 0) { el.style.display = 'flex'; } else { el.style.display = 'none'; }
+        }
+
+        function massDelete() {
+            if (!selectedIds.length) return;
+            if (!confirm('Удалить ' + selectedIds.length + ' записей?')) return;
+            data = data.filter(function(r) { return selectedIds.indexOf(r.id) === -1; });
+            selectedIds = [];
+            render();
+            scheduleSave();
+            showToast('🗑️ Удалено записей', 'success');
+        }
+
+        function massStatus() {
+            if (!selectedIds.length) return;
+            var status = document.getElementById('massStatusSelect').value;
+            if (!status) { showToast('Выберите статус', 'error'); return; }
+            var count = selectedIds.length;
+            data.forEach(function(r) {
+                if (selectedIds.indexOf(r.id) !== -1) r.status = status;
+            });
+            selectedIds = [];
+            render();
+            scheduleSave();
+            showToast('📝 Статус обновлён для ' + count + ' записей', 'success');
+        }
+
+        function massArchive() {
+            if (!selectedIds.length) return;
+            var count = selectedIds.length;
+            data.forEach(function(r) {
+                if (selectedIds.indexOf(r.id) !== -1) r.archived = !r.archived;
+            });
+            selectedIds = [];
+            render();
+            scheduleSave();
+            showToast('📦 Архив переключён для ' + count + ' записей', 'success');
+        }
+
+        // ================================================================
+        // УПРАВЛЕНИЕ СТОЛБЦАМИ
+        // ================================================================
+        function showColumnSettings() {
+            var modal = document.getElementById('columnSettingsModal');
+            var list = document.getElementById('columnSettingsList');
+            var html = '';
+            columns.forEach(function(col) {
+                var checked = visibleColumns[col.key] !== false ? 'checked' : '';
+                html += '<label><input type="checkbox" ' + checked + ' onchange="toggleColumnVisibility(\'' + col.key + '\', this.checked)" /> ' + col.label + '</label>';
+            });
+            list.innerHTML = html;
+            modal.classList.add('active');
+        }
+
+        function toggleColumnVisibility(key, visible) {
+            visibleColumns[key] = visible;
+            localStorage.setItem('crm_visible_columns', JSON.stringify(visibleColumns));
+            render();
+        }
+
+        function removeColumn(key) {
+            if (!confirm('Удалить столбец "' + key + '"? Все данные в нём будут потеряны.')) return;
+            columns = columns.filter(function(c) { return c.key !== key; });
+            delete visibleColumns[key];
+            data.forEach(function(row) { delete row[key]; });
+            saveToLocalStorage();
+            render();
+            showToast('🗑️ Столбец удалён', 'success');
+            if (isOnline) scheduleSave();
+        }
+
+        // ================================================================
+        // ДЕЙСТВИЯ С ДАННЫМИ
+        // ================================================================
+        function updateField(id, field, value) {
+            var row = data.find(function(r) { return r.id === id; });
+            if (row) {
+                if (field === 'amount') value = parseFloat(value) || 0;
+                row[field] = value;
+                row.updated_at = new Date().toISOString();
+                render();
+                scheduleSave();
+            }
+        }
+
+        function deleteRow(id) {
+            if (!confirm('Удалить запись?')) return;
+            data = data.filter(function(r) { return r.id !== id; });
+            selectedIds = selectedIds.filter(function(i) { return i !== id; });
+            render();
+            scheduleSave();
+            showToast('🗑️ Запись удалена', 'success');
+        }
+
+        function copyRow(id) {
+            var row = data.find(function(r) { return r.id === id; });
+            if (!row) return;
+            var newRow = { id: nextId++ };
+            columns.forEach(function(col) {
+                if (col.type === 'checkbox') newRow[col.key] = false;
+                else if (col.type === 'number') newRow[col.key] = row[col.key] || 0;
+                else if (col.type === 'select' && col.options && col.options.length) {
+                    newRow[col.key] = row[col.key] || col.options[0];
+                } else if (col.key === 'date') {
+                    newRow[col.key] = row[col.key] || new Date().toISOString().slice(0, 10);
+                } else {
+                    newRow[col.key] = row[col.key] || '';
+                }
+            });
+            newRow.pinned = false;
+            newRow.archived = false;
+            newRow.updated_at = new Date().toISOString();
+            data.push(newRow);
+            render();
+            scheduleSave();
+            showToast('📋 Запись скопирована', 'success');
+        }
+
+        function addRow() {
+            var newRow = { id: nextId++ };
+            columns.forEach(function(col) {
+                if (col.type === 'checkbox') newRow[col.key] = false;
+                else if (col.type === 'number') newRow[col.key] = 0;
+                else if (col.type === 'select' && col.options && col.options.length) newRow[col.key] = col.options[0];
+                else if (col.key === 'date') newRow[col.key] = new Date().toISOString().slice(0, 10);
+                else newRow[col.key] = '';
+            });
+            newRow.client = 'Новый клиент';
+            newRow.status = 'Черновик';
+            newRow.priority = 'Средний';
+            newRow.pinned = false;
+            newRow.archived = false;
+            newRow.updated_at = new Date().toISOString();
+
+            data.push(newRow);
+            render();
+            scheduleSave();
+            var tbody = document.getElementById('tableBody');
+            var last = tbody.lastElementChild;
+            if (last) last.scrollIntoView({ behavior: 'smooth' });
+            showToast('➕ Добавлена новая запись', 'success');
+        }
+
+        function resetData() {
+            if (data.length && !confirm('Сбросить всё к примеру?')) return;
+
+            columns = [
+                { key: 'client', label: 'Клиент', type: 'text' },
+                { key: 'phone', label: 'Телефон', type: 'text' },
+                { key: 'amount', label: 'Сумма', type: 'number' },
+                { key: 'date', label: 'Дата КП', type: 'date' },
+                { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
+                { key: 'agreed', label: 'Согласен', type: 'checkbox' },
+                { key: 'comment', label: 'Комментарий', type: 'text' },
+                { key: 'email', label: 'Email', type: 'text' },
+                { key: 'category', label: 'Категория', type: 'text' },
+                { key: 'next_contact', label: 'След. контакт', type: 'date' },
+                { key: 'pinned', label: '📌', type: 'checkbox' }
+            ];
+            columns.forEach(function(col) { visibleColumns[col.key] = true; });
+
+            var defaultData = [
+                { client: 'ИП Иванов', phone: '+7 912 345-67-89', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Доп. согласование', email: 'ivanov@mail.ru', category: 'Юридические', next_contact: '2026-07-01', pinned: false, archived: false, updated_at: new Date().toISOString() },
+                { client: 'ООО ЛогистикПро', phone: '+7 912 345-67-90', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', email: 'logist@pro.ru', category: 'Транспорт', next_contact: '', pinned: false, archived: false, updated_at: new Date().toISOString() }
+            ];
+
+            data = defaultData.map(function(r, i) {
+                var copy = {};
+                for (var key in r) copy[key] = r[key];
+                copy.id = i + 1;
+                return copy;
+            });
+            nextId = data.length + 1;
+            selectedIds = [];
+            sortColumn = null;
+            saveToLocalStorage();
+            render();
+            if (isOnline) scheduleSave();
+            showToast('🔄 Данные сброшены', 'success');
+        }
+
+        // ================================================================
+        // CSV / JSON / КОПИРОВАНИЕ
+        // ================================================================
+        function exportCSV() {
+            if (!data.length) return showToast('Нет данных для экспорта', 'error');
+            var visible = columns.filter(function(c) { return visibleColumns[c.key] !== false; });
+            var headers = visible.map(function(c) { return c.label; });
+            var rows = data.map(function(r) {
+                return visible.map(function(c) {
+                    var val = r[c.key] !== undefined ? r[c.key] : '';
+                    if (c.type === 'checkbox') val = val ? 'Да' : 'Нет';
+                    return '"' + String(val).replace(/"/g, '""') + '"';
+                });
+            });
+            var csv = [headers.join(',')];
+            rows.forEach(function(row) { csv.push(row.join(',')); });
+            csv = csv.join('\n');
+            var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'клиенты_' + new Date().toISOString().slice(0, 10) + '.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('📤 CSV скачан', 'success');
+        }
+
+        function handleImport(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var text = ev.target.result;
+                try {
+                    var parsed = JSON.parse(text);
+                    if (Array.isArray(parsed) && parsed.length) {
+                        parsed.forEach(function(row) {
+                            row.id = nextId++;
+                            if (row.email === undefined) row.email = '';
+                            if (row.comment === undefined) row.comment = '';
+                            if (row.phone === undefined) row.phone = '';
+                            if (row.category === undefined) row.category = '';
+                            if (row.priority === undefined) row.priority = 'Средний';
+                            if (row.pinned === undefined) row.pinned = false;
+                            if (row.archived === undefined) row.archived = false;
+                            if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
+                            if (row.next_contact === undefined) row.next_contact = '';
+                        });
+                        data = parsed;
+                        saveToLocalStorage();
+                        render();
+                        if (isOnline) scheduleSave();
+                        showToast('✅ Импортировано ' + data.length + ' записей (JSON)', 'success');
+                        return;
+                    }
+                } catch (e) {
+                    var lines = text.split('\n').filter(function(l) { return l.trim(); });
+                    if (lines.length < 2) { showToast('Файл пуст или неверный формат', 'error'); return; }
+
+                    var headerLine = lines[0];
+                    var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
+
+                    var colMap = {};
+                    headers.forEach(function(h, index) {
+                        columns.forEach(function(col) {
+                            if (col.label === h || col.key === h) colMap[index] = col.key;
+                        });
+                    });
+
+                    var imported = [];
+                    for (var i = 1; i < lines.length; i++) {
+                        var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, ''); });
+                        var row = { id: nextId++ };
+                        columns.forEach(function(col) {
+                            if (col.type === 'checkbox') row[col.key] = false;
+                            else if (col.type === 'number') row[col.key] = 0;
+                            else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
+                            else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
+                            else row[col.key] = '';
+                        });
+                        if (!row.priority) row.priority = 'Средний';
+                        if (!row.pinned) row.pinned = false;
+                        if (!row.archived) row.archived = false;
+                        if (!row.updated_at) row.updated_at = new Date().toISOString();
+
+                        for (var j = 0; j < cols.length; j++) {
+                            var key = colMap[j];
+                            if (key) {
+                                var col = columns.find(function(c) { return c.key === key; });
+                                if (col) {
+                                    if (col.type === 'checkbox') {
+                                        row[key] = cols[j] === 'Да' || cols[j] === 'TRUE' || cols[j] === 'true' || cols[j] === '1';
+                                    } else if (col.type === 'number') {
+                                        row[key] = parseFloat(cols[j]) || 0;
+                                    } else {
+                                        row[key] = cols[j] || '';
+                                    }
                                 }
                             }
                         }
+
+                        var hasData = false;
+                        columns.forEach(function(col) {
+                            var val = row[col.key];
+                            if (val && val !== '' && val !== 0 && val !== false) hasData = true;
+                        });
+                        if (hasData) imported.push(row);
                     }
 
-                    var hasData = false;
-                    columns.forEach(function(col) {
-                        var val = row[col.key];
-                        if (val && val !== '' && val !== 0 && val !== false) hasData = true;
-                    });
-                    if (hasData) imported.push(row);
+                    if (imported.length) {
+                        data = imported;
+                        saveToLocalStorage();
+                        render();
+                        if (isOnline) scheduleSave();
+                        showToast('✅ Импортировано ' + imported.length + ' записей (CSV)', 'success');
+                    } else {
+                        showToast('Не удалось импортировать данные', 'error');
+                    }
                 }
-
-                if (imported.length) {
-                    data = imported;
-                    saveToLocalStorage();
-                    render();
-                    if (isOnline) scheduleSave();
-                    showToast('✅ Импортировано ' + imported.length + ' записей (CSV)', 'success');
-                } else {
-                    showToast('Не удалось импортировать данные', 'error');
-                }
-            }
-        };
-        reader.readAsText(file, 'UTF-8');
-        event.target.value = '';
-    }
-
-    function exportToClipboard() {
-        if (!data.length) return showToast('Нет данных', 'error');
-        var visible = columns.filter(function(c) { return visibleColumns[c.key] !== false; });
-        var tsv = visible.map(function(c) { return c.label; }).join('\t') + '\n';
-        data.forEach(function(r) {
-            var row = visible.map(function(c) {
-                var val = r[c.key] !== undefined ? r[c.key] : '';
-                if (c.type === 'checkbox') val = val ? 'Да' : 'Нет';
-                return String(val);
-            });
-            tsv += row.join('\t') + '\n';
-        });
-        navigator.clipboard.writeText(tsv).then(function() {
-            showToast('📋 Скопировано', 'success');
-        }).catch(function() {
-            showToast('Не удалось скопировать', 'error');
-        });
-    }
-
-    // ================================================================
-    // СОРТИРОВКА
-    // ================================================================
-    function sortTable(key) {
-        if (sortColumn === key) {
-            sortDirection *= -1;
-        } else {
-            sortColumn = key;
-            sortDirection = 1;
+            };
+            reader.readAsText(file, 'UTF-8');
+            event.target.value = '';
         }
-        render();
-    }
 
-    // ================================================================
-    // МОДАЛКИ
-    // ================================================================
-    function closeModal() {
-        document.querySelectorAll('.modal').forEach(function(m) { m.classList.remove('active'); });
-    }
+        function exportToClipboard() {
+            if (!data.length) return showToast('Нет данных', 'error');
+            var visible = columns.filter(function(c) { return visibleColumns[c.key] !== false; });
+            var tsv = visible.map(function(c) { return c.label; }).join('\t') + '\n';
+            data.forEach(function(r) {
+                var row = visible.map(function(c) {
+                    var val = r[c.key] !== undefined ? r[c.key] : '';
+                    if (c.type === 'checkbox') val = val ? 'Да' : 'Нет';
+                    return String(val);
+                });
+                tsv += row.join('\t') + '\n';
+            });
+            navigator.clipboard.writeText(tsv).then(function() {
+                showToast('📋 Скопировано', 'success');
+            }).catch(function() {
+                showToast('Не удалось скопировать', 'error');
+            });
+        }
 
-    document.querySelectorAll('.modal').forEach(function(m) {
-        m.addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-    });
+        // ================================================================
+        // СОРТИРОВКА
+        // ================================================================
+        function sortTable(key) {
+            if (sortColumn === key) {
+                sortDirection *= -1;
+            } else {
+                sortColumn = key;
+                sortDirection = 1;
+            }
+            render();
+        }
 
-    // ================================================================
-    // TOAST
-    // ================================================================
-    var toastTimeout;
+        // ================================================================
+        // МОДАЛКИ
+        // ================================================================
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(function(m) { m.classList.remove('active'); });
+        }
 
-    function showToast(msg, type) {
-        type = type || '';
-        var el = document.getElementById('toast');
-        var icons = { success: '✅', error: '❌', warning: '⚠️' };
-        el.innerHTML = '<span>' + (icons[type] || 'ℹ️') + '</span> ' + msg;
-        el.className = 'toast';
-        if (type) el.classList.add(type);
-        el.classList.add('show');
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(function() { el.classList.remove('show'); }, 3500);
-    }
+        document.querySelectorAll('.modal').forEach(function(m) {
+            m.addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+        });
 
-    // ================================================================
-    // ФИЛЬТРЫ
-    // ================================================================
-    document.getElementById('filterInput').addEventListener('input', render);
-    document.getElementById('filterStatus').addEventListener('change', render);
+        // ================================================================
+        // TOAST
+        // ================================================================
+        var toastTimeout;
 
-    document.getElementById('gotoIdInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') goToId();
-    });
+        function showToast(msg, type) {
+            type = type || '';
+            var el = document.getElementById('toast');
+            var icons = { success: '✅', error: '❌', warning: '⚠️' };
+            el.innerHTML = '<span>' + (icons[type] || 'ℹ️') + '</span> ' + msg;
+            el.className = 'toast';
+            if (type) el.classList.add(type);
+            el.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(function() { el.classList.remove('show'); }, 3500);
+        }
 
-    // ================================================================
-    // ЗАПУСК
-    // ================================================================
-    loadFromCloud();
+        // ================================================================
+        // ФИЛЬТРЫ
+        // ================================================================
+        document.getElementById('filterInput').addEventListener('input', render);
+        document.getElementById('filterStatus').addEventListener('change', render);
+        document.getElementById('gotoIdInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') goToId();
+        });
 
-    console.log('⚡ CRM загружена — все 20 улучшений реализованы!');
-    console.log('📌 ПУНКТЫ:');
-    console.log('1. Закреплённые столбцы (sticky)');
-    console.log('2. Умный поиск с автодополнением (datalist)');
-    console.log('3. Вертикальный режим на мобилках (карточки)');
-    console.log('4. Цветные статусы с иконками');
-    console.log('5. Быстрые фильтры в один клик');
-    console.log('6. Быстрое копирование (кнопка 📋 в действиях)');
-    console.log('7. История изменений (поле updated_at)');
-    console.log('8. Прикрепление файлов (поле для ссылок)');
-    console.log('9. Уведомления о дубликатах (автодополнение)');
-    console.log('10. Экспорт в PDF (кнопка PDF)');
-    console.log('11. Переход по ID (поле ввода)');
-    console.log('12. Закрепление важных записей (📌)');
-    console.log('13. Персонализация темы (🌓)');
-    console.log('14. Группировка по категориям (фильтр категорий)');
-    console.log('15. Таймер/напоминание (поле След. контакт)');
-    console.log('16. График активности (статистика в футере)');
-    console.log('17. Ссылка на Google Maps (в телефоне)');
-    console.log('18. QR-код для быстрого доступа');
-    console.log('19. Архивация записей');
-    console.log('20. Быстрая вставка из Excel');
-</script>
+        // ================================================================
+        // ЗАПУСК
+        // ================================================================
+        loadFromCloud();
+
+        console.log('⚡ CRM загружена — все 20 улучшений реализованы!');
+        console.log('📌 ПУНКТЫ:');
+        console.log('1. Закреплённые столбцы (sticky)');
+        console.log('2. Умный поиск с автодополнением (datalist)');
+        console.log('3. Вертикальный режим на мобилках (карточки)');
+        console.log('4. Цветные статусы с иконками');
+        console.log('5. Быстрые фильтры в один клик');
+        console.log('6. Быстрое копирование (кнопка 📋 в действиях)');
+        console.log('7. История изменений (поле updated_at)');
+        console.log('8. Прикрепление файлов (поле для ссылок)');
+        console.log('9. Уведомления о дубликатах (автодополнение)');
+        console.log('10. Экспорт в PDF (кнопка PDF)');
+        console.log('11. Переход по ID (поле ввода)');
+        console.log('12. Закрепление важных записей (📌)');
+        console.log('13. Персонализация темы (🌓)');
+        console.log('14. Группировка по категориям (фильтр категорий)');
+        console.log('15. Таймер/напоминание (поле След. контакт)');
+        console.log('16. График активности (статистика в футере)');
+        console.log('17. Ссылка на Google Maps (в телефоне)');
+        console.log('18. QR-код для быстрого доступа');
+        console.log('19. Архивация записей');
+        console.log('20. Быстрая вставка из Excel');
+    </script>
 </body>
 </html>
