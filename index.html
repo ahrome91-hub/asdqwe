@@ -730,12 +730,12 @@
     ];
 
     // ================================================================
-    // ЗАГРУЗКА ИЗ ОБЛАКА
+    // ЗАГРУЗКА ИЗ ОБЛАКА (С FIX ДЛЯ GITHUB PAGES - ?cors=true)
     // ================================================================
     async function loadFromCloud() {
         try {
             setStatus('loading', 'Загрузка...');
-            var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest', {
+            var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '/latest?cors=true', {
                 headers: { 'X-Master-Key': API_KEY }
             });
 
@@ -747,9 +747,7 @@
             var loaded = result.record;
 
             if (loaded && Array.isArray(loaded) && loaded.length > 0) {
-                data = loaded.map(function(row) {
-                    return cleanRow(row);
-                });
+                data = loaded;
                 // Убедимся, что у всех записей есть поле email
                 data.forEach(function(row) {
                     if (row.email === undefined) row.email = '';
@@ -769,63 +767,6 @@
             setStatus('offline', 'Офлайн ✏️');
             loadFromLocalStorage();
         }
-    }
-
-    // ОЧИСТКА ДАННЫХ
-    function cleanRow(row) {
-        var clean = {};
-        clean.id = row.id || 0;
-        clean.client = row.client || '';
-        clean.proposal = row.proposal || '';
-        
-        var amountVal = parseFloat(row.amount);
-        if (!isNaN(amountVal) && row.amount !== '') {
-            clean.amount = amountVal;
-        } else {
-            var possibleAmount = parseFloat(row.date) || parseFloat(row.status) || parseFloat(row.comment) || 0;
-            clean.amount = possibleAmount || 0;
-        }
-
-        var dateStr = row.date || '';
-        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/) && !isNaN(new Date(dateStr).getTime())) {
-            clean.date = dateStr;
-        } else {
-            var foundDate = '';
-            var fields = [row.status, row.comment, row.phone, row.email];
-            for (var i = 0; i < fields.length; i++) {
-                var val = fields[i];
-                if (val && val.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                    foundDate = val;
-                    break;
-                }
-            }
-            clean.date = foundDate || new Date().toISOString().slice(0, 10);
-        }
-
-        var statusOptions = ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
-        var statusVal = row.status || 'Черновик';
-        if (statusOptions.indexOf(statusVal) === -1) {
-            var foundStatus = 'Черновик';
-            var allFields = [row.client, row.proposal, row.comment, row.phone];
-            for (var j = 0; j < allFields.length; j++) {
-                var f = allFields[j];
-                if (f && statusOptions.indexOf(f) !== -1) {
-                    foundStatus = f;
-                    break;
-                }
-            }
-            statusVal = foundStatus;
-        }
-        clean.status = statusVal;
-
-        clean.agreed = row.agreed === true || row.agreed === 'true' || row.agreed === 'Да' || row.agreed === '1';
-        clean.comment = row.comment || '';
-        if (clean.comment === 'Нет' || clean.comment === 'Да' || clean.comment === 'TRUE') {
-            clean.comment = '';
-        }
-        clean.phone = row.phone || '';
-        clean.email = row.email || '';
-        return clean;
     }
 
     // ================================================================
@@ -858,7 +799,6 @@
 
             if (stored) {
                 data = JSON.parse(stored);
-                // Убедимся, что у всех записей есть поле email
                 data.forEach(function(row) {
                     if (row.email === undefined) row.email = '';
                 });
@@ -891,7 +831,7 @@
     }
 
     // ================================================================
-    // СОХРАНЕНИЕ В ОБЛАКО
+    // СОХРАНЕНИЕ В ОБЛАКО (С FIX ДЛЯ GITHUB PAGES - ?cors=true)
     // ================================================================
     async function saveToCloud() {
         if (isSaving) return;
@@ -899,7 +839,7 @@
         showSaving(true, 'Сохранение в облако...');
 
         try {
-            var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID, {
+            var resp = await fetch('https://api.jsonbin.io/v3/b/' + BIN_ID + '?cors=true', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1359,6 +1299,7 @@
     console.log('🔑 BIN_ID:', BIN_ID);
     console.log('🔑 API_KEY:', API_KEY ? '✅ Установлен' : '❌ НЕ УСТАНОВЛЕН');
     console.log('📊 Колонок:', columns.length);
+    console.log('🌐 GitHub Pages режим: используется ?cors=true');
 </script>
 </body>
 </html>
