@@ -2,12 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>CRM — Клиентская база</title>
     <style>
         /* ============================================================
-           СОВРЕМЕННЫЙ ДИЗАЙН — 2025
+           КАРДИНАЛЬНО НОВЫЙ ДИЗАЙН
+           Современный, минималистичный, с фокусом на мобильную версию
            ============================================================ */
+
         * {
             margin: 0;
             padding: 0;
@@ -15,180 +17,138 @@
         }
 
         :root {
-            --bg-primary: #07090b;
-            --bg-secondary: #0d1117;
-            --bg-card: #141920;
-            --bg-hover: #1c232b;
-            --bg-input: #0f141a;
-            --border-color: #212830;
-            --border-light: #161d24;
-            --text-primary: #f0f4f8;
-            --text-secondary: #8b9bb5;
+            --bg: #0a0c0f;
+            --bg-card: #11161e;
+            --bg-card-hover: #181f2a;
+            --bg-input: #0d121a;
+            --border: #1e2632;
+            --border-light: #19212a;
+            --text: #f0f4f8;
+            --text-secondary: #8899b0;
             --text-muted: #4a5568;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --accent-glow: rgba(59, 130, 246, 0.12);
-            --success: #22c55e;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --purple: #8b5cf6;
-            --pink: #ec4899;
-            --radius: 14px;
-            --radius-sm: 8px;
-            --shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            --accent: #6c8cff;
+            --accent-glow: rgba(108, 140, 255, 0.15);
+            --accent-dark: #5a7ae0;
+            --success: #34d399;
+            --danger: #f87171;
+            --warning: #fbbf24;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
 
         [data-theme="light"] {
-            --bg-primary: #f0f4f8;
-            --bg-secondary: #ffffff;
+            --bg: #f0f4f8;
             --bg-card: #ffffff;
-            --bg-hover: #f8fafc;
+            --bg-card-hover: #f8fafc;
             --bg-input: #f1f5f9;
-            --border-color: #e2e8f0;
+            --border: #e2e8f0;
             --border-light: #e2e8f0;
-            --text-primary: #0f172a;
+            --text: #0f172a;
             --text-secondary: #475569;
             --text-muted: #94a3b8;
-            --shadow: 0 8px 40px rgba(0, 0, 0, 0.05);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
         }
 
         body {
-            font-family: var(--font);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 0;
             min-height: 100vh;
             transition: var(--transition);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1480px;
+        .app {
+            max-width: 100%;
             margin: 0 auto;
-            animation: fadeIn 0.5s ease;
+            padding: 16px 16px 80px;
         }
 
         /* ============================================================
-           HEADER
+           HEADER — минималистичный
            ============================================================ */
         .header {
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 24px;
-            padding: 16px 28px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(12px);
-            background: rgba(var(--bg-secondary-rgb), 0.85);
+            padding: 12px 0 20px;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .logo {
-            font-size: 30px;
-            filter: drop-shadow(0 0 20px var(--accent-glow));
-            transition: var(--transition);
+            font-size: 28px;
+            flex-shrink: 0;
         }
-        .logo:hover { transform: scale(1.1) rotate(-4deg); }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            letter-spacing: -0.4px;
+            background: linear-gradient(135deg, var(--text), var(--text-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .header-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+        .badge {
             background: var(--accent);
             color: #fff;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            padding: 2px 14px;
+            padding: 2px 12px;
             border-radius: 20px;
-            box-shadow: 0 0 24px var(--accent-glow);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        .status-indicator {
+        .status-dot {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            gap: 6px;
+            font-size: 12px;
             color: var(--text-secondary);
-            padding: 4px 16px;
+            padding: 4px 12px;
             border-radius: 20px;
             background: var(--bg-input);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
         }
 
         .dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             display: inline-block;
-            transition: var(--transition);
         }
-        .dot.online { background: var(--success); box-shadow: 0 0 12px rgba(34, 197, 94, 0.3); }
-        .dot.offline { background: var(--danger); box-shadow: 0 0 12px rgba(239, 68, 68, 0.3); }
+        .dot.online { background: var(--success); }
+        .dot.offline { background: var(--danger); }
         .dot.loading { background: var(--warning); animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
 
         .theme-btn {
             background: var(--bg-input);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             color: var(--text-secondary);
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 16px;
@@ -196,73 +156,69 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
-        .theme-btn:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
+        .theme-btn:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--text-secondary);
+        }
 
         /* ============================================================
-           TOOLBAR
+           TOOLBAR — компактная на мобилке
            ============================================================ */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 14px 20px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            align-items: center;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
+            gap: 8px;
+            padding: 14px 0 12px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .toolbar .search-wrap {
+        .toolbar .search {
             flex: 1;
-            min-width: 180px;
+            min-width: 140px;
             position: relative;
         }
 
-        .toolbar .search-wrap input {
+        .toolbar .search input {
             width: 100%;
-            padding: 9px 16px 9px 40px;
+            padding: 10px 14px 10px 38px;
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             background: var(--bg-input);
-            color: var(--text-primary);
-            font-size: 13px;
+            color: var(--text);
+            font-size: 14px;
             outline: none;
             transition: var(--transition);
-            font-family: inherit;
         }
 
-        .toolbar .search-wrap input:focus {
+        .toolbar .search input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        .toolbar .search-wrap .search-icon {
+        .toolbar .search .icon {
             position: absolute;
-            left: 14px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 14px;
             opacity: 0.4;
-            pointer-events: none;
         }
 
         .toolbar select,
         .toolbar input[type="number"],
         .toolbar input[type="date"] {
-            padding: 9px 12px;
+            padding: 10px 12px;
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             background: var(--bg-input);
-            color: var(--text-primary);
+            color: var(--text);
             font-size: 13px;
             outline: none;
             transition: var(--transition);
             font-family: inherit;
-            min-width: 100px;
+            min-width: 80px;
         }
 
         .toolbar select:focus,
@@ -272,26 +228,115 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        .toolbar select option { background: var(--bg-secondary); color: var(--text-primary); }
-
-        .filter-group {
+        .filter-row {
             display: flex;
+            flex-wrap: wrap;
             gap: 6px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .filter-row .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .filter-row .filter-group {
+            display: flex;
+            gap: 4px;
             align-items: center;
             flex-wrap: wrap;
         }
 
-        .filter-group label {
-            font-size: 11px;
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+            white-space: nowrap;
+            background: var(--bg-input);
             color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            border: 1px solid var(--border);
         }
 
-        .filter-group .filter-separator {
-            color: var(--text-muted);
+        .btn:active { transform: scale(0.95); }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .btn-primary:hover { background: var(--accent-dark); }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+            border: none;
+        }
+        .btn-success:hover { filter: brightness(1.1); }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+            border: none;
+        }
+        .btn-danger:hover { filter: brightness(1.1); }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #0f172a;
+            border: none;
+        }
+        .btn-warning:hover { filter: brightness(1.1); }
+
+        .btn-sm { padding: 5px 12px; font-size: 12px; }
+        .btn-xs { padding: 3px 10px; font-size: 11px; }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .btn-outline:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--text-secondary);
+        }
+
+        .save-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             font-size: 12px;
+            color: var(--text-secondary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+        }
+
+        .save-status .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .quick-filters {
@@ -300,276 +345,168 @@
             flex-wrap: wrap;
         }
 
-        .quick-filters .btn {
-            font-size: 11px;
-            padding: 4px 12px;
-        }
-
         /* ============================================================
-           BUTTONS
+           КАРТОЧКИ (главное представление)
            ============================================================ */
-        .btn {
-            padding: 9px 18px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-weight: 500;
-            font-size: 13px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-family: inherit;
-            white-space: nowrap;
-            text-decoration: none;
-            line-height: 1;
-        }
-
-        .btn:active { transform: scale(0.95); }
-
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-        .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 0 30px var(--accent-glow); }
-
-        .btn-success { background: var(--success); color: #fff; }
-        .btn-success:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(34, 197, 94, 0.2); }
-
-        .btn-danger { background: var(--danger); color: #fff; }
-        .btn-danger:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
-
-        .btn-warning { background: var(--warning); color: #fff; }
-        .btn-warning:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
-
-        .btn-purple { background: var(--purple); color: #fff; }
-        .btn-purple:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
-
-        .btn-pink { background: var(--pink); color: #fff; }
-        .btn-pink:hover { filter: brightness(1.1); box-shadow: 0 0 20px rgba(236, 72, 153, 0.2); }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-        }
-        .btn-outline:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-secondary);
-            padding: 4px 10px;
-        }
-        .btn-ghost:hover { color: var(--text-primary); background: var(--bg-hover); border-radius: var(--radius-sm); }
-
-        .btn-sm { padding: 5px 12px; font-size: 12px; }
-        .btn-xs { padding: 3px 10px; font-size: 11px; }
-
-        .save-status {
+        .cards {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            padding: 4px 14px;
-            border-radius: 20px;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            margin-left: auto;
+            flex-direction: column;
+            gap: 10px;
+            padding: 12px 0;
         }
 
-        .save-status .spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid var(--border-color);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            display: none;
-        }
-
-        /* ============================================================
-           TABLE
-           ============================================================ */
-        .table-wrap {
-            background: var(--bg-secondary);
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            overflow: auto;
-            box-shadow: var(--shadow);
+            padding: 14px 16px;
             transition: var(--transition);
+            position: relative;
+            animation: fadeIn 0.3s ease;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            min-width: 950px;
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-light);
         }
 
-        th {
-            background: var(--bg-input);
-            color: var(--text-secondary);
+        .card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 16px;
             font-weight: 600;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 12px 14px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 2;
-            cursor: pointer;
-            user-select: none;
-            transition: var(--transition);
-            white-space: nowrap;
+            line-height: 1.3;
+            color: var(--text);
         }
 
-        th:hover { background: var(--bg-hover); }
-
-        th .sort-icon {
-            margin-left: 4px;
-            opacity: 0.3;
-            font-size: 9px;
-        }
-        th.sort-asc .sort-icon { opacity: 1; }
-        th.sort-asc .sort-icon::after { content: '▲'; }
-        th.sort-desc .sort-icon { opacity: 1; }
-        th.sort-desc .sort-icon::after { content: '▼'; }
-
-        th .col-actions {
-            display: inline-flex;
-            gap: 4px;
-            margin-left: 6px;
-        }
-
-        th .col-actions button {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 10px;
-            cursor: pointer;
-            padding: 0 4px;
-            transition: var(--transition);
-        }
-        th .col-actions button:hover { color: var(--danger); }
-
-        td {
-            padding: 10px 14px;
-            border-bottom: 1px solid var(--border-light);
-            vertical-align: middle;
-            transition: var(--transition);
-        }
-
-        tr:hover td { background: var(--bg-hover); }
-        tr.selected td { background: var(--accent-glow); }
-
-        /* Статусы */
-        .status-cell {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .status-согласовано .status-cell { background: rgba(34, 197, 94, 0.12); color: var(--success); }
-        .status-отказ .status-cell { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
-        .status-вработе .status-cell { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
-        .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.12); color: var(--accent); }
-        .status-черновик .status-cell { background: rgba(148, 163, 184, 0.12); color: var(--text-secondary); }
-
-        tr.status-согласовано td:first-child { border-left: 3px solid var(--success); }
-        tr.status-отказ td:first-child { border-left: 3px solid var(--danger); }
-        tr.status-вработе td:first-child { border-left: 3px solid var(--warning); }
-        tr.status-отправлено td:first-child { border-left: 3px solid var(--accent); }
-        tr.status-черновик td:first-child { border-left: 3px solid var(--text-muted); }
-
-        .table-input {
-            width: 100%;
-            padding: 4px 8px;
-            border-radius: var(--radius-sm);
-            border: 1px solid transparent;
-            background: transparent;
-            color: var(--text-primary);
+        .card-title .sub {
+            font-weight: 400;
             font-size: 13px;
-            font-family: inherit;
-            transition: var(--transition);
+            color: var(--text-secondary);
         }
 
-        .table-input:hover { border-color: var(--border-color); background: var(--bg-input); }
-        .table-input:focus {
-            border-color: var(--accent);
-            background: var(--bg-input);
-            outline: none;
-            box-shadow: 0 0 0 3px var(--accent-glow);
+        .card-check {
+            flex-shrink: 0;
+            padding-top: 2px;
         }
 
-        .table-select {
-            width: 100%;
-            padding: 4px 8px;
-            border-radius: var(--radius-sm);
-            border: 1px solid transparent;
-            background: transparent;
-            color: var(--text-primary);
-            font-size: 13px;
-            font-family: inherit;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .table-select:hover { border-color: var(--border-color); background: var(--bg-input); }
-        .table-select:focus {
-            border-color: var(--accent);
-            background: var(--bg-input);
-            outline: none;
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-        .table-select option { background: var(--bg-secondary); color: var(--text-primary); }
-
-        input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+        .card-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
             accent-color: var(--accent);
             cursor: pointer;
-            transition: var(--transition);
         }
-        input[type="checkbox"]:hover { transform: scale(1.1); }
 
-        .td-checkbox { text-align: center; width: 30px; }
-
-        .action-btns {
+        .card-body {
             display: flex;
-            gap: 2px;
+            flex-wrap: wrap;
+            gap: 6px 16px;
+            margin-top: 4px;
+        }
+
+        .card-field {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            color: var(--text-secondary);
             flex-wrap: wrap;
         }
 
-        .action-btns .btn-icon {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 4px 6px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            transition: var(--transition);
+        .card-field .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            min-width: 50px;
         }
 
-        .action-btns .btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
-        .action-btns .btn-icon.danger:hover { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
-        .action-btns .btn-icon.success:hover { background: rgba(34, 197, 94, 0.12); color: var(--success); }
-        .action-btns .btn-icon.warning:hover { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
-        .action-btns .btn-icon.info:hover { background: rgba(59, 130, 246, 0.12); color: var(--accent); }
-
-        /* Row number */
-        .row-number {
-            color: var(--text-muted);
-            font-size: 11px;
+        .card-field .value {
+            color: var(--text);
             font-weight: 500;
+        }
+
+        .card-field .value.success { color: var(--success); }
+        .card-field .value.danger { color: var(--danger); }
+        .card-field .value.warning { color: var(--warning); }
+        .card-field .value.accent { color: var(--accent); }
+
+        .card-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .card-status.согласовано { background: rgba(52, 211, 153, 0.12); color: var(--success); }
+        .card-status.отказ { background: rgba(248, 113, 113, 0.12); color: var(--danger); }
+        .card-status.вработе { background: rgba(251, 191, 36, 0.12); color: var(--warning); }
+        .card-status.отправлено { background: rgba(108, 140, 255, 0.12); color: var(--accent); }
+        .card-status.черновик { background: rgba(136, 153, 176, 0.12); color: var(--text-secondary); }
+
+        .card-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+            flex-wrap: wrap;
+        }
+
+        .card-actions .btn {
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        .card-priority {
+            display: inline-block;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .card-priority.high { background: rgba(248, 113, 113, 0.15); color: var(--danger); }
+        .card-priority.medium { background: rgba(251, 191, 36, 0.15); color: var(--warning); }
+        .card-priority.low { background: rgba(52, 211, 153, 0.15); color: var(--success); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .emoji {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
         }
 
         /* ============================================================
@@ -578,51 +515,39 @@
         .footer {
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 10px;
             align-items: center;
-            margin-top: 20px;
-            padding: 14px 24px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
+            padding: 14px 0 0;
+            border-top: 1px solid var(--border);
+            margin-top: 4px;
         }
 
         .footer .stats {
             display: flex;
-            gap: 24px;
+            gap: 16px;
             flex-wrap: wrap;
-        }
-
-        .footer .stat-item {
             font-size: 13px;
             color: var(--text-secondary);
         }
 
-        .footer .stat-item strong {
-            color: var(--text-primary);
-            font-weight: 600;
+        .footer .stats strong {
+            color: var(--text);
         }
 
-        .footer .stat-item .value {
+        .footer .stats .value {
             color: var(--accent);
             font-weight: 600;
         }
 
-        .footer .stat-item .value.success { color: var(--success); }
-        .footer .stat-item .value.danger { color: var(--danger); }
-        .footer .stat-item .value.warning { color: var(--warning); }
-
         .footer .mass-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
             flex-wrap: wrap;
             margin-left: auto;
         }
 
-        .footer .mass-actions .selected-info {
+        .footer .mass-actions .info {
             font-size: 12px;
             color: var(--text-secondary);
         }
@@ -630,12 +555,11 @@
         .footer .mass-actions select {
             padding: 4px 10px;
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             background: var(--bg-input);
-            color: var(--text-primary);
+            color: var(--text);
             font-size: 12px;
             outline: none;
-            font-family: inherit;
         }
 
         .footer .mass-actions select:focus {
@@ -643,49 +567,26 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        .footer .right-actions {
+        .footer .right {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
         }
-
-        /* ============================================================
-           EMPTY STATE
-           ============================================================ */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
-        }
-
-        .empty-state .emoji {
-            font-size: 56px;
-            display: block;
-            margin-bottom: 16px;
-            animation: pulse 2s infinite;
-        }
-
-        .empty-state h3 {
-            font-size: 18px;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-        .empty-state p { font-size: 14px; }
 
         /* ============================================================
            TOAST
            ============================================================ */
         .toast {
             position: fixed;
-            bottom: 24px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(30px);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            padding: 12px 28px;
+            background: var(--bg-card);
+            color: var(--text);
+            padding: 12px 24px;
             border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 16px 56px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
             z-index: 999;
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -695,18 +596,16 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            max-width: 90%;
         }
 
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
-
         .toast.success { border-color: var(--success); }
         .toast.error { border-color: var(--danger); }
         .toast.warning { border-color: var(--warning); }
-
-        .toast .toast-icon { font-size: 18px; }
 
         /* ============================================================
            MODAL
@@ -729,31 +628,31 @@
         .modal.active { display: flex; }
 
         .modal-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 32px;
-            max-width: 480px;
+            padding: 28px 24px;
+            max-width: 460px;
             width: 100%;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.3s ease;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
         }
 
         .modal-content h3 {
             font-size: 20px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
-        .modal-content .modal-sub {
+        .modal-content .sub {
             color: var(--text-secondary);
             font-size: 13px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .modal-content label {
             display: block;
-            margin: 12px 0 4px;
+            margin: 10px 0 4px;
             color: var(--text-secondary);
             font-size: 13px;
             font-weight: 500;
@@ -764,9 +663,9 @@
             width: 100%;
             padding: 9px 12px;
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             background: var(--bg-input);
-            color: var(--text-primary);
+            color: var(--text);
             font-size: 13px;
             outline: none;
             font-family: inherit;
@@ -782,196 +681,248 @@
         .modal-actions {
             display: flex;
             gap: 10px;
-            margin-top: 24px;
+            margin-top: 20px;
             justify-content: flex-end;
         }
 
-        .modal-actions .btn { padding: 9px 24px; }
+        .modal-actions .btn { padding: 9px 20px; }
 
         .column-settings {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            padding: 8px 0;
+            gap: 6px;
+            padding: 4px 0;
         }
 
         .column-settings label {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-size: 13px;
             cursor: pointer;
-            padding: 6px 14px;
+            padding: 4px 12px;
             background: var(--bg-input);
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             margin: 0;
             font-weight: 400;
         }
 
-        .column-settings label:hover { background: var(--bg-hover); }
+        .column-settings label:hover { background: var(--bg-card-hover); }
         .column-settings label input[type="checkbox"] { width: 14px; height: 14px; }
 
         /* ============================================================
-           RESPONSIVE
+           СКЕЛЕТОН
            ============================================================ */
-        @media (max-width: 1024px) {
-            .toolbar .search-wrap { min-width: 140px; }
-            .toolbar select,
-            .toolbar input[type="number"],
-            .toolbar input[type="date"] { min-width: 80px; }
-        }
-
-        @media (max-width: 768px) {
-            body { padding: 12px; }
-            .header { flex-direction: column; align-items: stretch; padding: 14px; }
-            .header h1 { font-size: 18px; }
-            .header-right { justify-content: space-between; flex-wrap: wrap; }
-
-            .toolbar { flex-direction: column; align-items: stretch; padding: 12px 16px; }
-            .toolbar .search-wrap { min-width: auto; }
-            .toolbar select,
-            .toolbar input[type="number"],
-            .toolbar input[type="date"] { min-width: auto; width: 100%; }
-
-            .filter-group { flex-wrap: wrap; }
-            .filter-group label { width: 100%; }
-
-            .footer { flex-direction: column; align-items: stretch; }
-            .footer .mass-actions { margin-left: 0; flex-wrap: wrap; }
-            .footer .right-actions { justify-content: center; }
-            .footer .stats { gap: 12px; }
-
-            .save-status { margin-left: 0; }
-
-            /* Карточки на телефонах */
-            table, thead, tbody, th, td, tr { display: block; }
-            thead { display: none; }
-            tr {
-                display: block;
-                margin-bottom: 12px;
-                border: 1px solid var(--border-color);
-                border-radius: var(--radius);
-                padding: 12px 14px;
-                background: var(--bg-card);
-            }
-            tr:hover td { background: transparent; }
-            td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 6px 0;
-                border: none;
-                border-bottom: 1px solid var(--border-light);
-                gap: 12px;
-            }
-            td:last-child { border-bottom: none; }
-            td::before {
-                content: attr(data-label);
-                font-weight: 500;
-                color: var(--text-secondary);
-                font-size: 11px;
-                text-transform: uppercase;
-                letter-spacing: 0.3px;
-                min-width: 80px;
-                flex-shrink: 0;
-            }
-            td .table-input,
-            td .table-select {
-                width: auto;
-                flex: 1;
-                text-align: right;
-                padding: 2px 6px;
-            }
-            td .status-cell { font-size: 11px; padding: 2px 12px; }
-            .td-checkbox { justify-content: center; }
-            .td-checkbox::before { display: none; }
-            .td-checkbox input[type="checkbox"] { width: 20px; height: 20px; }
-            .action-btns { justify-content: flex-end; }
-            .row-number { display: none; }
-        }
-
-        @media (max-width: 480px) {
-            .header h1 { font-size: 16px; }
-            .btn { font-size: 12px; padding: 6px 12px; }
-            .footer .stat-item { font-size: 12px; }
-        }
-
-        /* Scrollbar */
-        .table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
-        .table-wrap::-webkit-scrollbar-track { background: var(--bg-input); }
-        .table-wrap::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-        .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-
-        /* Скелетон загрузки */
         .skeleton {
-            background: linear-gradient(90deg, var(--bg-input) 25%, var(--bg-hover) 50%, var(--bg-input) 75%);
+            background: linear-gradient(90deg, var(--bg-input) 25%, var(--bg-card-hover) 50%, var(--bg-input) 75%);
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
             border-radius: var(--radius-sm);
-            height: 20px;
+            height: 40px;
             width: 100%;
         }
 
-        /* Бейдж приоритета */
-        .priority-badge {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
-        .priority-badge.high { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-        .priority-badge.medium { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
-        .priority-badge.low { background: rgba(34, 197, 94, 0.15); color: var(--success); }
 
-        /* Progress bar mini */
-        .progress-mini {
-            width: 60px;
-            height: 4px;
+        /* ============================================================
+           ДЕСКТОПНАЯ ТАБЛИЦА (опционально, для больших экранов)
+           ============================================================ */
+        .table-wrap {
+            display: none;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: auto;
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 700px;
+        }
+
+        th {
             background: var(--bg-input);
-            border-radius: 4px;
-            overflow: hidden;
-            display: inline-block;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        th:hover { background: var(--bg-card-hover); }
+        th .sort-icon { margin-left: 4px; opacity: 0.3; font-size: 9px; }
+        th.sort-asc .sort-icon { opacity: 1; }
+        th.sort-asc .sort-icon::after { content: '▲'; }
+        th.sort-desc .sort-icon { opacity: 1; }
+        th.sort-desc .sort-icon::after { content: '▼'; }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-light);
             vertical-align: middle;
+            transition: var(--transition);
         }
-        .progress-mini .fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.6s ease;
-            background: var(--accent);
+
+        tr:hover td { background: var(--bg-card-hover); }
+        tr.selected td { background: var(--accent-glow); }
+
+        .table-status {
+            display: inline-flex;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
         }
-        .progress-mini .fill.success { background: var(--success); }
-        .progress-mini .fill.warning { background: var(--warning); }
-        .progress-mini .fill.danger { background: var(--danger); }
+
+        .table-status.согласовано { background: rgba(52, 211, 153, 0.12); color: var(--success); }
+        .table-status.отказ { background: rgba(248, 113, 113, 0.12); color: var(--danger); }
+        .table-status.вработе { background: rgba(251, 191, 36, 0.12); color: var(--warning); }
+        .table-status.отправлено { background: rgba(108, 140, 255, 0.12); color: var(--accent); }
+        .table-status.черновик { background: rgba(136, 153, 176, 0.12); color: var(--text-secondary); }
+
+        .table-input {
+            width: 100%;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .table-input:hover { border-color: var(--border); background: var(--bg-input); }
+        .table-input:focus {
+            border-color: var(--accent);
+            background: var(--bg-input);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .table-select {
+            width: 100%;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .table-select:hover { border-color: var(--border); background: var(--bg-input); }
+        .table-select:focus {
+            border-color: var(--accent);
+            background: var(--bg-input);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .table-select option { background: var(--bg-card); color: var(--text); }
+
+        .td-checkbox { text-align: center; width: 30px; }
+
+        .action-btns {
+            display: flex;
+            gap: 2px;
+            flex-wrap: wrap;
+        }
+
+        .action-btns .btn-icon {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .action-btns .btn-icon:hover { background: var(--bg-card-hover); color: var(--text); }
+        .action-btns .btn-icon.danger:hover { background: rgba(248, 113, 113, 0.12); color: var(--danger); }
+        .action-btns .btn-icon.success:hover { background: rgba(52, 211, 153, 0.12); color: var(--success); }
+
+        /* ============================================================
+           АДАПТИВНОСТЬ
+           ============================================================ */
+        @media (min-width: 820px) {
+            .cards { display: none; }
+            .table-wrap { display: block; }
+            .app { padding: 20px 32px 80px; }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 17px; }
+            .header { padding: 8px 0 14px; }
+            .badge { font-size: 10px; padding: 1px 10px; }
+            .status-dot { font-size: 11px; padding: 2px 10px; }
+            .toolbar { padding: 10px 0; gap: 6px; }
+            .toolbar .search input { font-size: 13px; padding: 8px 12px 8px 34px; }
+            .toolbar select,
+            .toolbar input[type="number"],
+            .toolbar input[type="date"] { font-size: 12px; padding: 8px 10px; min-width: 60px; }
+            .btn { font-size: 12px; padding: 6px 12px; }
+            .card { padding: 12px; }
+            .card-title { font-size: 15px; }
+            .card-body { gap: 4px 12px; }
+            .card-field { font-size: 12px; }
+            .footer .stats { gap: 10px; font-size: 12px; }
+            .footer .mass-actions select { font-size: 11px; padding: 3px 8px; }
+        }
+
+        @media (max-width: 400px) {
+            .filter-row .filter-group { width: 100%; }
+            .filter-row .filter-group input { flex: 1; }
+            .quick-filters { width: 100%; justify-content: flex-start; }
+            .save-status { margin-left: 0; }
+            .card-actions { flex-wrap: wrap; }
+            .card-actions .btn { flex: 1; justify-content: center; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app" id="app">
     <!-- HEADER -->
     <header class="header">
         <div class="header-left">
             <span class="logo">⚡</span>
             <h1>CRM</h1>
-            <span class="header-badge" id="countBadge">0</span>
+            <span class="badge" id="countBadge">0</span>
         </div>
         <div class="header-right">
-            <button class="theme-btn" onclick="toggleTheme()" title="Сменить тему">🌓</button>
-            <div class="status-indicator">
+            <button class="theme-btn" onclick="toggleTheme()" title="Тема">🌓</button>
+            <div class="status-dot">
                 <span class="dot loading" id="statusDot"></span>
-                <span id="statusText">Подключение...</span>
+                <span id="statusText">Подключение</span>
             </div>
         </div>
     </header>
 
     <!-- TOOLBAR -->
     <div class="toolbar">
-        <div class="search-wrap">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="filterInput" placeholder="Поиск по всем полям..." />
+        <div class="search">
+            <span class="icon">🔍</span>
+            <input type="text" id="filterInput" placeholder="Поиск..." />
         </div>
 
         <select id="filterStatus">
@@ -983,46 +934,52 @@
             <option value="Черновик">📝 Черновик</option>
         </select>
 
-        <div class="filter-group">
-            <label>Сумма</label>
-            <input type="number" id="filterAmountMin" placeholder="от" style="min-width:70px;" />
-            <span class="filter-separator">—</span>
-            <input type="number" id="filterAmountMax" placeholder="до" style="min-width:70px;" />
+        <div class="filter-row">
+            <div class="filter-group">
+                <span class="label">Сумма</span>
+                <input type="number" id="filterAmountMin" placeholder="от" style="min-width:60px;" />
+                <span style="color:var(--text-muted);font-size:12px;">—</span>
+                <input type="number" id="filterAmountMax" placeholder="до" style="min-width:60px;" />
+            </div>
+            <div class="filter-group">
+                <span class="label">Дата</span>
+                <input type="date" id="filterDateFrom" style="min-width:80px;" />
+                <span style="color:var(--text-muted);font-size:12px;">—</span>
+                <input type="date" id="filterDateTo" style="min-width:80px;" />
+            </div>
+            <div class="quick-filters">
+                <button class="btn btn-xs btn-outline" onclick="setQuickFilter('high')">🔥</button>
+                <button class="btn btn-xs btn-outline" onclick="setQuickFilter('agreed')">✅</button>
+                <button class="btn btn-xs btn-outline" onclick="setQuickFilter('today')">📅</button>
+                <button class="btn btn-xs btn-outline" onclick="clearQuickFilters()">✕</button>
+            </div>
         </div>
 
-        <div class="filter-group">
-            <label>Дата</label>
-            <input type="date" id="filterDateFrom" style="min-width:100px;" />
-            <span class="filter-separator">—</span>
-            <input type="date" id="filterDateTo" style="min-width:100px;" />
-        </div>
-
-        <div class="quick-filters">
-            <button class="btn btn-xs btn-outline" onclick="setQuickFilter('high')">🔥 Высокие</button>
-            <button class="btn btn-xs btn-outline" onclick="setQuickFilter('agreed')">✅ Согласны</button>
-            <button class="btn btn-xs btn-outline" onclick="setQuickFilter('today')">📅 Сегодня</button>
-            <button class="btn btn-xs btn-outline" onclick="clearQuickFilters()">✕ Очистить</button>
-        </div>
-
-        <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
-        <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
-        <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
-        <button class="btn btn-outline" onclick="exportJSON()">💾 JSON</button>
-
-        <div class="save-status">
-            <span class="spinner" id="savingSpinner"></span>
-            <span id="savingText">💾 Сохранено</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;width:100%;">
+            <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
+            <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
+            <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
+            <button class="btn btn-outline" onclick="exportJSON()">💾 JSON</button>
+            <div class="save-status">
+                <span class="spinner" id="savingSpinner"></span>
+                <span id="savingText">💾 Сохранено</span>
+            </div>
         </div>
     </div>
 
-    <!-- TABLE -->
-    <div class="table-wrap">
+    <!-- CARDS (МОБИЛЬНАЯ ВЕРСИЯ) -->
+    <div class="cards" id="cardsContainer">
+        <div class="empty-state"><span class="emoji">⏳</span><h3>Загрузка...</h3></div>
+    </div>
+
+    <!-- TABLE (ДЕСКТОПНАЯ ВЕРСИЯ) -->
+    <div class="table-wrap" id="tableWrap">
         <table>
             <thead id="tableHead">
                 <tr id="headerRow"></tr>
             </thead>
             <tbody id="tableBody">
-                <tr><td colspan="10"><div class="empty-state"><span class="emoji">⏳</span><h3>Загрузка данных...</h3></div></td></tr>
+                <tr><td colspan="10"><div class="empty-state"><span class="emoji">⏳</span><h3>Загрузка...</h3></div></td></tr>
             </tbody>
         </table>
     </div>
@@ -1030,17 +987,15 @@
     <!-- FOOTER -->
     <div class="footer">
         <div class="stats">
-            <span class="stat-item">Всего: <strong id="rowCounter">0</strong></span>
-            <span class="stat-item">Согласны: <strong id="agreedCounter">0</strong></span>
-            <span class="stat-item">Общая сумма: <strong class="value" id="totalAmount">0</strong></span>
-            <span class="stat-item">Средняя: <strong class="value" id="avgAmount">0</strong></span>
-            <span class="stat-item">Макс: <strong class="value success" id="maxAmount">0</strong></span>
+            <span>Всего: <strong id="rowCounter">0</strong></span>
+            <span>Согласны: <strong id="agreedCounter">0</strong></span>
+            <span>Сумма: <strong class="value" id="totalAmount">0</strong></span>
         </div>
 
         <div class="mass-actions" id="massActions" style="display:none;">
-            <span class="selected-info">Выделено: <strong id="selectedCount">0</strong></span>
+            <span class="info">Выбрано: <strong id="selectedCount">0</strong></span>
             <select id="massStatusSelect">
-                <option value="">Изменить статус</option>
+                <option value="">Статус</option>
                 <option value="Согласовано">Согласовано</option>
                 <option value="Отказ">Отказ</option>
                 <option value="В работе">В работе</option>
@@ -1048,15 +1003,14 @@
                 <option value="Черновик">Черновик</option>
             </select>
             <button class="btn btn-warning btn-sm" onclick="massStatus()">Применить</button>
-            <button class="btn btn-danger btn-sm" onclick="massDelete()">🗑 Удалить</button>
-            <button class="btn btn-sm btn-outline" onclick="massExport()">📤 Экспорт</button>
+            <button class="btn btn-danger btn-sm" onclick="massDelete()">🗑</button>
         </div>
 
-        <div class="right-actions">
-            <button class="btn btn-outline btn-sm" onclick="exportToClipboard()">📋 Копировать</button>
-            <button class="btn btn-outline btn-sm" onclick="showColumnSettings()">⚙️ Столбцы</button>
-            <button class="btn btn-outline btn-sm" onclick="showAddColumnModal()">➕ Столбец</button>
-            <button class="btn btn-outline btn-sm" onclick="showStats()">📊 Статистика</button>
+        <div class="right">
+            <button class="btn btn-outline btn-sm" onclick="exportToClipboard()">📋</button>
+            <button class="btn btn-outline btn-sm" onclick="showColumnSettings()">⚙️</button>
+            <button class="btn btn-outline btn-sm" onclick="showAddColumnModal()">➕</button>
+            <button class="btn btn-outline btn-sm" onclick="showStats()">📊</button>
         </div>
     </div>
 </div>
@@ -1065,22 +1019,22 @@
 <div class="modal" id="addColumnModal">
     <div class="modal-content">
         <h3>➕ Добавить столбец</h3>
-        <p class="modal-sub">Создайте пользовательское поле для таблицы</p>
+        <p class="sub">Создайте пользовательское поле</p>
         <label>Название (ключ):</label>
         <input type="text" id="newColumnKey" placeholder="например: city" />
         <label>Отображаемое имя:</label>
         <input type="text" id="newColumnLabel" placeholder="например: Город" />
-        <label>Тип данных:</label>
+        <label>Тип:</label>
         <select id="newColumnType">
             <option value="text">Текст</option>
             <option value="number">Число</option>
             <option value="date">Дата</option>
-            <option value="select">Выпадающий список</option>
+            <option value="select">Список</option>
             <option value="checkbox">Чекбокс</option>
         </select>
-        <div id="selectOptionsContainer" style="display:none; margin-top:8px;">
+        <div id="selectOptionsContainer" style="display:none;margin-top:8px;">
             <label>Варианты (через запятую):</label>
-            <input type="text" id="newColumnOptions" placeholder="например: Да,Нет,Возможно" />
+            <input type="text" id="newColumnOptions" placeholder="например: Да,Нет" />
         </div>
         <div class="modal-actions">
             <button class="btn btn-outline" onclick="closeModal()">Отмена</button>
@@ -1091,8 +1045,8 @@
 
 <div class="modal" id="columnSettingsModal">
     <div class="modal-content">
-        <h3>⚙️ Настройка столбцов</h3>
-        <p class="modal-sub">Показывать или скрывать колонки таблицы</p>
+        <h3>⚙️ Столбцы</h3>
+        <p class="sub">Показать или скрыть колонки</p>
         <div class="column-settings" id="columnSettingsList"></div>
         <div class="modal-actions">
             <button class="btn btn-primary" onclick="closeModal()">Закрыть</button>
@@ -1103,29 +1057,29 @@
 <div class="modal" id="statsModal">
     <div class="modal-content">
         <h3>📊 Статистика</h3>
-        <p class="modal-sub">Общая аналитика по данным</p>
-        <div id="statsContent" style="margin: 16px 0;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
-                    <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Всего записей</div>
-                    <div style="font-size:28px;font-weight:700;" id="statTotal">0</div>
+        <p class="sub">Аналитика по данным</p>
+        <div id="statsContent" style="margin:12px 0;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div style="background:var(--bg-input);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border);">
+                    <div style="font-size:10px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Записей</div>
+                    <div style="font-size:24px;font-weight:700;" id="statTotal">0</div>
                 </div>
-                <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
-                    <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Сумма всех КП</div>
-                    <div style="font-size:28px;font-weight:700;color:var(--accent);" id="statSum">0</div>
+                <div style="background:var(--bg-input);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border);">
+                    <div style="font-size:10px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Сумма</div>
+                    <div style="font-size:24px;font-weight:700;color:var(--accent);" id="statSum">0</div>
                 </div>
-                <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
-                    <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Средняя сумма</div>
-                    <div style="font-size:28px;font-weight:700;color:var(--warning);" id="statAvg">0</div>
+                <div style="background:var(--bg-input);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border);">
+                    <div style="font-size:10px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Средняя</div>
+                    <div style="font-size:24px;font-weight:700;color:var(--warning);" id="statAvg">0</div>
                 </div>
-                <div style="background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
-                    <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Согласовано</div>
-                    <div style="font-size:28px;font-weight:700;color:var(--success);" id="statAgreed">0</div>
+                <div style="background:var(--bg-input);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border);">
+                    <div style="font-size:10px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;">Согласовано</div>
+                    <div style="font-size:24px;font-weight:700;color:var(--success);" id="statAgreed">0</div>
                 </div>
             </div>
-            <div style="margin-top:12px;background:var(--bg-input);padding:16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
-                <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px;">Статусы</div>
-                <div id="statStatuses" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+            <div style="margin-top:10px;background:var(--bg-input);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border);">
+                <div style="font-size:10px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px;">Статусы</div>
+                <div id="statStatuses" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
             </div>
         </div>
         <div class="modal-actions">
@@ -1161,7 +1115,7 @@
         { key: 'client', label: 'Клиент', type: 'text' },
         { key: 'proposal', label: 'КП', type: 'text' },
         { key: 'amount', label: 'Сумма', type: 'number' },
-        { key: 'date', label: 'Дата КП', type: 'date' },
+        { key: 'date', label: 'Дата', type: 'date' },
         { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
         { key: 'agreed', label: 'Согласен', type: 'checkbox' },
         { key: 'comment', label: 'Комментарий', type: 'text' },
@@ -1173,7 +1127,7 @@
     columns.forEach(function(col) { visibleColumns[col.key] = true; });
 
     // ================================================================
-    // QUIC-ФИКС ДЛЯ CHROME/EDGE
+    // QUIC-ФИКС
     // ================================================================
     var originalFetch = window.fetch;
     window.fetch = function(url, options) {
@@ -1304,7 +1258,7 @@
     }
 
     // ================================================================
-    // СОХРАНЕНИЕ В ОБЛАКО
+    // СОХРАНЕНИЕ
     // ================================================================
     async function saveToCloud() {
         if (isSaving) return;
@@ -1382,19 +1336,88 @@
     // РЕНДЕР
     // ================================================================
     function render() {
+        renderCards();
+        renderTable();
+        updateCounters();
+        updateMassActions();
+        document.getElementById('countBadge').textContent = data.length;
+    }
+
+    // ================================================================
+    // КАРТОЧКИ (МОБИЛЬНАЯ ВЕРСИЯ)
+    // ================================================================
+    function renderCards() {
+        var container = document.getElementById('cardsContainer');
+        var filtered = getFilteredData();
+
+        if (!filtered.length) {
+            container.innerHTML = '<div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3></div>';
+            return;
+        }
+
+        var html = '';
+        filtered.forEach(function(row, idx) {
+            var statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
+            var isSelected = selectedIds.indexOf(row.id) !== -1;
+            var priorityLabels = {
+                'Низкий': 'low',
+                'Средний': 'medium',
+                'Высокий': 'high'
+            };
+            var priorityClass = priorityLabels[row.priority] || 'medium';
+            var priorityEmoji = { 'Низкий': '🟢', 'Средний': '🟡', 'Высокий': '🔴' };
+
+            html += '<div class="card ' + (isSelected ? 'selected' : '') + '">';
+            html += '<div class="card-header">';
+            html += '<div class="card-title">' + escapeHtml(row.client || 'Без имени');
+            html += ' <span class="sub">' + escapeHtml(row.proposal || '') + '</span>';
+            html += ' <span class="card-priority ' + priorityClass + '">' + (priorityEmoji[row.priority] || '🟡') + ' ' + (row.priority || 'Средний') + '</span>';
+            html += '</div>';
+            html += '<div class="card-check"><input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleSelect(' + row.id + ', this.checked)" /></div>';
+            html += '</div>';
+
+            html += '<div class="card-body">';
+            html += '<div class="card-field"><span class="label">Сумма</span><span class="value">' + (row.amount || 0).toLocaleString('ru-RU') + ' ₽</span></div>';
+            html += '<div class="card-field"><span class="label">Дата</span><span class="value">' + (row.date || '') + '</span></div>';
+            html += '<div class="card-field"><span class="label">Статус</span><span class="card-status ' + statusClass + '">' + getStatusLabel(row.status) + '</span></div>';
+            html += '<div class="card-field"><span class="label">Согласен</span><span class="value">' + (row.agreed ? '✅' : '❌') + '</span></div>';
+            if (row.phone) html += '<div class="card-field"><span class="label">Телефон</span><span class="value">' + escapeHtml(row.phone) + '</span></div>';
+            if (row.email) html += '<div class="card-field"><span class="label">Email</span><span class="value">' + escapeHtml(row.email) + '</span></div>';
+            if (row.comment) html += '<div class="card-field"><span class="label">Комментарий</span><span class="value">' + escapeHtml(row.comment) + '</span></div>';
+            html += '</div>';
+
+            html += '<div class="card-actions">';
+            html += '<button class="btn btn-sm btn-outline" onclick="copyRow(' + row.id + ')">📋 Копировать</button>';
+            html += '<button class="btn btn-sm btn-outline" onclick="togglePriority(' + row.id + ')">🏷️ Приоритет</button>';
+            html += '<button class="btn btn-sm btn-danger" onclick="deleteRow(' + row.id + ')">🗑</button>';
+            html += '</div>';
+            html += '</div>';
+        });
+
+        container.innerHTML = html;
+    }
+
+    function getStatusLabel(status) {
+        var labels = {
+            'Согласовано': '✅ Согласовано',
+            'Отказ': '❌ Отказ',
+            'В работе': '⚡ В работе',
+            'Отправлено': '📤 Отправлено',
+            'Черновик': '📝 Черновик'
+        };
+        return labels[status] || status || '📝 Черновик';
+    }
+
+    // ================================================================
+    // ТАБЛИЦА (ДЕСКТОПНАЯ ВЕРСИЯ)
+    // ================================================================
+    function renderTable() {
         var thead = document.getElementById('headerRow');
         var tbody = document.getElementById('tableBody');
-
-        var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
-        var filterStatus = document.getElementById('filterStatus').value;
-        var filterAmountMin = parseFloat(document.getElementById('filterAmountMin').value);
-        var filterAmountMax = parseFloat(document.getElementById('filterAmountMax').value);
-        var filterDateFrom = document.getElementById('filterDateFrom').value;
-        var filterDateTo = document.getElementById('filterDateTo').value;
+        var filtered = getFilteredData();
 
         // Заголовки
         var headerHtml = '<th style="width:30px;"><input type="checkbox" onchange="toggleAllSelect(this.checked)" /></th>';
-        headerHtml += '<th style="width:30px;text-align:center;">#</th>';
         columns.forEach(function(col) {
             if (visibleColumns[col.key] === false) return;
             var sortClass = '';
@@ -1406,78 +1429,41 @@
             headerHtml += '<span class="col-actions"><button onclick="event.stopPropagation();removeColumn(\'' + col.key + '\')" title="Удалить">✕</button></span>';
             headerHtml += '</th>';
         });
-        headerHtml += '<th style="width:110px;">Действия</th>';
+        headerHtml += '<th style="width:80px;">Действия</th>';
         thead.innerHTML = headerHtml;
 
-        // Фильтрация
-        var filtered = data.filter(function(row) {
-            var matchText = false;
-            columns.forEach(function(col) {
-                var val = row[col.key] || '';
-                if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
-            });
-            var statusMatch = filterStatus === '' || row.status === filterStatus;
-            var amountMatch = true;
-            if (!isNaN(filterAmountMin) && row.amount < filterAmountMin) amountMatch = false;
-            if (!isNaN(filterAmountMax) && row.amount > filterAmountMax) amountMatch = false;
-            var dateMatch = true;
-            if (filterDateFrom && row.date < filterDateFrom) dateMatch = false;
-            if (filterDateTo && row.date > filterDateTo) dateMatch = false;
-            return matchText && statusMatch && amountMatch && dateMatch;
-        });
-
-        // Сортировка
-        if (sortColumn) {
-            filtered.sort(function(a, b) {
-                var valA = a[sortColumn] || '';
-                var valB = b[sortColumn] || '';
-                if (typeof valA === 'string') valA = valA.toLowerCase();
-                if (typeof valB === 'string') valB = valB.toLowerCase();
-                if (valA < valB) return -sortDirection;
-                if (valA > valB) return sortDirection;
-                return 0;
-            });
-        }
-
         if (!filtered.length) {
-            var colCount = columns.filter(function(c) { return visibleColumns[c.key] !== false; }).length + 3;
-            tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3><p>Нажмите «➕ Добавить» чтобы создать первую запись</p></div></td></tr>';
-            document.getElementById('countBadge').textContent = data.length;
-            updateCounters();
-            updateMassActions();
+            var colCount = columns.filter(function(c) { return visibleColumns[c.key] !== false; }).length + 2;
+            tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3></div></td></tr>';
             return;
         }
 
         var html = '';
-        filtered.forEach(function(row, idx) {
+        filtered.forEach(function(row) {
             var statusClass = (row.status || 'Черновик').toLowerCase().replace(/ /g, '');
             var isSelected = selectedIds.indexOf(row.id) !== -1;
-            html += '<tr class="status-' + statusClass + (isSelected ? ' selected' : '') + '">';
+            html += '<tr class="' + (isSelected ? 'selected' : '') + '">';
             html += '<td class="td-checkbox"><input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleSelect(' + row.id + ', this.checked)" /></td>';
-            html += '<td style="text-align:center;"><span class="row-number">' + (idx + 1) + '</span></td>';
 
             columns.forEach(function(col) {
                 if (visibleColumns[col.key] === false) return;
-                html += '<td data-label="' + col.label + '">';
-                html += renderCell(row, col);
+                html += '<td>';
+                html += renderTableCell(row, col);
                 html += '</td>';
             });
 
-            html += '<td data-label="Действия"><div class="action-btns">';
+            html += '<td><div class="action-btns">';
             html += '<button class="btn-icon success" onclick="copyRow(' + row.id + ')" title="Копировать">📋</button>';
-            html += '<button class="btn-icon info" onclick="togglePriority(' + row.id + ')" title="Сменить приоритет">🏷️</button>';
+            html += '<button class="btn-icon" onclick="togglePriority(' + row.id + ')" title="Приоритет">🏷️</button>';
             html += '<button class="btn-icon danger" onclick="deleteRow(' + row.id + ')" title="Удалить">🗑</button>';
             html += '</div></td>';
             html += '</tr>';
         });
 
         tbody.innerHTML = html;
-        document.getElementById('countBadge').textContent = data.length;
-        updateCounters();
-        updateMassActions();
     }
 
-    function renderCell(row, col) {
+    function renderTableCell(row, col) {
         var value = row[col.key] !== undefined ? row[col.key] : '';
         var id = row.id;
         var key = col.key;
@@ -1488,6 +1474,14 @@
                 return '<input type="checkbox" ' + checked + ' onchange="updateField(' + id + ', \'' + key + '\', this.checked)" />';
 
             case 'select':
+                if (key === 'priority') {
+                    var priorityLabels = {
+                        'Низкий': '<span style="color:var(--success);font-weight:500;">🟢 Низкий</span>',
+                        'Средний': '<span style="color:var(--warning);font-weight:500;">🟡 Средний</span>',
+                        'Высокий': '<span style="color:var(--danger);font-weight:500;">🔴 Высокий</span>'
+                    };
+                    return priorityLabels[value] || value;
+                }
                 var options = col.options || ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
                 var html = '<select class="table-select" onchange="updateField(' + id + ', \'' + key + '\', this.value)">';
                 options.forEach(function(opt) {
@@ -1504,25 +1498,52 @@
 
             default:
                 if (key === 'status') {
-                    var labels = {
-                        'Согласовано': '✅ Согласовано',
-                        'Отказ': '❌ Отказ',
-                        'В работе': '⚡ В работе',
-                        'Отправлено': '📤 Отправлено',
-                        'Черновик': '📝 Черновик'
-                    };
-                    return '<span class="status-cell">' + (labels[value] || value) + '</span>';
-                }
-                if (key === 'priority') {
-                    var priorityLabels = {
-                        'Низкий': '<span class="priority-badge low">Низкий</span>',
-                        'Средний': '<span class="priority-badge medium">Средний</span>',
-                        'Высокий': '<span class="priority-badge high">Высокий</span>'
-                    };
-                    return priorityLabels[value] || value;
+                    return '<span class="table-status ' + (value || 'черновик').toLowerCase().replace(/ /g, '') + '">' + getStatusLabel(value) + '</span>';
                 }
                 return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
         }
+    }
+
+    // ================================================================
+    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    // ================================================================
+    function getFilteredData() {
+        var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
+        var filterStatus = document.getElementById('filterStatus').value;
+        var filterAmountMin = parseFloat(document.getElementById('filterAmountMin').value);
+        var filterAmountMax = parseFloat(document.getElementById('filterAmountMax').value);
+        var filterDateFrom = document.getElementById('filterDateFrom').value;
+        var filterDateTo = document.getElementById('filterDateTo').value;
+
+        var filtered = data.filter(function(row) {
+            var matchText = false;
+            columns.forEach(function(col) {
+                var val = row[col.key] || '';
+                if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
+            });
+            var statusMatch = filterStatus === '' || row.status === filterStatus;
+            var amountMatch = true;
+            if (!isNaN(filterAmountMin) && row.amount < filterAmountMin) amountMatch = false;
+            if (!isNaN(filterAmountMax) && row.amount > filterAmountMax) amountMatch = false;
+            var dateMatch = true;
+            if (filterDateFrom && row.date < filterDateFrom) dateMatch = false;
+            if (filterDateTo && row.date > filterDateTo) dateMatch = false;
+            return matchText && statusMatch && amountMatch && dateMatch;
+        });
+
+        if (sortColumn) {
+            filtered.sort(function(a, b) {
+                var valA = a[sortColumn] || '';
+                var valB = b[sortColumn] || '';
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
+                if (valA < valB) return -sortDirection;
+                if (valA > valB) return sortDirection;
+                return 0;
+            });
+        }
+
+        return filtered;
     }
 
     function updateCounters() {
@@ -1531,10 +1552,6 @@
         document.getElementById('agreedCounter').textContent = agreedCount;
         var total = data.reduce(function(sum, r) { return sum + (r.amount || 0); }, 0);
         document.getElementById('totalAmount').textContent = total.toLocaleString('ru-RU');
-        var avg = data.length ? total / data.length : 0;
-        document.getElementById('avgAmount').textContent = avg.toLocaleString('ru-RU');
-        var max = data.reduce(function(max, r) { return Math.max(max, r.amount || 0); }, 0);
-        document.getElementById('maxAmount').textContent = max.toLocaleString('ru-RU');
     }
 
     function escapeHtml(text) {
@@ -1556,7 +1573,7 @@
     }
 
     // ================================================================
-    // БЫСТРЫЕ ФИЛЬТРЫ (НОВАЯ ФИЧА)
+    // БЫСТРЫЕ ФИЛЬТРЫ
     // ================================================================
     function setQuickFilter(type) {
         var today = new Date().toISOString().slice(0, 10);
@@ -1605,31 +1622,6 @@
         render();
     }
 
-    function getFilteredData() {
-        var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
-        var filterStatus = document.getElementById('filterStatus').value;
-        var filterAmountMin = parseFloat(document.getElementById('filterAmountMin').value);
-        var filterAmountMax = parseFloat(document.getElementById('filterAmountMax').value);
-        var filterDateFrom = document.getElementById('filterDateFrom').value;
-        var filterDateTo = document.getElementById('filterDateTo').value;
-
-        return data.filter(function(row) {
-            var matchText = false;
-            columns.forEach(function(col) {
-                var val = row[col.key] || '';
-                if (String(val).toLowerCase().indexOf(filterText) !== -1) matchText = true;
-            });
-            var statusMatch = filterStatus === '' || row.status === filterStatus;
-            var amountMatch = true;
-            if (!isNaN(filterAmountMin) && row.amount < filterAmountMin) amountMatch = false;
-            if (!isNaN(filterAmountMax) && row.amount > filterAmountMax) amountMatch = false;
-            var dateMatch = true;
-            if (filterDateFrom && row.date < filterDateFrom) dateMatch = false;
-            if (filterDateTo && row.date > filterDateTo) dateMatch = false;
-            return matchText && statusMatch && amountMatch && dateMatch;
-        });
-    }
-
     function updateMassActions() {
         var el = document.getElementById('massActions');
         var count = selectedIds.length;
@@ -1648,7 +1640,7 @@
         selectedIds = [];
         render();
         scheduleSave();
-        showToast('🗑️ Удалено записей: ' + (data.length - selectedIds.length), 'success');
+        showToast('🗑️ Удалено ' + (data.length - selectedIds.length) + ' записей', 'success');
     }
 
     function massStatus() {
@@ -1665,32 +1657,8 @@
         showToast('📝 Статус обновлён для ' + count + ' записей', 'success');
     }
 
-    function massExport() {
-        if (!selectedIds.length) return;
-        var selectedData = data.filter(function(r) { return selectedIds.indexOf(r.id) !== -1; });
-        var visible = columns.filter(function(c) { return visibleColumns[c.key] !== false; });
-        var headers = visible.map(function(c) { return c.label; });
-        var rows = selectedData.map(function(r) {
-            return visible.map(function(c) {
-                var val = r[c.key] !== undefined ? r[c.key] : '';
-                if (c.type === 'checkbox') val = val ? 'Да' : 'Нет';
-                return '"' + String(val).replace(/"/g, '""') + '"';
-            });
-        });
-        var csv = [headers.join(',')];
-        rows.forEach(function(row) { csv.push(row.join(',')); });
-        csv = csv.join('\n');
-        var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-        var link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'выбранные_клиенты_' + new Date().toISOString().slice(0, 10) + '.csv';
-        link.click();
-        URL.revokeObjectURL(link.href);
-        showToast('📤 Экспортировано ' + selectedData.length + ' записей', 'success');
-    }
-
     // ================================================================
-    // ПРИОРИТЕТЫ (НОВАЯ ФИЧА)
+    // ПРИОРИТЕТЫ
     // ================================================================
     function togglePriority(id) {
         var row = data.find(function(r) { return r.id === id; });
@@ -1704,7 +1672,7 @@
     }
 
     // ================================================================
-    // СТАТИСТИКА (НОВАЯ ФИЧА)
+    // СТАТИСТИКА
     // ================================================================
     function showStats() {
         var modal = document.getElementById('statsModal');
@@ -1722,15 +1690,15 @@
             statuses[s] = (statuses[s] || 0) + 1;
         });
         var html = '';
+        var labels = {
+            'Согласовано': '✅',
+            'Отказ': '❌',
+            'В работе': '⚡',
+            'Отправлено': '📤',
+            'Черновик': '📝'
+        };
         for (var s in statuses) {
-            var labels = {
-                'Согласовано': '✅',
-                'Отказ': '❌',
-                'В работе': '⚡',
-                'Отправлено': '📤',
-                'Черновик': '📝'
-            };
-            html += '<span style="background:var(--bg-input);padding:4px 14px;border-radius:20px;border:1px solid var(--border-color);font-size:13px;">' + (labels[s] || '') + ' ' + s + ': ' + statuses[s] + '</span>';
+            html += '<span style="background:var(--bg-input);padding:4px 12px;border-radius:20px;border:1px solid var(--border);font-size:12px;">' + (labels[s] || '') + ' ' + s + ': ' + statuses[s] + '</span>';
         }
         document.getElementById('statStatuses').innerHTML = html || 'Нет данных';
         modal.classList.add('active');
@@ -1877,8 +1845,8 @@
         data.push(newRow);
         render();
         scheduleSave();
-        var tbody = document.getElementById('tableBody');
-        var last = tbody.lastElementChild;
+        var container = document.getElementById('cardsContainer');
+        var last = container.lastElementChild;
         if (last) last.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -1889,7 +1857,7 @@
             { key: 'client', label: 'Клиент', type: 'text' },
             { key: 'proposal', label: 'КП', type: 'text' },
             { key: 'amount', label: 'Сумма', type: 'number' },
-            { key: 'date', label: 'Дата КП', type: 'date' },
+            { key: 'date', label: 'Дата', type: 'date' },
             { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
             { key: 'agreed', label: 'Согласен', type: 'checkbox' },
             { key: 'comment', label: 'Комментарий', type: 'text' },
@@ -1920,7 +1888,7 @@
     }
 
     // ================================================================
-    // CSV / JSON
+    // CSV / JSON / КОПИРОВАНИЕ
     // ================================================================
     function exportCSV() {
         if (!data.length) return showToast('Нет данных для экспорта', 'error');
@@ -1963,7 +1931,6 @@
         reader.onload = function(ev) {
             var text = ev.target.result;
             try {
-                // Пробуем как JSON
                 var parsed = JSON.parse(text);
                 if (Array.isArray(parsed) && parsed.length) {
                     parsed.forEach(function(row) {
@@ -1981,7 +1948,6 @@
                     return;
                 }
             } catch(e) {
-                // Пробуем как CSV
                 var lines = text.split('\n').filter(function(l) { return l.trim(); });
                 if (lines.length < 2) { showToast('Файл пуст или неверный формат', 'error'); return; }
 
@@ -2075,8 +2041,7 @@
         type = type || '';
         var el = document.getElementById('toast');
         var icons = { success: '✅', error: '❌', warning: '⚠️' };
-        var icon = icons[type] || 'ℹ️';
-        el.innerHTML = '<span class="toast-icon">' + icon + '</span> ' + msg;
+        el.innerHTML = '<span>' + (icons[type] || 'ℹ️') + '</span> ' + msg;
         el.className = 'toast';
         if (type) el.classList.add(type);
         el.classList.add('show');
@@ -2103,10 +2068,9 @@
     // ================================================================
     loadFromCloud();
 
-    console.log('⚡ CRM загружена');
-    console.log('🔑 BIN_ID:', BIN_ID);
-    console.log('📊 Колонок:', columns.length);
-    console.log('🆕 Добавлены фичи: приоритеты, статистика, быстрые фильтры, масс-экспорт, JSON-экспорт');
+    console.log('⚡ CRM загружена — новый дизайн!');
+    console.log('📱 Мобильная версия — карточки, десктопная — таблица');
+    console.log('🆕 Новые фичи: приоритеты, статистика, быстрые фильтры');
 </script>
 </body>
 </html>
