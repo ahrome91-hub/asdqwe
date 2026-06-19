@@ -6,8 +6,7 @@
     <title>CRM — Клиентская база</title>
     <style>
         /* ============================================================
-           ДИЗАЙН В СТИЛЕ МЕССЕНДЖЕРА
-           Современный, плавный, с фокусом на мобильную версию
+           ДИЗАЙН В СТИЛЕ МЕССЕНДЖЕРА + ВСЯ ФУНКЦИОНАЛЬНОСТЬ
            ============================================================ */
 
         * {
@@ -79,7 +78,7 @@
         }
 
         /* ============================================================
-           HEADER — как в мессенджере
+           HEADER
            ============================================================ */
         .header {
             display: flex;
@@ -138,6 +137,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-wrap: wrap;
         }
 
         .header-info .status .dot {
@@ -154,6 +154,17 @@
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
+        }
+
+        .badge-count {
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 1px 10px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px var(--accent-glow);
+            flex-shrink: 0;
         }
 
         .header-right {
@@ -183,19 +194,8 @@
             color: var(--text);
         }
 
-        .badge-count {
-            background: var(--accent);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 1px 10px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px var(--accent-glow);
-            flex-shrink: 0;
-        }
-
         /* ============================================================
-           TOOLBAR — как поиск в мессенджере
+           TOOLBAR
            ============================================================ */
         .toolbar {
             padding: 10px 16px;
@@ -375,7 +375,7 @@
         }
 
         /* ============================================================
-           КАРТОЧКИ — как сообщения в мессенджере
+           КАРТОЧКИ-СООБЩЕНИЯ
            ============================================================ */
         .messages {
             padding: 12px 16px 20px;
@@ -490,6 +490,67 @@
         .message-field .value.warning { color: var(--warning); }
         .message-field .value.accent { color: var(--accent); }
 
+        .message-field .editable {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            width: auto;
+            min-width: 40px;
+            max-width: 200px;
+        }
+
+        .message-field .editable:hover {
+            border-color: var(--border);
+            background: var(--bg-input);
+        }
+
+        .message-field .editable:focus {
+            border-color: var(--accent);
+            background: var(--bg-input);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .message-field .editable-select {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .message-field .editable-select:hover {
+            border-color: var(--border);
+            background: var(--bg-input);
+        }
+
+        .message-field .editable-select:focus {
+            border-color: var(--accent);
+            background: var(--bg-input);
+            outline: none;
+        }
+
+        .message-field .editable-select option {
+            background: var(--bg-secondary);
+            color: var(--text);
+        }
+
+        .message-field .editable-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
         .message-status {
             display: inline-flex;
             align-items: center;
@@ -534,6 +595,15 @@
         .message-priority.medium { background: rgba(251, 191, 36, 0.15); color: var(--warning); }
         .message-priority.low { background: rgba(52, 211, 153, 0.15); color: var(--success); }
 
+        .sort-indicator {
+            display: inline-block;
+            margin-left: 4px;
+            font-size: 10px;
+            opacity: 0.4;
+            cursor: pointer;
+        }
+        .sort-indicator.active { opacity: 1; }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -558,7 +628,7 @@
         }
 
         /* ============================================================
-           FOOTER — как в мессенджере
+           FOOTER
            ============================================================ */
         .footer {
             display: flex;
@@ -630,7 +700,7 @@
         }
 
         /* ============================================================
-           ТОСТ
+           TOAST
            ============================================================ */
         .toast {
             position: fixed;
@@ -768,7 +838,7 @@
         .column-settings label input[type="checkbox"] { width: 14px; height: 14px; }
 
         /* ============================================================
-           МОБИЛЬНАЯ ВЕРСИЯ — оптимизирована
+           МОБИЛЬНАЯ ВЕРСИЯ
            ============================================================ */
         @media (max-width: 820px) {
             .header { padding: 10px 14px; }
@@ -788,6 +858,7 @@
             .message-sender .msg-name { font-size: 14px; }
             .message-body { padding-left: 42px; gap: 2px 10px; }
             .message-field { font-size: 12px; }
+            .message-field .editable { font-size: 12px; max-width: 120px; }
             .message-actions { padding-left: 42px; }
             .message-actions .btn { font-size: 11px; padding: 2px 10px; }
 
@@ -821,11 +892,12 @@
             .message-sender .msg-avatar { width: 28px; height: 28px; font-size: 11px; }
             .message-sender .msg-name { font-size: 13px; }
             .message-sender .msg-sub { font-size: 10px; }
-            .message-body { padding-left: 38px; gap: 2px 8px; }
+            .message-body { padding-left: 0; gap: 2px 8px; }
             .message-field { font-size: 11px; }
             .message-field .label { font-size: 9px; }
+            .message-field .editable { font-size: 11px; max-width: 80px; }
             .message-status { font-size: 10px; padding: 1px 10px; }
-            .message-actions { padding-left: 38px; gap: 2px; }
+            .message-actions { padding-left: 0; gap: 2px; }
             .message-actions .btn { font-size: 10px; padding: 2px 8px; }
             .message-priority { font-size: 9px; padding: 1px 8px; }
 
@@ -849,9 +921,9 @@
             .toolbar .filters { width: 100%; }
             .toolbar .filters select,
             .toolbar .filters input { flex: 1; min-width: 40px; }
+            .message-sender .msg-avatar { display: none; }
             .message-body { padding-left: 0; }
             .message-actions { padding-left: 0; }
-            .message-sender .msg-avatar { display: none; }
         }
     </style>
 </head>
@@ -874,6 +946,7 @@
         <div class="header-right">
             <button class="btn-icon" onclick="toggleTheme()" title="Тема">🌓</button>
             <button class="btn-icon" onclick="showStats()" title="Статистика">📊</button>
+            <button class="btn-icon" onclick="showAddColumnModal()" title="Добавить столбец">➕</button>
         </div>
     </header>
 
@@ -907,10 +980,11 @@
         </div>
 
         <div style="display:flex;gap:4px;flex-wrap:wrap;width:100%;">
-            <button class="btn btn-primary" onclick="addRow()">➕</button>
-            <button class="btn btn-success" onclick="exportCSV()">📤</button>
-            <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥</button>
-            <button class="btn btn-outline" onclick="exportJSON()">💾</button>
+            <button class="btn btn-primary" onclick="addRow()">➕ Добавить</button>
+            <button class="btn btn-success" onclick="exportCSV()">📤 CSV</button>
+            <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
+            <button class="btn btn-outline" onclick="exportJSON()">💾 JSON</button>
+            <button class="btn btn-outline" onclick="showColumnSettings()">⚙️</button>
             <div class="save-status">
                 <span class="spinner" id="savingSpinner"></span>
                 <span id="savingText">💾 Сохранено</span>
@@ -929,6 +1003,7 @@
             <span>Всего: <strong id="rowCounter">0</strong></span>
             <span>Согласны: <strong id="agreedCounter">0</strong></span>
             <span>Сумма: <strong class="value" id="totalAmount">0</strong></span>
+            <span><span class="sort-indicator" onclick="sortBy('amount')" style="cursor:pointer;">⬆ Сортировка</span></span>
         </div>
 
         <div class="mass-actions" id="massActions" style="display:none;">
@@ -947,8 +1022,7 @@
 
         <div class="right">
             <button class="btn btn-outline btn-sm" onclick="exportToClipboard()">📋</button>
-            <button class="btn btn-outline btn-sm" onclick="showColumnSettings()">⚙️</button>
-            <button class="btn btn-outline btn-sm" onclick="showAddColumnModal()">➕</button>
+            <button class="btn btn-outline btn-sm" onclick="resetData()">🔄</button>
         </div>
     </div>
 </div>
@@ -1046,6 +1120,8 @@
     var isOnline = false;
     var selectedIds = [];
     var visibleColumns = {};
+    var sortField = null;
+    var sortDirection = 1;
 
     var columns = [
         { key: 'client', label: 'Клиент', type: 'text' },
@@ -1269,7 +1345,7 @@
     }
 
     // ================================================================
-    // РЕНДЕР
+    // ОСНОВНОЙ РЕНДЕР
     // ================================================================
     function render() {
         renderMessages();
@@ -1279,7 +1355,7 @@
     }
 
     // ================================================================
-    // СООБЩЕНИЯ (КАРТОЧКИ)
+    // РЕНДЕР КАРТОЧЕК
     // ================================================================
     function renderMessages() {
         var container = document.getElementById('messagesContainer');
@@ -1303,23 +1379,40 @@
             html += '<div class="message-sender">';
             html += '<div class="msg-avatar">' + (row.client ? row.client.charAt(0).toUpperCase() : '?') + '</div>';
             html += '<div>';
-            html += '<div class="msg-name">' + escapeHtml(row.client || 'Без имени');
-            html += ' <span class="message-priority ' + priorityClass + '">' + (priorityEmoji[row.priority] || '🟡') + ' ' + (row.priority || 'Средний') + '</span>';
+            html += '<div class="msg-name">' + renderEditable(row, 'client') + ' ';
+            html += '<span class="message-priority ' + priorityClass + '">' + (priorityEmoji[row.priority] || '🟡') + ' ' + (row.priority || 'Средний') + '</span>';
             html += '</div>';
-            html += '<div class="msg-sub">' + escapeHtml(row.proposal || '') + '</div>';
+            html += '<div class="msg-sub">' + renderEditable(row, 'proposal') + '</div>';
             html += '</div>';
             html += '</div>';
             html += '<div class="message-check"><input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleSelect(' + row.id + ', this.checked)" /></div>';
             html += '</div>';
 
             html += '<div class="message-body">';
-            html += '<div class="message-field"><span class="label">Сумма</span><span class="value">' + (row.amount || 0).toLocaleString('ru-RU') + ' ₽</span></div>';
-            html += '<div class="message-field"><span class="label">Дата</span><span class="value">' + (row.date || '') + '</span></div>';
-            html += '<div class="message-field"><span class="label">Статус</span><span class="message-status ' + statusClass + '">' + getStatusLabel(row.status) + '</span></div>';
-            html += '<div class="message-field"><span class="label">Согласен</span><span class="value">' + (row.agreed ? '✅ Да' : '❌ Нет') + '</span></div>';
-            if (row.phone) html += '<div class="message-field"><span class="label">Телефон</span><span class="value">' + escapeHtml(row.phone) + '</span></div>';
-            if (row.email) html += '<div class="message-field"><span class="label">Email</span><span class="value">' + escapeHtml(row.email) + '</span></div>';
-            if (row.comment) html += '<div class="message-field"><span class="label">Комментарий</span><span class="value">' + escapeHtml(row.comment) + '</span></div>';
+            // Сумма
+            html += '<div class="message-field"><span class="label">Сумма</span><span class="value">' + renderEditable(row, 'amount') + ' ₽</span></div>';
+            // Дата
+            html += '<div class="message-field"><span class="label">Дата</span><span class="value">' + renderEditable(row, 'date') + '</span></div>';
+            // Статус
+            html += '<div class="message-field"><span class="label">Статус</span><span class="message-status ' + statusClass + '">' + renderEditableSelect(row, 'status') + '</span></div>';
+            // Согласен
+            html += '<div class="message-field"><span class="label">Согласен</span><span class="value">' + renderEditableCheckbox(row, 'agreed') + '</span></div>';
+            // Телефон
+            if (visibleColumns['phone'] !== false) {
+                html += '<div class="message-field"><span class="label">Телефон</span><span class="value">' + renderEditable(row, 'phone') + '</span></div>';
+            }
+            // Email
+            if (visibleColumns['email'] !== false) {
+                html += '<div class="message-field"><span class="label">Email</span><span class="value">' + renderEditable(row, 'email') + '</span></div>';
+            }
+            // Комментарий
+            if (visibleColumns['comment'] !== false) {
+                html += '<div class="message-field"><span class="label">Комментарий</span><span class="value">' + renderEditable(row, 'comment') + '</span></div>';
+            }
+            // Приоритет
+            if (visibleColumns['priority'] !== false) {
+                html += '<div class="message-field"><span class="label">Приоритет</span><span class="value">' + renderEditableSelect(row, 'priority') + '</span></div>';
+            }
             html += '</div>';
 
             html += '<div class="message-actions">';
@@ -1331,6 +1424,44 @@
         });
 
         container.innerHTML = html;
+    }
+
+    // ================================================================
+    // РЕНДЕР ПОЛЕЙ
+    // ================================================================
+    function renderEditable(row, key) {
+        var value = row[key] !== undefined ? row[key] : '';
+        var id = row.id;
+        var col = columns.find(function(c) { return c.key === key; });
+        if (!col) return value;
+
+        if (col.type === 'number') {
+            return '<input class="editable" type="number" value="' + (value || 0) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" onfocus="this.select()" />';
+        } else if (col.type === 'date') {
+            return '<input class="editable" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+        } else {
+            return '<input class="editable" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="..." />';
+        }
+    }
+
+    function renderEditableSelect(row, key) {
+        var value = row[key] !== undefined ? row[key] : '';
+        var id = row.id;
+        var col = columns.find(function(c) { return c.key === key; });
+        if (!col || !col.options) return value;
+
+        var html = '<select class="editable-select" onchange="updateField(' + id + ', \'' + key + '\', this.value)">';
+        col.options.forEach(function(opt) {
+            html += '<option value="' + opt + '" ' + (opt === value ? 'selected' : '') + '>' + opt + '</option>';
+        });
+        html += '</select>';
+        return html;
+    }
+
+    function renderEditableCheckbox(row, key) {
+        var checked = row[key] ? 'checked' : '';
+        var id = row.id;
+        return '<input class="editable-checkbox" type="checkbox" ' + checked + ' onchange="updateField(' + id + ', \'' + key + '\', this.checked)" />';
     }
 
     function getStatusLabel(status) {
@@ -1345,7 +1476,7 @@
     }
 
     // ================================================================
-    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+    // ФИЛЬТРАЦИЯ И СОРТИРОВКА
     // ================================================================
     function getFilteredData() {
         var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
@@ -1371,7 +1502,31 @@
             return matchText && statusMatch && amountMatch && dateMatch;
         });
 
+        // Сортировка
+        if (sortField) {
+            filtered.sort(function(a, b) {
+                var valA = a[sortField] || '';
+                var valB = b[sortField] || '';
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
+                if (valA < valB) return -sortDirection;
+                if (valA > valB) return sortDirection;
+                return 0;
+            });
+        }
+
         return filtered;
+    }
+
+    function sortBy(field) {
+        if (sortField === field) {
+            sortDirection *= -1;
+        } else {
+            sortField = field;
+            sortDirection = 1;
+        }
+        render();
+        showToast('📊 Сортировка: ' + field + (sortDirection === 1 ? ' ▲' : ' ▼'), 'success');
     }
 
     function updateCounters() {
@@ -1402,6 +1557,7 @@
             document.getElementById('filterDateTo').value = today;
         }
         render();
+        showToast('✅ Быстрый фильтр применён', 'success');
     }
 
     function clearQuickFilters() {
@@ -1411,7 +1567,9 @@
         document.getElementById('filterAmountMax').value = '';
         document.getElementById('filterDateFrom').value = '';
         document.getElementById('filterDateTo').value = '';
+        sortField = null;
         render();
+        showToast('✕ Фильтры очищены', 'success');
     }
 
     // ================================================================
@@ -1592,11 +1750,12 @@
     }
 
     // ================================================================
-    // ДЕЙСТВИЯ
+    // ДЕЙСТВИЯ С ДАННЫМИ
     // ================================================================
     function updateField(id, field, value) {
         var row = data.find(function(r) { return r.id === id; });
         if (row) {
+            if (field === 'amount') value = parseFloat(value) || 0;
             row[field] = value;
             render();
             scheduleSave();
@@ -1609,6 +1768,7 @@
         selectedIds = selectedIds.filter(function(i) { return i !== id; });
         render();
         scheduleSave();
+        showToast('🗑️ Запись удалена', 'success');
     }
 
     function copyRow(id) {
@@ -1652,6 +1812,7 @@
         var container = document.getElementById('messagesContainer');
         var last = container.lastElementChild;
         if (last) last.scrollIntoView({ behavior: 'smooth' });
+        showToast('➕ Добавлена новая запись', 'success');
     }
 
     function resetData() {
@@ -1684,6 +1845,7 @@
         });
         nextId = data.length + 1;
         selectedIds = [];
+        sortField = null;
         saveToLocalStorage();
         render();
         if (isOnline) scheduleSave();
@@ -1871,9 +2033,9 @@
     // ================================================================
     loadFromCloud();
 
-    console.log('⚡ CRM загружена — дизайн в стиле мессенджера!');
-    console.log('📱 Полностью адаптивная мобильная версия');
-    console.log('🆕 Фичи: приоритеты, статистика, быстрые фильтры');
+    console.log('⚡ CRM загружена — мессенджер-стиль + полная функциональность!');
+    console.log('📱 Адаптивная мобильная версия');
+    console.log('🆕 Фичи: редактирование полей, сортировка, массовые действия, чекбоксы, комментарии');
 </script>
 </body>
 </html>
