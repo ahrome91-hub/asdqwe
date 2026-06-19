@@ -33,7 +33,6 @@
             --success: #22c55e;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --purple: #8b5cf6;
             --radius: 12px;
             --radius-sm: 8px;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -61,12 +60,10 @@
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.4; }
         }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -116,14 +113,12 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-
         .logo {
             font-size: 22px;
             filter: drop-shadow(0 0 12px var(--accent-glow));
             transition: var(--transition);
         }
         .logo:hover { transform: scale(1.1) rotate(-4deg); }
-
         .header h1 {
             font-size: 18px;
             font-weight: 700;
@@ -132,7 +127,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .badge {
             background: var(--accent);
             color: #fff;
@@ -142,14 +136,12 @@
             border-radius: 20px;
             box-shadow: 0 0 20px var(--accent-glow);
         }
-
         .header-right {
             display: flex;
             align-items: center;
             gap: 6px;
             flex-wrap: wrap;
         }
-
         .status-indicator {
             display: flex;
             align-items: center;
@@ -161,7 +153,6 @@
             background: var(--bg-input);
             border: 1px solid var(--border-color);
         }
-
         .dot {
             width: 6px;
             height: 6px;
@@ -171,7 +162,6 @@
         .dot.online { background: var(--success); box-shadow: 0 0 12px rgba(34, 197, 94, 0.3); }
         .dot.offline { background: var(--danger); box-shadow: 0 0 12px rgba(239, 68, 68, 0.3); }
         .dot.loading { background: var(--warning); animation: pulse 1s infinite; }
-
         .theme-btn {
             background: var(--bg-input);
             border: 1px solid var(--border-color);
@@ -204,13 +194,11 @@
             align-items: center;
             box-shadow: var(--shadow);
         }
-
         .toolbar .search-wrap {
             flex: 1;
             min-width: 120px;
             position: relative;
         }
-
         .toolbar .search-wrap input {
             width: 100%;
             padding: 6px 10px 6px 32px;
@@ -235,7 +223,6 @@
             font-size: 13px;
             opacity: 0.4;
         }
-
         .toolbar .quick-filters {
             display: flex;
             gap: 3px;
@@ -246,7 +233,6 @@
             padding: 3px 8px;
             border-radius: 14px;
         }
-
         .toolbar .goto-id {
             display: flex;
             gap: 3px;
@@ -267,7 +253,6 @@
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
-
         .toolbar select,
         .toolbar input[type="number"],
         .toolbar input[type="date"] {
@@ -288,7 +273,6 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
         .toolbar select option { background: var(--bg-secondary); color: var(--text-primary); }
-
         .btn {
             padding: 5px 10px;
             border: none;
@@ -307,7 +291,6 @@
             border: 1px solid var(--border-color);
         }
         .btn:active { transform: scale(0.95); }
-
         .btn-primary { background: var(--accent); color: #fff; border: none; box-shadow: 0 0 20px var(--accent-glow); }
         .btn-primary:hover { background: var(--accent-hover); }
         .btn-success { background: var(--success); color: #fff; border: none; }
@@ -316,13 +299,10 @@
         .btn-danger:hover { filter: brightness(1.1); }
         .btn-warning { background: var(--warning); color: #0f172a; border: none; }
         .btn-warning:hover { filter: brightness(1.1); }
-        .btn-purple { background: var(--purple); color: #fff; border: none; }
-        .btn-purple:hover { filter: brightness(1.1); }
         .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); }
         .btn-outline:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
         .btn-sm { padding: 3px 8px; font-size: 11px; }
         .btn-xs { padding: 2px 6px; font-size: 10px; }
-
         .save-status {
             display: flex;
             align-items: center;
@@ -356,14 +336,12 @@
             box-shadow: var(--shadow);
             position: relative;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
             min-width: 700px;
         }
-
         th {
             background: var(--bg-input);
             color: var(--text-secondary);
@@ -382,7 +360,6 @@
             transition: var(--transition);
         }
         th:hover { background: var(--bg-hover); }
-
         th:first-child,
         td:first-child {
             position: sticky;
@@ -394,13 +371,11 @@
             background: var(--bg-hover);
         }
         th:first-child { z-index: 4; background: var(--bg-input); min-width: 30px; }
-
         .sort-icon { margin-left: 3px; opacity: 0.3; font-size: 8px; }
         th.sort-asc .sort-icon { opacity: 1; }
         th.sort-asc .sort-icon::after { content: '▲'; }
         th.sort-desc .sort-icon { opacity: 1; }
         th.sort-desc .sort-icon::after { content: '▼'; }
-
         td {
             padding: 6px 10px;
             border-bottom: 1px solid var(--border-light);
@@ -429,7 +404,6 @@
         .status-вработе .status-cell { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.25); }
         .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.15); color: var(--accent); border: 1px solid rgba(59, 130, 246, 0.25); }
         .status-черновик .status-cell { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); border: 1px solid rgba(148, 163, 184, 0.25); }
-
         tr.status-согласовано td:first-child { border-left: 3px solid var(--success); }
         tr.status-отказ td:first-child { border-left: 3px solid var(--danger); }
         tr.status-вработе td:first-child { border-left: 3px solid var(--warning); }
@@ -506,16 +480,6 @@
         .action-btns .btn-icon.pin { font-size: 12px; }
         .action-btns .btn-icon.pin.active { color: gold; }
 
-        .next-contact {
-            font-size: 10px;
-            padding: 1px 6px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-        .next-contact.soon { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-        .next-contact.medium { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
-        .next-contact.far { background: rgba(34, 197, 94, 0.15); color: var(--success); }
-
         /* ============================================================
            FOOTER
            ============================================================ */
@@ -531,7 +495,6 @@
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
         }
-
         .footer .stats {
             display: flex;
             gap: 12px;
@@ -541,7 +504,6 @@
         }
         .footer .stats strong { color: var(--text-primary); }
         .footer .stats .value { color: var(--accent); font-weight: 600; }
-
         .footer .mass-actions {
             display: flex;
             gap: 4px;
@@ -562,7 +524,6 @@
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
-
         .footer .right-actions {
             display: flex;
             gap: 4px;
@@ -659,7 +620,6 @@
             padding: 16px;
         }
         .modal.active { display: flex; }
-
         .modal-content {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -719,7 +679,6 @@
             margin-top: 16px;
             justify-content: flex-end;
         }
-
         .column-settings {
             display: flex;
             flex-wrap: wrap;
@@ -741,7 +700,6 @@
         }
         .column-settings label:hover { background: var(--bg-hover); }
         .column-settings label input[type="checkbox"] { width: 12px; height: 12px; }
-
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -765,7 +723,6 @@
             .toolbar .btn { justify-content: center; font-size: 11px; padding: 4px 8px; }
             .save-status { margin-left: 0; justify-content: center; }
 
-            /* КАРТОЧКИ */
             table,
             thead,
             tbody,
@@ -814,16 +771,32 @@
             }
             td .table-input,
             td .table-select {
-                width: auto;
+                width: auto !important;
                 flex: 1;
                 text-align: right;
                 padding: 2px 4px;
                 font-size: 12px;
                 min-width: 40px;
+                display: inline-block !important;
+                background: var(--bg-input);
+                border: 1px solid transparent;
+                border-radius: var(--radius-sm);
+                color: var(--text-primary);
+            }
+            td .table-select {
+                border: 1px solid var(--border-color);
+                background: var(--bg-input);
+                appearance: auto;
+            }
+            td .table-select option {
+                background: var(--bg-secondary);
+                color: var(--text-primary);
             }
             td .status-cell {
                 font-size: 10px;
                 padding: 1px 8px;
+                display: inline-flex !important;
+                white-space: nowrap;
             }
             td .td-checkbox {
                 justify-content: flex-start;
@@ -839,7 +812,6 @@
                 font-size: 16px;
                 padding: 4px 6px;
             }
-
             tr.pinned td:first-child {
                 border-left: none;
             }
@@ -857,7 +829,6 @@
             tr.archived td {
                 text-decoration: line-through;
             }
-
             .footer {
                 flex-direction: column;
                 align-items: stretch;
@@ -876,7 +847,6 @@
                 font-size: 11px;
                 gap: 8px;
             }
-
             .modal-content {
                 padding: 16px;
                 margin: 10px;
@@ -884,7 +854,6 @@
             .qr-box {
                 padding: 16px;
             }
-
             .status-согласовано td:first-child,
             .status-отказ td:first-child,
             .status-вработе td:first-child,
@@ -936,7 +905,6 @@
 <body>
 
     <div class="container">
-        <!-- HEADER -->
         <header class="header">
             <div class="header-left">
                 <span class="logo">⚡</span>
@@ -952,7 +920,6 @@
             </div>
         </header>
 
-        <!-- TOOLBAR -->
         <div class="toolbar">
             <div class="search-wrap">
                 <span class="search-icon">🔍</span>
@@ -998,7 +965,6 @@
             </div>
         </div>
 
-        <!-- TABLE -->
         <div class="table-wrap">
             <table>
                 <thead id="tableHead">
@@ -1010,7 +976,6 @@
             </table>
         </div>
 
-        <!-- FOOTER -->
         <div class="footer">
             <div class="stats">
                 <span>Всего: <strong id="rowCounter">0</strong></span>
@@ -1042,7 +1007,6 @@
         </div>
     </div>
 
-    <!-- QR-КОД -->
     <div class="qr-container" id="qrContainer">
         <div class="qr-box">
             <h3>📱 QR-код</h3>
@@ -1052,7 +1016,6 @@
         </div>
     </div>
 
-    <!-- МОДАЛКИ -->
     <div class="modal" id="quickAddModal">
         <div class="modal-content">
             <h3>⚡ Быстрая вставка</h3>
@@ -2133,6 +2096,7 @@
         console.log('18. QR-код для быстрого доступа');
         console.log('19. Архивация записей');
         console.log('20. Быстрая вставка из Excel');
+        console.log('🔧 ФИКС: статус можно менять в мобильной версии');
     </script>
 </body>
 </html>
