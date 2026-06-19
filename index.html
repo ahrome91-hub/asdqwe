@@ -30,8 +30,8 @@
             --success: #22c55e;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --radius: 12px;
-            --radius-sm: 8px;
+            --radius: 10px;
+            --radius-sm: 6px;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
@@ -54,8 +54,10 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0;
+                transform: translateY(8px); }
+            to { opacity: 1;
+                transform: translateY(0); }
         }
         @keyframes pulse {
             0%,
@@ -70,10 +72,10 @@
             font-family: var(--font);
             background: var(--bg-primary);
             color: var(--text-primary);
-            padding: 16px;
+            padding: 12px;
             min-height: 100vh;
             transition: var(--transition);
-            line-height: 1.5;
+            line-height: 1.4;
             overflow-x: auto;
         }
 
@@ -81,7 +83,7 @@
             max-width: 1480px;
             margin: 0 auto;
             animation: fadeIn 0.4s ease;
-            min-width: 1100px;
+            min-width: 1000px;
         }
 
         .header {
@@ -89,9 +91,9 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding: 14px 20px;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 10px 16px;
             background: var(--bg-secondary);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
@@ -107,13 +109,13 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
-        .logo { font-size: 26px;
+        .logo { font-size: 22px;
             filter: drop-shadow(0 0 12px var(--accent-glow));
             transition: var(--transition); }
         .logo:hover { transform: scale(1.1) rotate(-4deg); }
-        .header h1 { font-size: 20px;
+        .header h1 { font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.3px;
             background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
@@ -121,25 +123,25 @@
             -webkit-text-fill-color: transparent; }
         .badge { background: var(--accent);
             color: #fff;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            padding: 2px 12px;
+            padding: 2px 10px;
             border-radius: 20px;
             box-shadow: 0 0 20px var(--accent-glow); }
         .header-right { display: flex;
             align-items: center;
-            gap: 8px; }
+            gap: 6px; }
         .status-indicator { display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 12px;
+            gap: 5px;
+            font-size: 11px;
             color: var(--text-secondary);
-            padding: 4px 14px;
+            padding: 3px 12px;
             border-radius: 20px;
             background: var(--bg-input);
             border: 1px solid var(--border-color); }
-        .dot { width: 7px;
-            height: 7px;
+        .dot { width: 6px;
+            height: 6px;
             border-radius: 50%;
             display: inline-block; }
         .dot.online { background: var(--success);
@@ -151,11 +153,11 @@
         .theme-btn { background: var(--bg-input);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             transition: var(--transition);
             display: flex;
             align-items: center;
@@ -166,9 +168,9 @@
         .toolbar {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 12px 16px;
+            gap: 6px;
+            margin-bottom: 12px;
+            padding: 8px 12px;
             background: var(--bg-secondary);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
@@ -176,79 +178,59 @@
             box-shadow: var(--shadow);
         }
         .toolbar .search-wrap { flex: 1;
-            min-width: 180px;
+            min-width: 150px;
             position: relative; }
         .toolbar .search-wrap input { width: 100%;
-            padding: 8px 14px 8px 36px;
+            padding: 6px 10px 6px 32px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
             transition: var(--transition);
             font-family: inherit; }
         .toolbar .search-wrap input:focus { border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow); }
         .toolbar .search-wrap .search-icon { position: absolute;
-            left: 12px;
+            left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 14px;
+            font-size: 12px;
             opacity: 0.4; }
 
         .toolbar .quick-filters { display: flex;
-            gap: 4px;
+            gap: 3px;
             flex-wrap: wrap; }
-        .toolbar .quick-filters .btn { font-size: 11px;
-            padding: 4px 12px; }
+        .toolbar .quick-filters .btn { font-size: 10px;
+            padding: 3px 8px; }
 
         .toolbar .goto-id { display: flex;
-            gap: 4px;
+            gap: 3px;
             align-items: center; }
-        .toolbar .goto-id input { width: 60px;
-            padding: 6px 8px;
+        .toolbar .goto-id input { width: 50px;
+            padding: 4px 6px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
             font-family: inherit; }
         .toolbar .goto-id input:focus { border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow); }
 
-        .toolbar select,
-        .toolbar input[type="number"],
-        .toolbar input[type="date"] {
-            padding: 6px 10px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-color);
-            background: var(--bg-input);
-            color: var(--text-primary);
-            font-size: 13px;
-            outline: none;
-            transition: var(--transition);
-            font-family: inherit;
-            min-width: 80px;
-        }
-        .toolbar select:focus,
-        .toolbar input:focus { border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow); }
-        .toolbar select option { background: var(--bg-secondary);
-            color: var(--text-primary); }
-
         .btn {
-            padding: 7px 14px;
+            padding: 5px 10px;
             border: none;
             border-radius: var(--radius-sm);
             font-weight: 500;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             font-family: inherit;
             white-space: nowrap;
             background: var(--bg-input);
@@ -278,25 +260,25 @@
             color: var(--text-secondary); }
         .btn-outline:hover { background: var(--bg-hover);
             border-color: var(--text-secondary); }
-        .btn-sm { padding: 4px 10px;
-            font-size: 12px; }
-        .btn-xs { padding: 2px 8px;
+        .btn-sm { padding: 3px 8px;
             font-size: 11px; }
+        .btn-xs { padding: 2px 6px;
+            font-size: 10px; }
 
         .save-status {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 11px;
+            gap: 4px;
+            font-size: 10px;
             color: var(--text-secondary);
-            padding: 3px 12px;
+            padding: 2px 10px;
             border-radius: 20px;
             background: var(--bg-input);
             border: 1px solid var(--border-color);
             margin-left: auto;
         }
-        .save-status .spinner { width: 12px;
-            height: 12px;
+        .save-status .spinner { width: 10px;
+            height: 10px;
             border: 2px solid var(--border-color);
             border-top-color: var(--accent);
             border-radius: 50%;
@@ -315,18 +297,18 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
-            min-width: 1200px;
+            font-size: 12px;
+            min-width: 1000px;
         }
 
         th {
             background: var(--bg-input);
             color: var(--text-secondary);
             font-weight: 600;
-            font-size: 10px;
+            font-size: 9px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
-            padding: 10px 12px;
+            letter-spacing: 0.3px;
+            padding: 6px 10px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
             position: sticky;
@@ -345,8 +327,8 @@
             left: 0;
             z-index: 3;
             background: var(--bg-secondary);
-            min-width: 30px;
-            width: 30px;
+            min-width: 28px;
+            width: 28px;
         }
         td:first-child { text-align: center; }
         th:first-child { z-index: 4;
@@ -355,10 +337,10 @@
         th:nth-child(2),
         td:nth-child(2) {
             position: sticky;
-            left: 30px;
+            left: 28px;
             z-index: 3;
             background: var(--bg-secondary);
-            min-width: 160px;
+            min-width: 120px;
         }
         th:nth-child(2) { z-index: 4;
             background: var(--bg-input); }
@@ -368,16 +350,16 @@
             background: var(--bg-hover);
         }
 
-        .sort-icon { margin-left: 4px;
+        .sort-icon { margin-left: 3px;
             opacity: 0.3;
-            font-size: 9px; }
+            font-size: 8px; }
         th.sort-asc .sort-icon { opacity: 1; }
         th.sort-asc .sort-icon::after { content: '▲'; }
         th.sort-desc .sort-icon { opacity: 1; }
         th.sort-desc .sort-icon::after { content: '▼'; }
 
         td {
-            padding: 8px 12px;
+            padding: 4px 8px;
             border-bottom: 1px solid var(--border-light);
             vertical-align: middle;
             transition: var(--transition);
@@ -385,7 +367,7 @@
         }
         tr:hover td { background: var(--bg-hover); }
         tr.selected td { background: var(--accent-glow); }
-        tr.pinned td { background: rgba(255, 215, 0, 0.06); }
+        tr.pinned td { background: rgba(255, 215, 0, 0.05); }
         tr.pinned td:first-child { border-left: 3px solid gold; }
         tr.archived { opacity: 0.4;
             background: var(--bg-hover); }
@@ -394,46 +376,46 @@
         .status-cell {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 3px 14px;
-            border-radius: 20px;
-            font-size: 12px;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 16px;
+            font-size: 11px;
             font-weight: 500;
             white-space: nowrap;
         }
         .status-согласовано .status-cell { background: rgba(34, 197, 94, 0.15);
             color: var(--success);
-            border: 1px solid rgba(34, 197, 94, 0.3); }
+            border: 1px solid rgba(34, 197, 94, 0.25); }
         .status-отказ .status-cell { background: rgba(239, 68, 68, 0.15);
             color: var(--danger);
-            border: 1px solid rgba(239, 68, 68, 0.3); }
+            border: 1px solid rgba(239, 68, 68, 0.25); }
         .status-вработе .status-cell { background: rgba(245, 158, 11, 0.15);
             color: var(--warning);
-            border: 1px solid rgba(245, 158, 11, 0.3); }
+            border: 1px solid rgba(245, 158, 11, 0.25); }
         .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.15);
             color: var(--accent);
-            border: 1px solid rgba(59, 130, 246, 0.3); }
+            border: 1px solid rgba(59, 130, 246, 0.25); }
         .status-черновик .status-cell { background: rgba(148, 163, 184, 0.15);
             color: var(--text-secondary);
-            border: 1px solid rgba(148, 163, 184, 0.3); }
+            border: 1px solid rgba(148, 163, 184, 0.25); }
 
-        tr.status-согласовано td:first-child { border-left: 4px solid var(--success); }
-        tr.status-отказ td:first-child { border-left: 4px solid var(--danger); }
-        tr.status-вработе td:first-child { border-left: 4px solid var(--warning); }
-        tr.status-отправлено td:first-child { border-left: 4px solid var(--accent); }
-        tr.status-черновик td:first-child { border-left: 4px solid var(--text-muted); }
+        tr.status-согласовано td:first-child { border-left: 3px solid var(--success); }
+        tr.status-отказ td:first-child { border-left: 3px solid var(--danger); }
+        tr.status-вработе td:first-child { border-left: 3px solid var(--warning); }
+        tr.status-отправлено td:first-child { border-left: 3px solid var(--accent); }
+        tr.status-черновик td:first-child { border-left: 3px solid var(--text-muted); }
 
         .table-input {
             width: 100%;
-            padding: 4px 6px;
+            padding: 2px 4px;
             border-radius: var(--radius-sm);
             border: 1px solid transparent;
             background: transparent;
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             font-family: inherit;
             transition: var(--transition);
-            min-width: 60px;
+            min-width: 50px;
         }
         .table-input:hover { border-color: var(--border-color);
             background: var(--bg-input); }
@@ -445,16 +427,16 @@
         }
 
         .table-select-status {
-            padding: 4px 8px;
+            padding: 2px 6px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             font-family: inherit;
             cursor: pointer;
             transition: var(--transition);
-            min-width: 120px;
+            min-width: 100px;
             appearance: auto;
         }
         .table-select-status:hover { border-color: var(--text-secondary);
@@ -467,23 +449,23 @@
         .table-select-status option { background: var(--bg-secondary);
             color: var(--text-primary); }
 
-        input[type="checkbox"] { width: 16px;
-            height: 16px;
+        input[type="checkbox"] { width: 14px;
+            height: 14px;
             accent-color: var(--accent);
             cursor: pointer; }
         .td-checkbox { text-align: center; }
 
         .action-btns { display: flex;
-            gap: 2px;
+            gap: 1px;
             flex-wrap: wrap; }
         .action-btns .btn-icon {
             background: transparent;
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            padding: 4px 6px;
+            padding: 2px 4px;
             border-radius: var(--radius-sm);
-            font-size: 14px;
+            font-size: 12px;
             transition: var(--transition);
         }
         .action-btns .btn-icon:hover { background: var(--bg-hover);
@@ -492,40 +474,40 @@
             color: var(--danger); }
         .action-btns .btn-icon.success:hover { background: rgba(34, 197, 94, 0.12);
             color: var(--success); }
-        .action-btns .btn-icon.pin { font-size: 13px; }
+        .action-btns .btn-icon.pin { font-size: 11px; }
         .action-btns .btn-icon.pin.active { color: gold; }
 
         .footer {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 8px;
             align-items: center;
-            margin-top: 16px;
-            padding: 12px 16px;
+            margin-top: 12px;
+            padding: 8px 12px;
             background: var(--bg-secondary);
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
         }
         .footer .stats { display: flex;
-            gap: 16px;
+            gap: 12px;
             flex-wrap: wrap;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary); }
         .footer .stats strong { color: var(--text-primary); }
         .footer .stats .value { color: var(--accent);
             font-weight: 600; }
         .footer .mass-actions { display: flex;
-            gap: 6px;
+            gap: 4px;
             align-items: center;
             flex-wrap: wrap;
             margin-left: auto; }
-        .footer .mass-actions select { padding: 4px 10px;
+        .footer .mass-actions select { padding: 2px 8px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
-            font-size: 12px;
+            font-size: 11px;
             outline: none; }
         .footer .mass-actions select:focus { border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow); }
@@ -549,15 +531,15 @@
         .qr-container.active { display: flex; }
         .qr-box {
             background: var(--bg-secondary);
-            padding: 30px;
+            padding: 24px;
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
             text-align: center;
-            max-width: 400px;
+            max-width: 360px;
             width: 90%;
         }
-        .qr-box .close-btn { margin-top: 16px;
-            padding: 8px 24px;
+        .qr-box .close-btn { margin-top: 12px;
+            padding: 6px 20px;
             background: var(--accent);
             color: #fff;
             border: none;
@@ -565,20 +547,20 @@
             cursor: pointer; }
         .qr-box #qrcode { display: flex;
             justify-content: center;
-            margin: 16px 0; }
+            margin: 12px 0; }
         .qr-box #qrcode canvas { background: #fff;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 6px;
+            border-radius: 6px;
             max-width: 100%; }
 
         .toast {
             position: fixed;
-            bottom: 24px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(30px);
             background: var(--bg-secondary);
             color: var(--text-primary);
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: var(--radius);
             border: 1px solid var(--border-color);
             box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
@@ -586,11 +568,11 @@
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            font-size: 13px;
+            font-size: 12px;
             backdrop-filter: blur(16px);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             max-width: 90%;
         }
         .toast.show { opacity: 1;
@@ -611,42 +593,42 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
         }
         .modal.active { display: flex; }
         .modal-content {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 28px 24px;
-            max-width: 480px;
+            padding: 20px;
+            max-width: 440px;
             width: 100%;
             box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.3s ease;
             max-height: 90vh;
             overflow-y: auto;
         }
-        .modal-content h3 { font-size: 20px;
+        .modal-content h3 { font-size: 18px;
             font-weight: 600;
             margin-bottom: 4px; }
         .modal-content .sub { color: var(--text-secondary);
-            font-size: 13px;
-            margin-bottom: 16px; }
+            font-size: 12px;
+            margin-bottom: 12px; }
         .modal-content label { display: block;
-            margin: 10px 0 4px;
+            margin: 8px 0 4px;
             color: var(--text-secondary);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500; }
         .modal-content input,
         .modal-content select,
         .modal-content textarea {
             width: 100%;
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             outline: none;
             font-family: inherit;
             transition: var(--transition);
@@ -655,23 +637,23 @@
         .modal-content select:focus,
         .modal-content textarea:focus { border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow); }
-        .modal-content textarea { min-height: 80px;
+        .modal-content textarea { min-height: 60px;
             resize: vertical; }
         .modal-actions { display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 16px;
             justify-content: flex-end; }
         .column-settings { display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             padding: 4px 0; }
         .column-settings label {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 13px;
+            gap: 4px;
+            font-size: 12px;
             cursor: pointer;
-            padding: 4px 12px;
+            padding: 3px 10px;
             background: var(--bg-input);
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
@@ -679,55 +661,58 @@
             font-weight: 400;
         }
         .column-settings label:hover { background: var(--bg-hover); }
-        .column-settings label input[type="checkbox"] { width: 14px;
-            height: 14px; }
+        .column-settings label input[type="checkbox"] { width: 12px;
+            height: 12px; }
         .empty-state { text-align: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             color: var(--text-muted); }
-        .empty-state .emoji { font-size: 48px;
+        .empty-state .emoji { font-size: 40px;
             display: block;
-            margin-bottom: 12px; }
+            margin-bottom: 8px; }
 
-        .table-wrap::-webkit-scrollbar { width: 6px;
-            height: 6px; }
+        .table-wrap::-webkit-scrollbar { width: 4px;
+            height: 4px; }
         .table-wrap::-webkit-scrollbar-track { background: var(--bg-input); }
         .table-wrap::-webkit-scrollbar-thumb { background: var(--border-color);
             border-radius: 10px; }
         .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
         @media (max-width: 768px) {
-            body { padding: 8px; }
+            body { padding: 6px; }
             .container { min-width: auto; }
             .header { flex-direction: column;
                 align-items: stretch;
-                padding: 12px; }
-            .header h1 { font-size: 17px; }
+                padding: 8px 10px; }
+            .header h1 { font-size: 16px; }
             .header-right { justify-content: space-between; }
             .toolbar { flex-direction: column;
                 align-items: stretch;
-                padding: 10px 12px; }
+                padding: 6px 8px; }
             .toolbar .search-wrap { min-width: auto; }
             .toolbar .goto-id { width: 100%; }
             .toolbar .goto-id input { flex: 1; }
             .save-status { margin-left: 0; }
             .footer { flex-direction: column;
-                align-items: stretch; }
+                align-items: stretch;
+                padding: 6px 8px; }
             .footer .mass-actions { margin-left: 0; }
             .footer .right-actions { justify-content: center; }
             .table-wrap { overflow: auto;
                 -webkit-overflow-scrolling: touch; }
-            table { min-width: 1100px;
-                font-size: 12px; }
+            table { min-width: 900px;
+                font-size: 11px; }
             th,
-            td { padding: 6px 8px;
+            td { padding: 4px 6px;
                 white-space: nowrap; }
-            .btn { font-size: 11px;
-                padding: 4px 8px; }
+            .btn { font-size: 10px;
+                padding: 3px 6px; }
             .status-cell { font-size: 10px;
-                padding: 2px 10px; }
-            .table-select-status { min-width: 90px;
-                font-size: 11px;
-                padding: 2px 6px; }
+                padding: 2px 8px; }
+            .table-select-status { min-width: 80px;
+                font-size: 10px;
+                padding: 2px 4px; }
+            .table-input { font-size: 11px;
+                padding: 2px 4px; }
         }
     </style>
 </head>
@@ -786,6 +771,7 @@
                 <button class="btn btn-outline" onclick="exportPDF()">📄</button>
                 <button class="btn btn-outline" onclick="showColumnSettings()">⚙️</button>
                 <button class="btn btn-outline" onclick="showArchiveToggle()">🗂️</button>
+                <button class="btn btn-outline btn-sm" onclick="resetData()">🔄</button>
             </div>
 
             <div class="save-status">
@@ -830,7 +816,6 @@
 
             <div class="right-actions">
                 <button class="btn btn-outline btn-sm" onclick="exportToClipboard()">📋</button>
-                <button class="btn btn-outline btn-sm" onclick="resetData()">🔄</button>
                 <button class="btn btn-outline btn-sm" onclick="showQuickAdd()">⚡</button>
             </div>
         </div>
@@ -839,7 +824,7 @@
     <div class="qr-container" id="qrContainer">
         <div class="qr-box">
             <h3>📱 QR-код</h3>
-            <p style="color:var(--text-secondary);font-size:13px;margin-bottom:8px;" id="qrClientName">Клиент</p>
+            <p style="color:var(--text-secondary);font-size:12px;margin-bottom:6px;" id="qrClientName">Клиент</p>
             <div id="qrcode"></div>
             <button class="close-btn" onclick="closeQR()">Закрыть</button>
         </div>
@@ -885,6 +870,10 @@
         var visibleColumns = {};
         var showArchived = false;
 
+        // 🔥 НОВЫЕ СТОЛБЦЫ:
+        // comment → ОЦЕНКИ (rating)
+        // email → КОММЕНТАРИЙ (comment)
+        // УБРАН next_contact
         var columns = [
             { key: 'client', label: 'Клиент', type: 'text' },
             { key: 'phone', label: 'Телефон', type: 'text' },
@@ -894,13 +883,13 @@
                     'Черновик'
                 ] },
             { key: 'agreed', label: 'Согласен', type: 'checkbox' },
+            { key: 'rating', label: 'Оценки', type: 'text' },
             { key: 'comment', label: 'Комментарий', type: 'text' },
-            { key: 'email', label: 'Email', type: 'text' },
             { key: 'category', label: 'Категория', type: 'text' },
-            { key: 'next_contact', label: 'След. контакт', type: 'date' },
             { key: 'pinned', label: '📌', type: 'checkbox' }
         ];
 
+        // НОВЫЙ ПОРЯДОК ВИДИМОСТИ
         columns.forEach(function(col) { visibleColumns[col.key] = true; });
 
         var originalFetch = window.fetch;
@@ -941,7 +930,12 @@
                 if (loaded && Array.isArray(loaded) && loaded.length > 0) {
                     data = loaded;
                     data.forEach(function(row) {
-                        if (row.email === undefined) row.email = '';
+                        if (row.email !== undefined) {
+                            // email → comment (новое поле)
+                            if (!row.comment) row.comment = row.email;
+                            delete row.email;
+                        }
+                        if (row.rating === undefined) row.rating = '';
                         if (row.comment === undefined) row.comment = '';
                         if (row.phone === undefined) row.phone = '';
                         if (row.category === undefined) row.category = '';
@@ -949,7 +943,8 @@
                         if (row.pinned === undefined) row.pinned = false;
                         if (row.archived === undefined) row.archived = false;
                         if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
-                        if (row.next_contact === undefined) row.next_contact = '';
+                        // Убираем next_contact если есть
+                        if (row.next_contact !== undefined) delete row.next_contact;
                     });
                     nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
                     isOnline = true;
@@ -1000,7 +995,11 @@
                 if (stored) {
                     data = JSON.parse(stored);
                     data.forEach(function(row) {
-                        if (row.email === undefined) row.email = '';
+                        if (row.email !== undefined) {
+                            if (!row.comment) row.comment = row.email;
+                            delete row.email;
+                        }
+                        if (row.rating === undefined) row.rating = '';
                         if (row.comment === undefined) row.comment = '';
                         if (row.phone === undefined) row.phone = '';
                         if (row.category === undefined) row.category = '';
@@ -1008,7 +1007,7 @@
                         if (row.pinned === undefined) row.pinned = false;
                         if (row.archived === undefined) row.archived = false;
                         if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
-                        if (row.next_contact === undefined) row.next_contact = '';
+                        if (row.next_contact !== undefined) delete row.next_contact;
                     });
                     if (storedId) {
                         nextId = parseInt(storedId, 10);
@@ -1099,8 +1098,8 @@
             var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
             var filterStatus = document.getElementById('filterStatus').value;
 
-            var headerHtml = '<th style="width:30px;"><input type="checkbox" onchange="toggleAllSelect(this.checked)" /></th>';
-            headerHtml += '<th style="min-width:160px;">Клиент</th>';
+            var headerHtml = '<th style="width:28px;"><input type="checkbox" onchange="toggleAllSelect(this.checked)" /></th>';
+            headerHtml += '<th style="min-width:120px;">Клиент</th>';
             columns.forEach(function(col) {
                 if (visibleColumns[col.key] === false) return;
                 if (col.key === 'client') return;
@@ -1116,7 +1115,7 @@
                 }
                 headerHtml += '</th>';
             });
-            headerHtml += '<th style="width:110px;">Действия</th>';
+            headerHtml += '<th style="width:90px;">Действия</th>';
             thead.innerHTML = headerHtml;
 
             var filtered = data.filter(function(row) {
@@ -1132,8 +1131,8 @@
 
             if (sortColumn) {
                 filtered.sort(function(a, b) {
-                    var valA = a[sortColumn] || '';
-                    var valB = b[sortColumn] || '';
+                    var valA = a[sortColumn] !== undefined ? a[sortColumn] : '';
+                    var valB = b[sortColumn] !== undefined ? b[sortColumn] : '';
                     if (typeof valA === 'string') valA = valA.toLowerCase();
                     if (typeof valB === 'string') valB = valB.toLowerCase();
                     if (valA < valB) return -sortDirection;
@@ -1217,11 +1216,10 @@
 
                 case 'select':
                     if (key === 'status') {
-                        // 🔥 ВАЖНО: ВЫПАДАЮЩИЙ СПИСОК ДЛЯ СТАТУСА
                         var options = col.options || ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
                         var selectHtml =
                             '<select class="table-select-status" onchange="updateField(' + id + ', \'' + key +
-                            '\', this.value)" style="min-width:120px;">';
+                            '\', this.value)" style="min-width:100px;">';
                         options.forEach(function(opt) {
                             selectHtml += '<option value="' + opt + '" ' + (opt === value ? 'selected' : '') +
                                 '>' + opt + '</option>';
@@ -1241,20 +1239,20 @@
 
                 case 'number':
                     return '<input class="table-input" type="number" value="' + (value || 0) +
-                        '" onchange="updateField(' + id + ', \'' + key + '\', Number(this.value))" />';
+                        '" onchange="updateField(' + id + ', \'' + key + '\', Number(this.value))" style="min-width:60px;" />';
 
                 case 'date':
-                    if (key === 'next_contact') {
-                        return '<input class="table-input" type="date" value="' + (value || '') +
-                            '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
-                    }
                     return '<input class="table-input" type="date" value="' + (value || '') +
-                        '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+                        '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" style="min-width:80px;" />';
 
                 default:
                     if (key === 'phone') {
                         return '<input class="table-input" type="tel" value="' + escapeHtml(String(value)) +
-                            '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="+7..." style="min-width:130px;" />';
+                            '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="+7..." style="min-width:110px;" />';
+                    }
+                    if (key === 'rating') {
+                        return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) +
+                            '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="Оценка..." style="min-width:60px;" />';
                     }
                     return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) +
                         '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
@@ -1342,8 +1340,8 @@
             var url = window.location.href.split('?')[0] + '?id=' + row.id;
             qrInstance = new QRCode(qrDiv, {
                 text: url,
-                width: 200,
-                height: 200,
+                width: 180,
+                height: 180,
                 colorDark: '#000000',
                 colorLight: '#ffffff',
                 correctLevel: QRCode.CorrectLevel.H
@@ -1437,7 +1435,8 @@
                 row.amount = parseFloat(parts[2]) || 0;
                 row.status = parts[3] || 'Черновик';
                 if (parts[4]) row.category = parts[4];
-                if (parts[5]) row.comment = parts[5];
+                if (parts[5]) row.rating = parts[5];
+                if (parts[6]) row.comment = parts[6];
 
                 data.push(row);
                 added++;
@@ -1643,23 +1642,22 @@
                         'Согласовано', 'Черновик'
                     ] },
                 { key: 'agreed', label: 'Согласен', type: 'checkbox' },
+                { key: 'rating', label: 'Оценки', type: 'text' },
                 { key: 'comment', label: 'Комментарий', type: 'text' },
-                { key: 'email', label: 'Email', type: 'text' },
                 { key: 'category', label: 'Категория', type: 'text' },
-                { key: 'next_contact', label: 'След. контакт', type: 'date' },
                 { key: 'pinned', label: '📌', type: 'checkbox' }
             ];
             columns.forEach(function(col) { visibleColumns[col.key] = true; });
 
             var defaultData = [
                 { client: 'ИП Иванов', phone: '+7 912 345-67-89', amount: 450000, date: '2026-01-10',
-                    status: 'В работе', agreed: true, comment: 'Доп. согласование', email: 'ivanov@mail.ru',
-                    category: 'Юридические', next_contact: '2026-07-01', pinned: false, archived: false,
-                    updated_at: new Date().toISOString() },
+                    status: 'В работе', agreed: true, rating: '4.8 ★', comment: 'Доп. согласование',
+                    category: 'Юридические', pinned: false, archived: false,
+                updated_at: new Date().toISOString() },
                 { client: 'ООО ЛогистикПро', phone: '+7 912 345-67-90', amount: 670000, date: '2026-01-12',
-                    status: 'Отказ', agreed: false, comment: 'Нашли дешевле', email: 'logist@pro.ru',
-                    category: 'Транспорт', next_contact: '', pinned: false, archived: false,
-                    updated_at: new Date().toISOString() }
+                    status: 'Отказ', agreed: false, rating: '3.2 ★', comment: 'Нашли дешевле',
+                    category: 'Транспорт', pinned: false, archived: false,
+                updated_at: new Date().toISOString() }
             ];
 
             data = defaultData.map(function(r, i) {
@@ -1711,7 +1709,11 @@
                     if (Array.isArray(parsed) && parsed.length) {
                         parsed.forEach(function(row) {
                             row.id = nextId++;
-                            if (row.email === undefined) row.email = '';
+                            if (row.email !== undefined) {
+                                if (!row.comment) row.comment = row.email;
+                                delete row.email;
+                            }
+                            if (row.rating === undefined) row.rating = '';
                             if (row.comment === undefined) row.comment = '';
                             if (row.phone === undefined) row.phone = '';
                             if (row.category === undefined) row.category = '';
@@ -1719,7 +1721,7 @@
                             if (row.pinned === undefined) row.pinned = false;
                             if (row.archived === undefined) row.archived = false;
                             if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
-                            if (row.next_contact === undefined) row.next_contact = '';
+                            if (row.next_contact !== undefined) delete row.next_contact;
                         });
                         data = parsed;
                         saveToLocalStorage();
@@ -1859,9 +1861,13 @@
         loadFromCloud();
 
         console.log('⚡ CRM загружена');
-        console.log('✅ СТАТУС МЕНЯЕТСЯ через выпадающий список');
-        console.log('✅ ТЕЛЕФОН отображается полностью');
-        console.log('📌 ДЕСКТОПНАЯ ВЕРСИЯ');
+        console.log('📌 СТОЛБЦЫ ОПТИМИЗИРОВАНЫ:');
+        console.log('   → ОЦЕНКИ (бывший email)');
+        console.log('   → КОММЕНТАРИЙ (новое поле)');
+        console.log('   → УБРАН "След. контакт"');
+        console.log('   → Строки компактнее');
+        console.log('📌 СОРТИРОВКА по всем столбцам');
+        console.log('✅ СТАТУС меняется через выпадающий список');
     </script>
 </body>
 </html>
