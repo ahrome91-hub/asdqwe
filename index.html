@@ -871,7 +871,7 @@
         var showArchived = false;
 
         // ================================================================
-        // ⭐ КОЛОНКИ: rating — ОЦЕНКА, comment — КОММЕНТАРИЙ ⭐
+        // ⭐ КОЛОНКИ: rating — ОЦЕНКА (весь текст из comment), comment — КОММЕНТАРИЙ (пустой для заметок)
         // ================================================================
         var columns = [
             { key: 'client', label: 'Клиент', type: 'text' },
@@ -928,19 +928,16 @@
                 if (loaded && Array.isArray(loaded) && loaded.length > 0) {
                     data = loaded;
                     data.forEach(function(row) {
-                        // email переименовываем в comment (если есть)
+                        // email → comment (если есть)
                         if (row.email !== undefined && row.email !== '') {
                             if (!row.comment) row.comment = row.email;
                             delete row.email;
                         }
-                        // Если comment содержит оценку, переносим в rating
-                        if (row.comment && typeof row.comment === 'string') {
-                            var ratingMatch = row.comment.match(/\d+\.?\d*\s*[★☆]/);
-                            if (ratingMatch) {
-                                if (!row.rating) row.rating = ratingMatch[0].trim();
-                                // Убираем оценку из комментария
-                                row.comment = row.comment.replace(/\d+\.?\d*\s*[★☆]/, '').trim();
-                            }
+                        // ВЕСЬ ТЕКСТ из comment → rating
+                        if (row.comment && typeof row.comment === 'string' && row.comment.trim() !== '') {
+                            if (!row.rating) row.rating = row.comment.trim();
+                            // Очищаем comment (оставляем пустым для заметок)
+                            row.comment = '';
                         }
                         if (row.rating === undefined) row.rating = '';
                         if (row.comment === undefined) row.comment = '';
@@ -1005,12 +1002,9 @@
                             if (!row.comment) row.comment = row.email;
                             delete row.email;
                         }
-                        if (row.comment && typeof row.comment === 'string') {
-                            var ratingMatch = row.comment.match(/\d+\.?\d*\s*[★☆]/);
-                            if (ratingMatch) {
-                                if (!row.rating) row.rating = ratingMatch[0].trim();
-                                row.comment = row.comment.replace(/\d+\.?\d*\s*[★☆]/, '').trim();
-                            }
+                        if (row.comment && typeof row.comment === 'string' && row.comment.trim() !== '') {
+                            if (!row.rating) row.rating = row.comment.trim();
+                            row.comment = '';
                         }
                         if (row.rating === undefined) row.rating = '';
                         if (row.comment === undefined) row.comment = '';
@@ -1664,12 +1658,12 @@
 
             var defaultData = [
                 { client: 'ИП Иванов', phone: '+7 912 345-67-89', amount: 450000, date: '2026-01-10',
-                    status: 'В работе', agreed: true, rating: '4.8 ★', comment: 'Доп. согласование',
-                    category: 'Юридические', pinned: false, archived: false,
+                    status: 'В работе', agreed: true, rating: '4.8 ★', comment: '', category: 'Юридические',
+                    pinned: false, archived: false,
                 updated_at: new Date().toISOString() },
                 { client: 'ООО ЛогистикПро', phone: '+7 912 345-67-90', amount: 670000, date: '2026-01-12',
-                    status: 'Отказ', agreed: false, rating: '3.2 ★', comment: 'Нашли дешевле',
-                    category: 'Транспорт', pinned: false, archived: false,
+                    status: 'Отказ', agreed: false, rating: '3.2 ★', comment: '', category: 'Транспорт',
+                    pinned: false, archived: false,
                 updated_at: new Date().toISOString() }
             ];
 
@@ -1726,12 +1720,9 @@
                                 if (!row.comment) row.comment = row.email;
                                 delete row.email;
                             }
-                            if (row.comment && typeof row.comment === 'string') {
-                                var ratingMatch = row.comment.match(/\d+\.?\d*\s*[★☆]/);
-                                if (ratingMatch) {
-                                    if (!row.rating) row.rating = ratingMatch[0].trim();
-                                    row.comment = row.comment.replace(/\d+\.?\d*\s*[★☆]/, '').trim();
-                                }
+                            if (row.comment && typeof row.comment === 'string' && row.comment.trim() !== '') {
+                                if (!row.rating) row.rating = row.comment.trim();
+                                row.comment = '';
                             }
                             if (row.rating === undefined) row.rating = '';
                             if (row.comment === undefined) row.comment = '';
@@ -1881,8 +1872,7 @@
         loadFromCloud();
 
         console.log('⚡ CRM загружена');
-        console.log('📌 СТОЛБЦЫ: rating — ⭐ Оценка, comment — 📝 Комментарий');
-        console.log('📌 Данные из поля comment автоматически распределены');
+        console.log('📌 СТОЛБЦЫ: rating — ⭐ Оценка (весь текст из comment), comment — 📝 Комментарий (пустой для заметок)');
         console.log('✅ СТАТУС меняется через выпадающий список');
     </script>
 </body>
