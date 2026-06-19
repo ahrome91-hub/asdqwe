@@ -7,9 +7,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
     </script>
     <style>
-        /* ============================================================
-           БАЗОВЫЕ СТИЛИ — ТОЛЬКО ДЕСКТОП
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -61,7 +58,8 @@
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
+            0%,
+            100% { opacity: 1; }
             50% { opacity: 0.4; }
         }
         @keyframes spin {
@@ -86,9 +84,6 @@
             min-width: 1100px;
         }
 
-        /* ============================================================
-           HEADER
-           ============================================================ */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -114,22 +109,60 @@
             align-items: center;
             gap: 12px;
         }
-        .logo { font-size: 26px; filter: drop-shadow(0 0 12px var(--accent-glow)); transition: var(--transition); }
+        .logo { font-size: 26px;
+            filter: drop-shadow(0 0 12px var(--accent-glow));
+            transition: var(--transition); }
         .logo:hover { transform: scale(1.1) rotate(-4deg); }
-        .header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; background: linear-gradient(135deg, var(--text-primary), var(--text-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .badge { background: var(--accent); color: #fff; font-size: 11px; font-weight: 600; padding: 2px 12px; border-radius: 20px; box-shadow: 0 0 20px var(--accent-glow); }
-        .header-right { display: flex; align-items: center; gap: 8px; }
-        .status-indicator { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); padding: 4px 14px; border-radius: 20px; background: var(--bg-input); border: 1px solid var(--border-color); }
-        .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-        .dot.online { background: var(--success); box-shadow: 0 0 12px rgba(34, 197, 94, 0.3); }
-        .dot.offline { background: var(--danger); box-shadow: 0 0 12px rgba(239, 68, 68, 0.3); }
-        .dot.loading { background: var(--warning); animation: pulse 1s infinite; }
-        .theme-btn { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-secondary); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 16px; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
-        .theme-btn:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
+        .header h1 { font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; }
+        .badge { background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px var(--accent-glow); }
+        .header-right { display: flex;
+            align-items: center;
+            gap: 8px; }
+        .status-indicator { display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 4px 14px;
+            border-radius: 20px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color); }
+        .dot { width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            display: inline-block; }
+        .dot.online { background: var(--success);
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.3); }
+        .dot.offline { background: var(--danger);
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.3); }
+        .dot.loading { background: var(--warning);
+            animation: pulse 1s infinite; }
+        .theme-btn { background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center; }
+        .theme-btn:hover { background: var(--bg-hover);
+            border-color: var(--text-secondary); }
 
-        /* ============================================================
-           TOOLBAR
-           ============================================================ */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -142,17 +175,48 @@
             align-items: center;
             box-shadow: var(--shadow);
         }
-        .toolbar .search-wrap { flex: 1; min-width: 180px; position: relative; }
-        .toolbar .search-wrap input { width: 100%; padding: 8px 14px 8px 36px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary); font-size: 13px; outline: none; transition: var(--transition); font-family: inherit; }
-        .toolbar .search-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-        .toolbar .search-wrap .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.4; }
+        .toolbar .search-wrap { flex: 1;
+            min-width: 180px;
+            position: relative; }
+        .toolbar .search-wrap input { width: 100%;
+            padding: 8px 14px 8px 36px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
+            font-family: inherit; }
+        .toolbar .search-wrap input:focus { border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow); }
+        .toolbar .search-wrap .search-icon { position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.4; }
 
-        .toolbar .quick-filters { display: flex; gap: 4px; flex-wrap: wrap; }
-        .toolbar .quick-filters .btn { font-size: 11px; padding: 4px 12px; }
+        .toolbar .quick-filters { display: flex;
+            gap: 4px;
+            flex-wrap: wrap; }
+        .toolbar .quick-filters .btn { font-size: 11px;
+            padding: 4px 12px; }
 
-        .toolbar .goto-id { display: flex; gap: 4px; align-items: center; }
-        .toolbar .goto-id input { width: 60px; padding: 6px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary); font-size: 13px; outline: none; font-family: inherit; }
-        .toolbar .goto-id input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .toolbar .goto-id { display: flex;
+            gap: 4px;
+            align-items: center; }
+        .toolbar .goto-id input { width: 60px;
+            padding: 6px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+            font-family: inherit; }
+        .toolbar .goto-id input:focus { border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow); }
 
         .toolbar select,
         .toolbar input[type="number"],
@@ -169,8 +233,10 @@
             min-width: 80px;
         }
         .toolbar select:focus,
-        .toolbar input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-        .toolbar select option { background: var(--bg-secondary); color: var(--text-primary); }
+        .toolbar input:focus { border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow); }
+        .toolbar select option { background: var(--bg-secondary);
+            color: var(--text-primary); }
 
         .btn {
             padding: 7px 14px;
@@ -190,18 +256,32 @@
             border: 1px solid var(--border-color);
         }
         .btn:active { transform: scale(0.95); }
-        .btn-primary { background: var(--accent); color: #fff; border: none; box-shadow: 0 0 20px var(--accent-glow); }
+        .btn-primary { background: var(--accent);
+            color: #fff;
+            border: none;
+            box-shadow: 0 0 20px var(--accent-glow); }
         .btn-primary:hover { background: var(--accent-hover); }
-        .btn-success { background: var(--success); color: #fff; border: none; }
+        .btn-success { background: var(--success);
+            color: #fff;
+            border: none; }
         .btn-success:hover { filter: brightness(1.1); }
-        .btn-danger { background: var(--danger); color: #fff; border: none; }
+        .btn-danger { background: var(--danger);
+            color: #fff;
+            border: none; }
         .btn-danger:hover { filter: brightness(1.1); }
-        .btn-warning { background: var(--warning); color: #0f172a; border: none; }
+        .btn-warning { background: var(--warning);
+            color: #0f172a;
+            border: none; }
         .btn-warning:hover { filter: brightness(1.1); }
-        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); }
-        .btn-outline:hover { background: var(--bg-hover); border-color: var(--text-secondary); }
-        .btn-sm { padding: 4px 10px; font-size: 12px; }
-        .btn-xs { padding: 2px 8px; font-size: 11px; }
+        .btn-outline { background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary); }
+        .btn-outline:hover { background: var(--bg-hover);
+            border-color: var(--text-secondary); }
+        .btn-sm { padding: 4px 10px;
+            font-size: 12px; }
+        .btn-xs { padding: 2px 8px;
+            font-size: 11px; }
 
         .save-status {
             display: flex;
@@ -215,11 +295,14 @@
             border: 1px solid var(--border-color);
             margin-left: auto;
         }
-        .save-status .spinner { width: 12px; height: 12px; border: 2px solid var(--border-color); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+        .save-status .spinner { width: 12px;
+            height: 12px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none; }
 
-        /* ============================================================
-           TABLE
-           ============================================================ */
         .table-wrap {
             background: var(--bg-secondary);
             border-radius: var(--radius);
@@ -256,7 +339,6 @@
         }
         th:hover { background: var(--bg-hover); }
 
-        /* Закреплённые столбцы */
         th:first-child,
         td:first-child {
             position: sticky;
@@ -267,7 +349,8 @@
             width: 30px;
         }
         td:first-child { text-align: center; }
-        th:first-child { z-index: 4; background: var(--bg-input); }
+        th:first-child { z-index: 4;
+            background: var(--bg-input); }
 
         th:nth-child(2),
         td:nth-child(2) {
@@ -277,14 +360,17 @@
             background: var(--bg-secondary);
             min-width: 160px;
         }
-        th:nth-child(2) { z-index: 4; background: var(--bg-input); }
+        th:nth-child(2) { z-index: 4;
+            background: var(--bg-input); }
 
         tr:hover td:first-child,
         tr:hover td:nth-child(2) {
             background: var(--bg-hover);
         }
 
-        .sort-icon { margin-left: 4px; opacity: 0.3; font-size: 9px; }
+        .sort-icon { margin-left: 4px;
+            opacity: 0.3;
+            font-size: 9px; }
         th.sort-asc .sort-icon { opacity: 1; }
         th.sort-asc .sort-icon::after { content: '▲'; }
         th.sort-desc .sort-icon { opacity: 1; }
@@ -301,7 +387,8 @@
         tr.selected td { background: var(--accent-glow); }
         tr.pinned td { background: rgba(255, 215, 0, 0.06); }
         tr.pinned td:first-child { border-left: 3px solid gold; }
-        tr.archived { opacity: 0.4; background: var(--bg-hover); }
+        tr.archived { opacity: 0.4;
+            background: var(--bg-hover); }
         tr.archived td { text-decoration: line-through; }
 
         .status-cell {
@@ -314,11 +401,21 @@
             font-weight: 500;
             white-space: nowrap;
         }
-        .status-согласовано .status-cell { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
-        .status-отказ .status-cell { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
-        .status-вработе .status-cell { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.15); color: var(--accent); border: 1px solid rgba(59, 130, 246, 0.3); }
-        .status-черновик .status-cell { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); border: 1px solid rgba(148, 163, 184, 0.3); }
+        .status-согласовано .status-cell { background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(34, 197, 94, 0.3); }
+        .status-отказ .status-cell { background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3); }
+        .status-вработе .status-cell { background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-отправлено .status-cell { background: rgba(59, 130, 246, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(59, 130, 246, 0.3); }
+        .status-черновик .status-cell { background: rgba(148, 163, 184, 0.15);
+            color: var(--text-secondary);
+            border: 1px solid rgba(148, 163, 184, 0.3); }
 
         tr.status-согласовано td:first-child { border-left: 4px solid var(--success); }
         tr.status-отказ td:first-child { border-left: 4px solid var(--danger); }
@@ -338,7 +435,8 @@
             transition: var(--transition);
             min-width: 60px;
         }
-        .table-input:hover { border-color: var(--border-color); background: var(--bg-input); }
+        .table-input:hover { border-color: var(--border-color);
+            background: var(--bg-input); }
         .table-input:focus {
             border-color: var(--accent);
             background: var(--bg-input);
@@ -346,32 +444,38 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        .table-select {
-            width: 100%;
-            padding: 4px 6px;
+        .table-select-status {
+            padding: 4px 8px;
             border-radius: var(--radius-sm);
-            border: 1px solid transparent;
-            background: transparent;
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
             color: var(--text-primary);
             font-size: 13px;
             font-family: inherit;
             cursor: pointer;
             transition: var(--transition);
-            min-width: 100px;
+            min-width: 120px;
+            appearance: auto;
         }
-        .table-select:hover { border-color: var(--border-color); background: var(--bg-input); }
-        .table-select:focus {
+        .table-select-status:hover { border-color: var(--text-secondary);
+            background: var(--bg-hover); }
+        .table-select-status:focus {
             border-color: var(--accent);
-            background: var(--bg-input);
             outline: none;
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
-        .table-select option { background: var(--bg-secondary); color: var(--text-primary); }
+        .table-select-status option { background: var(--bg-secondary);
+            color: var(--text-primary); }
 
-        input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+        input[type="checkbox"] { width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            cursor: pointer; }
         .td-checkbox { text-align: center; }
 
-        .action-btns { display: flex; gap: 2px; flex-wrap: wrap; }
+        .action-btns { display: flex;
+            gap: 2px;
+            flex-wrap: wrap; }
         .action-btns .btn-icon {
             background: transparent;
             border: none;
@@ -382,15 +486,15 @@
             font-size: 14px;
             transition: var(--transition);
         }
-        .action-btns .btn-icon:hover { background: var(--bg-hover); color: var(--text-primary); }
-        .action-btns .btn-icon.danger:hover { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
-        .action-btns .btn-icon.success:hover { background: rgba(34, 197, 94, 0.12); color: var(--success); }
+        .action-btns .btn-icon:hover { background: var(--bg-hover);
+            color: var(--text-primary); }
+        .action-btns .btn-icon.danger:hover { background: rgba(239, 68, 68, 0.12);
+            color: var(--danger); }
+        .action-btns .btn-icon.success:hover { background: rgba(34, 197, 94, 0.12);
+            color: var(--success); }
         .action-btns .btn-icon.pin { font-size: 13px; }
         .action-btns .btn-icon.pin.active { color: gold; }
 
-        /* ============================================================
-           FOOTER
-           ============================================================ */
         .footer {
             display: flex;
             flex-wrap: wrap;
@@ -403,37 +507,32 @@
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
         }
-        .footer .stats {
-            display: flex;
+        .footer .stats { display: flex;
             gap: 16px;
             flex-wrap: wrap;
             font-size: 13px;
-            color: var(--text-secondary);
-        }
+            color: var(--text-secondary); }
         .footer .stats strong { color: var(--text-primary); }
-        .footer .stats .value { color: var(--accent); font-weight: 600; }
-        .footer .mass-actions {
-            display: flex;
+        .footer .stats .value { color: var(--accent);
+            font-weight: 600; }
+        .footer .mass-actions { display: flex;
             gap: 6px;
             align-items: center;
             flex-wrap: wrap;
-            margin-left: auto;
-        }
-        .footer .mass-actions select {
-            padding: 4px 10px;
+            margin-left: auto; }
+        .footer .mass-actions select { padding: 4px 10px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-input);
             color: var(--text-primary);
             font-size: 12px;
-            outline: none;
-        }
-        .footer .mass-actions select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-        .footer .right-actions { display: flex; gap: 4px; flex-wrap: wrap; }
+            outline: none; }
+        .footer .mass-actions select:focus { border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow); }
+        .footer .right-actions { display: flex;
+            gap: 4px;
+            flex-wrap: wrap; }
 
-        /* ============================================================
-           QR-КОД
-           ============================================================ */
         .qr-container {
             display: none;
             position: fixed;
@@ -457,13 +556,21 @@
             max-width: 400px;
             width: 90%;
         }
-        .qr-box .close-btn { margin-top: 16px; padding: 8px 24px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; }
-        .qr-box #qrcode { display: flex; justify-content: center; margin: 16px 0; }
-        .qr-box #qrcode canvas { background: #fff; padding: 8px; border-radius: 8px; max-width: 100%; }
+        .qr-box .close-btn { margin-top: 16px;
+            padding: 8px 24px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer; }
+        .qr-box #qrcode { display: flex;
+            justify-content: center;
+            margin: 16px 0; }
+        .qr-box #qrcode canvas { background: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            max-width: 100%; }
 
-        /* ============================================================
-           TOAST
-           ============================================================ */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -486,14 +593,12 @@
             gap: 10px;
             max-width: 90%;
         }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.show { opacity: 1;
+            transform: translateX(-50%) translateY(0); }
         .toast.success { border-color: var(--success); }
         .toast.error { border-color: var(--danger); }
         .toast.warning { border-color: var(--warning); }
 
-        /* ============================================================
-           МОДАЛКИ
-           ============================================================ */
         .modal {
             display: none;
             position: fixed;
@@ -521,9 +626,17 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-        .modal-content h3 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-        .modal-content .sub { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
-        .modal-content label { display: block; margin: 10px 0 4px; color: var(--text-secondary); font-size: 13px; font-weight: 500; }
+        .modal-content h3 { font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px; }
+        .modal-content .sub { color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 16px; }
+        .modal-content label { display: block;
+            margin: 10px 0 4px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500; }
         .modal-content input,
         .modal-content select,
         .modal-content textarea {
@@ -540,10 +653,18 @@
         }
         .modal-content input:focus,
         .modal-content select:focus,
-        .modal-content textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-        .modal-content textarea { min-height: 80px; resize: vertical; }
-        .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
-        .column-settings { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 0; }
+        .modal-content textarea:focus { border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow); }
+        .modal-content textarea { min-height: 80px;
+            resize: vertical; }
+        .modal-actions { display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end; }
+        .column-settings { display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 4px 0; }
         .column-settings label {
             display: flex;
             align-items: center;
@@ -558,50 +679,61 @@
             font-weight: 400;
         }
         .column-settings label:hover { background: var(--bg-hover); }
-        .column-settings label input[type="checkbox"] { width: 14px; height: 14px; }
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-        .empty-state .emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+        .column-settings label input[type="checkbox"] { width: 14px;
+            height: 14px; }
+        .empty-state { text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted); }
+        .empty-state .emoji { font-size: 48px;
+            display: block;
+            margin-bottom: 12px; }
 
-        /* ============================================================
-           СКРОЛЛБАР
-           ============================================================ */
-        .table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
+        .table-wrap::-webkit-scrollbar { width: 6px;
+            height: 6px; }
         .table-wrap::-webkit-scrollbar-track { background: var(--bg-input); }
-        .table-wrap::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .table-wrap::-webkit-scrollbar-thumb { background: var(--border-color);
+            border-radius: 10px; }
         .table-wrap::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-        /* ============================================================
-           МОБИЛЬНАЯ ВЕРСИЯ — ОТКЛЮЧЕНА (только горизонтальный скролл)
-           ============================================================ */
         @media (max-width: 768px) {
             body { padding: 8px; }
             .container { min-width: auto; }
-            .header { flex-direction: column; align-items: stretch; padding: 12px; }
+            .header { flex-direction: column;
+                align-items: stretch;
+                padding: 12px; }
             .header h1 { font-size: 17px; }
             .header-right { justify-content: space-between; }
-            .toolbar { flex-direction: column; align-items: stretch; padding: 10px 12px; }
+            .toolbar { flex-direction: column;
+                align-items: stretch;
+                padding: 10px 12px; }
             .toolbar .search-wrap { min-width: auto; }
             .toolbar .goto-id { width: 100%; }
             .toolbar .goto-id input { flex: 1; }
             .save-status { margin-left: 0; }
-            .footer { flex-direction: column; align-items: stretch; }
+            .footer { flex-direction: column;
+                align-items: stretch; }
             .footer .mass-actions { margin-left: 0; }
             .footer .right-actions { justify-content: center; }
-
-            /* На мобилках — просто горизонтальный скролл */
-            .table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
-            table { min-width: 1100px; font-size: 12px; }
+            .table-wrap { overflow: auto;
+                -webkit-overflow-scrolling: touch; }
+            table { min-width: 1100px;
+                font-size: 12px; }
             th,
-            td { padding: 6px 8px; white-space: nowrap; }
-            .btn { font-size: 11px; padding: 4px 8px; }
-            .status-cell { font-size: 10px; padding: 2px 10px; }
+            td { padding: 6px 8px;
+                white-space: nowrap; }
+            .btn { font-size: 11px;
+                padding: 4px 8px; }
+            .status-cell { font-size: 10px;
+                padding: 2px 10px; }
+            .table-select-status { min-width: 90px;
+                font-size: 11px;
+                padding: 2px 6px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- HEADER -->
         <header class="header">
             <div class="header-left">
                 <span class="logo">⚡</span>
@@ -617,7 +749,6 @@
             </div>
         </header>
 
-        <!-- TOOLBAR -->
         <div class="toolbar">
             <div class="search-wrap">
                 <span class="search-icon">🔍</span>
@@ -663,7 +794,6 @@
             </div>
         </div>
 
-        <!-- TABLE -->
         <div class="table-wrap">
             <table>
                 <thead id="tableHead">
@@ -675,7 +805,6 @@
             </table>
         </div>
 
-        <!-- FOOTER -->
         <div class="footer">
             <div class="stats">
                 <span>Всего: <strong id="rowCounter">0</strong></span>
@@ -707,7 +836,6 @@
         </div>
     </div>
 
-    <!-- QR-КОД -->
     <div class="qr-container" id="qrContainer">
         <div class="qr-box">
             <h3>📱 QR-код</h3>
@@ -717,7 +845,6 @@
         </div>
     </div>
 
-    <!-- МОДАЛКИ -->
     <div class="modal" id="quickAddModal">
         <div class="modal-content">
             <h3>⚡ Быстрая вставка</h3>
@@ -744,15 +871,9 @@
     <input type="file" id="fileInput" accept=".csv,.json" style="display:none" onchange="handleImport(event)" />
 
     <script>
-        // ================================================================
-        // КОНФИГУРАЦИЯ
-        // ================================================================
         var BIN_ID = '6a34730dda38895dfeda3121';
         var API_KEY = '$2a$10$euK6kkgJrxsrsI06lUXdu.Zyp1byoA3eVeev6S/Kiol96uQejCvKa';
 
-        // ================================================================
-        // СОСТОЯНИЕ
-        // ================================================================
         var data = [];
         var nextId = 1;
         var isSaving = false;
@@ -769,7 +890,9 @@
             { key: 'phone', label: 'Телефон', type: 'text' },
             { key: 'amount', label: 'Сумма', type: 'number' },
             { key: 'date', label: 'Дата КП', type: 'date' },
-            { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
+            { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано',
+                    'Черновик'
+                ] },
             { key: 'agreed', label: 'Согласен', type: 'checkbox' },
             { key: 'comment', label: 'Комментарий', type: 'text' },
             { key: 'email', label: 'Email', type: 'text' },
@@ -780,9 +903,6 @@
 
         columns.forEach(function(col) { visibleColumns[col.key] = true; });
 
-        // ================================================================
-        // QUIC-ФИКС
-        // ================================================================
         var originalFetch = window.fetch;
         window.fetch = function(url, options) {
             if (typeof url === 'string' && url.includes('api.jsonbin.io')) {
@@ -796,9 +916,6 @@
             return originalFetch(url, options);
         };
 
-        // ================================================================
-        // ТЕМА
-        // ================================================================
         function toggleTheme() {
             var current = document.documentElement.getAttribute('data-theme');
             var next = current === 'light' ? 'dark' : 'light';
@@ -812,9 +929,6 @@
         }
         loadTheme();
 
-        // ================================================================
-        // ЗАГРУЗКА
-        // ================================================================
         async function loadFromCloud() {
             try {
                 setStatus('loading', 'Загрузка...');
@@ -854,9 +968,6 @@
             }
         }
 
-        // ================================================================
-        // ЛОКАЛЬНОЕ ХРАНИЛИЩЕ
-        // ================================================================
         function saveToLocalStorage() {
             try {
                 localStorage.setItem('crm_data', JSON.stringify(data));
@@ -915,9 +1026,6 @@
             }
         }
 
-        // ================================================================
-        // СОХРАНЕНИЕ
-        // ================================================================
         async function saveToCloud() {
             if (isSaving) return;
             isSaving = true;
@@ -969,9 +1077,6 @@
             }, 800);
         }
 
-        // ================================================================
-        // ИНДИКАТОРЫ
-        // ================================================================
         function setStatus(type, text) {
             var dot = document.getElementById('statusDot');
             var el = document.getElementById('statusText');
@@ -987,9 +1092,6 @@
             if (text) document.getElementById('savingText').textContent = text;
         }
 
-        // ================================================================
-        // РЕНДЕР
-        // ================================================================
         function render() {
             var thead = document.getElementById('headerRow');
             var tbody = document.getElementById('tableBody');
@@ -997,7 +1099,6 @@
             var filterText = document.getElementById('filterInput').value.toLowerCase().trim();
             var filterStatus = document.getElementById('filterStatus').value;
 
-            // Заголовки
             var headerHtml = '<th style="width:30px;"><input type="checkbox" onchange="toggleAllSelect(this.checked)" /></th>';
             headerHtml += '<th style="min-width:160px;">Клиент</th>';
             columns.forEach(function(col) {
@@ -1010,14 +1111,14 @@
                 headerHtml += '<th class="' + sortClass + '" onclick="sortTable(\'' + col.key + '\')">' + col.label;
                 headerHtml += '<span class="sort-icon"></span>';
                 if (col.key !== 'pinned' && col.key !== 'agreed') {
-                    headerHtml += '<span class="col-actions"><button onclick="event.stopPropagation();removeColumn(\'' + col.key + '\')" title="Удалить">✕</button></span>';
+                    headerHtml += '<span class="col-actions"><button onclick="event.stopPropagation();removeColumn(\'' +
+                        col.key + '\')" title="Удалить">✕</button></span>';
                 }
                 headerHtml += '</th>';
             });
             headerHtml += '<th style="width:110px;">Действия</th>';
             thead.innerHTML = headerHtml;
 
-            // Фильтрация
             var filtered = data.filter(function(row) {
                 if (row.archived && !showArchived) return false;
                 var matchText = false;
@@ -1029,7 +1130,6 @@
                 return matchText && statusMatch;
             });
 
-            // Сортировка
             if (sortColumn) {
                 filtered.sort(function(a, b) {
                     var valA = a[sortColumn] || '';
@@ -1042,7 +1142,6 @@
                 });
             }
 
-            // Закреплённые сверху
             filtered.sort(function(a, b) {
                 if (a.pinned && !b.pinned) return -1;
                 if (!a.pinned && b.pinned) return 1;
@@ -1051,7 +1150,8 @@
 
             if (!filtered.length) {
                 var colCount = columns.filter(function(c) { return visibleColumns[c.key] !== false; }).length + 3;
-                tbody.innerHTML = '<tr><td colspan="' + colCount + '"><div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3></div></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="' + colCount +
+                    '"><div class="empty-state"><span class="emoji">📭</span><h3>Нет записей</h3></div></td></tr>';
                 document.getElementById('countBadge').textContent = data.length;
                 updateCounters();
                 updateMassActions();
@@ -1066,9 +1166,12 @@
                 var isPinned = row.pinned || false;
                 var isArchived = row.archived || false;
 
-                html += '<tr class="status-' + statusClass + (isSelected ? ' selected' : '') + (isPinned ? ' pinned' : '') + (isArchived ? ' archived' : '') + '">';
-                html += '<td class="td-checkbox"><input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="toggleSelect(' + row.id + ', this.checked)" /></td>';
-                html += '<td data-label="Клиент"><span style="font-weight:500;">' + escapeHtml(row.client || 'Без имени') + '</span></td>';
+                html += '<tr class="status-' + statusClass + (isSelected ? ' selected' : '') + (isPinned ? ' pinned' : '') +
+                    (isArchived ? ' archived' : '') + '">';
+                html += '<td class="td-checkbox"><input type="checkbox" ' + (isSelected ? 'checked' : '') +
+                    ' onchange="toggleSelect(' + row.id + ', this.checked)" /></td>';
+                html += '<td data-label="Клиент"><span style="font-weight:500;">' + escapeHtml(row.client ||
+                    'Без имени') + '</span></td>';
 
                 columns.forEach(function(col) {
                     if (visibleColumns[col.key] === false) return;
@@ -1079,9 +1182,11 @@
                 });
 
                 html += '<td data-label="Действия"><div class="action-btns">';
-                html += '<button class="btn-icon pin ' + (isPinned ? 'active' : '') + '" onclick="togglePin(' + row.id + ')" title="Закрепить">📌</button>';
+                html += '<button class="btn-icon pin ' + (isPinned ? 'active' : '') + '" onclick="togglePin(' + row
+                    .id + ')" title="Закрепить">📌</button>';
                 html += '<button class="btn-icon" onclick="showQR(\'' + row.id + '\')" title="QR-код">📱</button>';
-                html += '<button class="btn-icon success" onclick="copyRow(' + row.id + ')" title="Копировать">📋</button>';
+                html += '<button class="btn-icon success" onclick="copyRow(' + row.id +
+                    ')" title="Копировать">📋</button>';
                 html += '<button class="btn-icon" onclick="toggleArchive(' + row.id + ')" title="Архив">📦</button>';
                 html += '<button class="btn-icon danger" onclick="deleteRow(' + row.id + ')" title="Удалить">🗑</button>';
                 html += '</div></td>';
@@ -1107,41 +1212,52 @@
                         return '<input type="checkbox" ' + checked + ' onchange="togglePin(' + id + ')" />';
                     }
                     var checked = value ? 'checked' : '';
-                    return '<input type="checkbox" ' + checked + ' onchange="updateField(' + id + ', \'' + key + '\', this.checked)" />';
+                    return '<input type="checkbox" ' + checked + ' onchange="updateField(' + id + ', \'' + key +
+                        '\', this.checked)" />';
 
                 case 'select':
                     if (key === 'status') {
-                        var labels = {
-                            'Согласовано': '✅ Согласовано',
-                            'Отказ': '❌ Отказ',
-                            'В работе': '⚡ В работе',
-                            'Отправлено': '📤 Отправлено',
-                            'Черновик': '📝 Черновик'
-                        };
-                        return '<span class="status-cell">' + (labels[value] || value) + '</span>';
+                        // 🔥 ВАЖНО: ВЫПАДАЮЩИЙ СПИСОК ДЛЯ СТАТУСА
+                        var options = col.options || ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
+                        var selectHtml =
+                            '<select class="table-select-status" onchange="updateField(' + id + ', \'' + key +
+                            '\', this.value)" style="min-width:120px;">';
+                        options.forEach(function(opt) {
+                            selectHtml += '<option value="' + opt + '" ' + (opt === value ? 'selected' : '') +
+                                '>' + opt + '</option>';
+                        });
+                        selectHtml += '</select>';
+                        return selectHtml;
                     }
                     var options = col.options || ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'];
-                    var html = '<select class="table-select" onchange="updateField(' + id + ', \'' + key + '\', this.value)">';
+                    var html = '<select class="table-select" onchange="updateField(' + id + ', \'' + key +
+                        '\', this.value)">';
                     options.forEach(function(opt) {
-                        html += '<option value="' + opt + '" ' + (opt === value ? 'selected' : '') + '>' + opt + '</option>';
+                        html += '<option value="' + opt + '" ' + (opt === value ? 'selected' : '') + '>' + opt +
+                            '</option>';
                     });
                     html += '</select>';
                     return html;
 
                 case 'number':
-                    return '<input class="table-input" type="number" value="' + (value || 0) + '" onchange="updateField(' + id + ', \'' + key + '\', Number(this.value))" />';
+                    return '<input class="table-input" type="number" value="' + (value || 0) +
+                        '" onchange="updateField(' + id + ', \'' + key + '\', Number(this.value))" />';
 
                 case 'date':
                     if (key === 'next_contact') {
-                        return '<input class="table-input" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+                        return '<input class="table-input" type="date" value="' + (value || '') +
+                            '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
                     }
-                    return '<input class="table-input" type="date" value="' + (value || '') + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+                    return '<input class="table-input" type="date" value="' + (value || '') +
+                        '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
 
                 default:
                     if (key === 'phone') {
-                        return '<input class="table-input" type="tel" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="+7..." style="min-width:120px;" />';
+                        return '<input class="table-input" type="tel" value="' + escapeHtml(String(value)) +
+                            '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="+7..." style="min-width:130px;" />';
                     }
-                    return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) + '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
+                    return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) +
+                        '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
             }
         }
 
@@ -1158,12 +1274,10 @@
 
         function escapeHtml(text) {
             if (!text) return '';
-            return String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g,
+            '&gt;');
         }
 
-        // ================================================================
-        // АВТОДОПОЛНЕНИЕ
-        // ================================================================
         function updateSuggestions() {
             var datalist = document.getElementById('searchSuggestions');
             var clients = data.map(function(r) { return r.client || ''; }).filter(function(c) { return c; });
@@ -1171,9 +1285,6 @@
             datalist.innerHTML = unique.map(function(c) { return '<option value="' + escapeHtml(c) + '">'; }).join('');
         }
 
-        // ================================================================
-        // БЫСТРЫЕ ФИЛЬТРЫ
-        // ================================================================
         function setFilter(status) {
             if (status === 'all') {
                 document.getElementById('filterStatus').value = '';
@@ -1184,9 +1295,6 @@
             showToast('📊 Фильтр: ' + (status === 'all' ? 'Все' : status), 'success');
         }
 
-        // ================================================================
-        // ПЕРЕХОД ПО ID
-        // ================================================================
         function goToId() {
             var input = document.getElementById('gotoIdInput');
             var id = parseInt(input.value);
@@ -1211,9 +1319,6 @@
             showToast('Запись не отображается (возможно, фильтр скрывает её)', 'error');
         }
 
-        // ================================================================
-        // ЗАКРЕПЛЕНИЕ
-        // ================================================================
         function togglePin(id) {
             var row = data.find(function(r) { return r.id === id; });
             if (!row) return;
@@ -1223,9 +1328,6 @@
             showToast(row.pinned ? '📌 Закреплено' : '📌 Откреплено', 'success');
         }
 
-        // ================================================================
-        // QR-КОД
-        // ================================================================
         var qrInstance = null;
 
         function showQR(id) {
@@ -1256,9 +1358,6 @@
             }
         }
 
-        // ================================================================
-        // АРХИВ
-        // ================================================================
         function toggleArchive(id) {
             var row = data.find(function(r) { return r.id === id; });
             if (!row) return;
@@ -1274,9 +1373,6 @@
             showToast(showArchived ? '🗂️ Архив показан' : '🗂️ Архив скрыт', 'success');
         }
 
-        // ================================================================
-        // PDF
-        // ================================================================
         function exportPDF() {
             if (!data.length) return showToast('Нет данных для экспорта', 'error');
             var filtered = getFilteredData();
@@ -1285,7 +1381,8 @@
             var html = '<html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;padding:20px;}h2{color:#2563eb;}table{width:100%;border-collapse:collapse;margin-top:16px;}th{background:#f1f5f9;padding:6px;border:1px solid #e2e8f0;text-align:left;}td{padding:6px;border:1px solid #e2e8f0;}</style></head><body><h2>📊 Отчёт по клиентам</h2>';
             html += '<p>Дата: ' + new Date().toLocaleDateString('ru-RU') + '</p>';
             html += '<p>Всего записей: ' + filtered.length + '</p>';
-            html += '<table><thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Сумма</th><th>Статус</th><th>Согласен</th></tr></thead><tbody>';
+            html +=
+                '<table><thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Сумма</th><th>Статус</th><th>Согласен</th></tr></thead><tbody>';
 
             filtered.forEach(function(r, i) {
                 var statusLabels = {
@@ -1295,7 +1392,9 @@
                     'Отправлено': '📤 Отправлено',
                     'Черновик': '📝 Черновик'
                 };
-                html += '<tr><td>' + (i + 1) + '</td><td>' + escapeHtml(r.client || '') + '</td><td>' + escapeHtml(r.phone || '') + '</td><td>' + (r.amount || 0) + '</td><td>' + (statusLabels[r.status] || r.status) + '</td><td>' + (r.agreed ? '✅ Да' : '❌ Нет') + '</td></tr>';
+                html += '<tr><td>' + (i + 1) + '</td><td>' + escapeHtml(r.client || '') + '</td><td>' + escapeHtml(r
+                    .phone || '') + '</td><td>' + (r.amount || 0) + '</td><td>' + (statusLabels[r.status] || r
+                    .status) + '</td><td>' + (r.agreed ? '✅ Да' : '❌ Нет') + '</td></tr>';
             });
 
             html += '</tbody></table></body></html>';
@@ -1307,9 +1406,6 @@
             showToast('📄 PDF открыт для печати', 'success');
         }
 
-        // ================================================================
-        // БЫСТРАЯ ВСТАВКА
-        // ================================================================
         function showQuickAdd() {
             document.getElementById('quickAddModal').classList.add('active');
             document.getElementById('quickAddText').value = '';
@@ -1330,7 +1426,8 @@
                 columns.forEach(function(col) {
                     if (col.type === 'checkbox') row[col.key] = false;
                     else if (col.type === 'number') row[col.key] = 0;
-                    else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
+                    else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col
+                        .options[0];
                     else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
                     else row[col.key] = '';
                 });
@@ -1356,9 +1453,6 @@
             closeModal();
         }
 
-        // ================================================================
-        // МАССОВЫЕ ДЕЙСТВИЯ
-        // ================================================================
         function toggleSelect(id, checked) {
             if (checked) {
                 if (selectedIds.indexOf(id) === -1) selectedIds.push(id);
@@ -1437,16 +1531,15 @@
             showToast('📦 Архив переключён для ' + count + ' записей', 'success');
         }
 
-        // ================================================================
-        // УПРАВЛЕНИЕ СТОЛБЦАМИ
-        // ================================================================
         function showColumnSettings() {
             var modal = document.getElementById('columnSettingsModal');
             var list = document.getElementById('columnSettingsList');
             var html = '';
             columns.forEach(function(col) {
                 var checked = visibleColumns[col.key] !== false ? 'checked' : '';
-                html += '<label><input type="checkbox" ' + checked + ' onchange="toggleColumnVisibility(\'' + col.key + '\', this.checked)" /> ' + col.label + '</label>';
+                html += '<label><input type="checkbox" ' + checked +
+                    ' onchange="toggleColumnVisibility(\'' + col.key + '\', this.checked)" /> ' + col.label +
+                    '</label>';
             });
             list.innerHTML = html;
             modal.classList.add('active');
@@ -1469,9 +1562,6 @@
             if (isOnline) scheduleSave();
         }
 
-        // ================================================================
-        // ДЕЙСТВИЯ С ДАННЫМИ
-        // ================================================================
         function updateField(id, field, value) {
             var row = data.find(function(r) { return r.id === id; });
             if (row) {
@@ -1549,7 +1639,9 @@
                 { key: 'phone', label: 'Телефон', type: 'text' },
                 { key: 'amount', label: 'Сумма', type: 'number' },
                 { key: 'date', label: 'Дата КП', type: 'date' },
-                { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
+                { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено',
+                        'Согласовано', 'Черновик'
+                    ] },
                 { key: 'agreed', label: 'Согласен', type: 'checkbox' },
                 { key: 'comment', label: 'Комментарий', type: 'text' },
                 { key: 'email', label: 'Email', type: 'text' },
@@ -1560,8 +1652,14 @@
             columns.forEach(function(col) { visibleColumns[col.key] = true; });
 
             var defaultData = [
-                { client: 'ИП Иванов', phone: '+7 912 345-67-89', amount: 450000, date: '2026-01-10', status: 'В работе', agreed: true, comment: 'Доп. согласование', email: 'ivanov@mail.ru', category: 'Юридические', next_contact: '2026-07-01', pinned: false, archived: false, updated_at: new Date().toISOString() },
-                { client: 'ООО ЛогистикПро', phone: '+7 912 345-67-90', amount: 670000, date: '2026-01-12', status: 'Отказ', agreed: false, comment: 'Нашли дешевле', email: 'logist@pro.ru', category: 'Транспорт', next_contact: '', pinned: false, archived: false, updated_at: new Date().toISOString() }
+                { client: 'ИП Иванов', phone: '+7 912 345-67-89', amount: 450000, date: '2026-01-10',
+                    status: 'В работе', agreed: true, comment: 'Доп. согласование', email: 'ivanov@mail.ru',
+                    category: 'Юридические', next_contact: '2026-07-01', pinned: false, archived: false,
+                    updated_at: new Date().toISOString() },
+                { client: 'ООО ЛогистикПро', phone: '+7 912 345-67-90', amount: 670000, date: '2026-01-12',
+                    status: 'Отказ', agreed: false, comment: 'Нашли дешевле', email: 'logist@pro.ru',
+                    category: 'Транспорт', next_contact: '', pinned: false, archived: false,
+                    updated_at: new Date().toISOString() }
             ];
 
             data = defaultData.map(function(r, i) {
@@ -1579,9 +1677,6 @@
             showToast('🔄 Данные сброшены', 'success');
         }
 
-        // ================================================================
-        // CSV / JSON / КОПИРОВАНИЕ
-        // ================================================================
         function exportCSV() {
             if (!data.length) return showToast('Нет данных для экспорта', 'error');
             var visible = columns.filter(function(c) { return visibleColumns[c.key] !== false; });
@@ -1638,7 +1733,7 @@
                     if (lines.length < 2) { showToast('Файл пуст или неверный формат', 'error'); return; }
 
                     var headerLine = lines[0];
-                    var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, ''); });
+                    var headers = headerLine.split(',').map(function(h) { return h.trim().replace(/^"|"$/g, '') });
 
                     var colMap = {};
                     headers.forEach(function(h, index) {
@@ -1649,12 +1744,13 @@
 
                     var imported = [];
                     for (var i = 1; i < lines.length; i++) {
-                        var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, ''); });
+                        var cols = lines[i].split(',').map(function(c) { return c.trim().replace(/^"|"$/g, '') });
                         var row = { id: nextId++ };
                         columns.forEach(function(col) {
                             if (col.type === 'checkbox') row[col.key] = false;
                             else if (col.type === 'number') row[col.key] = 0;
-                            else if (col.type === 'select' && col.options && col.options.length) row[col.key] = col.options[0];
+                            else if (col.type === 'select' && col.options && col.options.length) row[col.key] =
+                                col.options[0];
                             else if (col.key === 'date') row[col.key] = new Date().toISOString().slice(0, 10);
                             else row[col.key] = '';
                         });
@@ -1669,7 +1765,8 @@
                                 var col = columns.find(function(c) { return c.key === key; });
                                 if (col) {
                                     if (col.type === 'checkbox') {
-                                        row[key] = cols[j] === 'Да' || cols[j] === 'TRUE' || cols[j] === 'true' || cols[j] === '1';
+                                        row[key] = cols[j] === 'Да' || cols[j] === 'TRUE' || cols[j] ===
+                                            'true' || cols[j] === '1';
                                     } else if (col.type === 'number') {
                                         row[key] = parseFloat(cols[j]) || 0;
                                     } else {
@@ -1721,9 +1818,6 @@
             });
         }
 
-        // ================================================================
-        // СОРТИРОВКА
-        // ================================================================
         function sortTable(key) {
             if (sortColumn === key) {
                 sortDirection *= -1;
@@ -1734,9 +1828,6 @@
             render();
         }
 
-        // ================================================================
-        // МОДАЛКИ
-        // ================================================================
         function closeModal() {
             document.querySelectorAll('.modal').forEach(function(m) { m.classList.remove('active'); });
         }
@@ -1745,9 +1836,6 @@
             m.addEventListener('click', function(e) { if (e.target === this) closeModal(); });
         });
 
-        // ================================================================
-        // TOAST
-        // ================================================================
         var toastTimeout;
 
         function showToast(msg, type) {
@@ -1762,23 +1850,18 @@
             toastTimeout = setTimeout(function() { el.classList.remove('show'); }, 3500);
         }
 
-        // ================================================================
-        // ФИЛЬТРЫ
-        // ================================================================
         document.getElementById('filterInput').addEventListener('input', render);
         document.getElementById('filterStatus').addEventListener('change', render);
         document.getElementById('gotoIdInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') goToId();
         });
 
-        // ================================================================
-        // ЗАПУСК
-        // ================================================================
         loadFromCloud();
 
         console.log('⚡ CRM загружена');
-        console.log('📌 ДЕСКТОПНАЯ ВЕРСИЯ: статус меняется через выпадающий список, телефон отображается полностью');
-        console.log('📌 МОБИЛЬНАЯ ВЕРСИЯ: горизонтальный скролл таблицы');
+        console.log('✅ СТАТУС МЕНЯЕТСЯ через выпадающий список');
+        console.log('✅ ТЕЛЕФОН отображается полностью');
+        console.log('📌 ДЕСКТОПНАЯ ВЕРСИЯ');
     </script>
 </body>
 </html>
