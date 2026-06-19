@@ -870,24 +870,26 @@
         var visibleColumns = {};
         var showArchived = false;
 
-        // 🔥 НОВЫЕ СТОЛБЦЫ:
-        // comment → ОЦЕНКИ (rating)
-        // email → КОММЕНТАРИЙ (comment)
-        // УБРАН next_contact
-    var columns = [
-    { key: 'client', label: 'Клиент', type: 'text' },
-    { key: 'phone', label: 'Телефон', type: 'text' },
-    { key: 'amount', label: 'Сумма', type: 'number' },
-    { key: 'date', label: 'Дата КП', type: 'date' },
-    { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
-    { key: 'agreed', label: 'Согласен', type: 'checkbox' },
-    { key: 'rating', label: '⭐ Оценка', type: 'text' },
-    { key: 'comment', label: '📝 Комментарий', type: 'text' },
-    { key: 'category', label: 'Категория', type: 'text' },
-    { key: 'pinned', label: '📌', type: 'checkbox' }
-];
+        // ================================================================
+        // ⭐ КОЛОНКИ — ПОМЕНЯЛИ МЕСТАМИ ⭐
+        // ================================================================
+        var columns = [
+            { key: 'client', label: 'Клиент', type: 'text' },
+            { key: 'phone', label: 'Телефон', type: 'text' },
+            { key: 'amount', label: 'Сумма', type: 'number' },
+            { key: 'date', label: 'Дата КП', type: 'date' },
+            { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано',
+                    'Черновик'
+                ] },
+            { key: 'agreed', label: 'Согласен', type: 'checkbox' },
+            // ⬇️ ПОМЕНЯЛИ МЕСТАМИ ⬇️
+            { key: 'comment', label: '📝 Комментарий', type: 'text' },
+            { key: 'rating', label: '⭐ Оценка', type: 'text' },
+            // ⬆️ ПОМЕНЯЛИ МЕСТАМИ ⬆️
+            { key: 'category', label: 'Категория', type: 'text' },
+            { key: 'pinned', label: '📌', type: 'checkbox' }
+        ];
 
-        // НОВЫЙ ПОРЯДОК ВИДИМОСТИ
         columns.forEach(function(col) { visibleColumns[col.key] = true; });
 
         var originalFetch = window.fetch;
@@ -929,7 +931,6 @@
                     data = loaded;
                     data.forEach(function(row) {
                         if (row.email !== undefined) {
-                            // email → comment (новое поле)
                             if (!row.comment) row.comment = row.email;
                             delete row.email;
                         }
@@ -941,7 +942,6 @@
                         if (row.pinned === undefined) row.pinned = false;
                         if (row.archived === undefined) row.archived = false;
                         if (row.updated_at === undefined) row.updated_at = new Date().toISOString();
-                        // Убираем next_contact если есть
                         if (row.next_contact !== undefined) delete row.next_contact;
                     });
                     nextId = data.reduce(function(max, r) { return Math.max(max, r.id || 0); }, 0) + 1;
@@ -1250,7 +1250,7 @@
                     }
                     if (key === 'rating') {
                         return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) +
-                            '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="Оценка..." style="min-width:60px;" />';
+                            '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" placeholder="⭐ Оценка..." style="min-width:60px;" />';
                     }
                     return '<input class="table-input" type="text" value="' + escapeHtml(String(value)) +
                         '" onchange="updateField(' + id + ', \'' + key + '\', this.value)" />';
@@ -1631,6 +1631,7 @@
         function resetData() {
             if (data.length && !confirm('Сбросить всё к примеру?')) return;
 
+            // ⭐ ТОТ ЖЕ ПОРЯДОК СТОЛБЦОВ В RESET ⭐
             columns = [
                 { key: 'client', label: 'Клиент', type: 'text' },
                 { key: 'phone', label: 'Телефон', type: 'text' },
@@ -1640,8 +1641,8 @@
                         'Согласовано', 'Черновик'
                     ] },
                 { key: 'agreed', label: 'Согласен', type: 'checkbox' },
-                { key: 'rating', label: '⭐ Оценка', type: 'text' },
                 { key: 'comment', label: '📝 Комментарий', type: 'text' },
+                { key: 'rating', label: '⭐ Оценка', type: 'text' },
                 { key: 'category', label: 'Категория', type: 'text' },
                 { key: 'pinned', label: '📌', type: 'checkbox' }
             ];
@@ -1859,12 +1860,8 @@
         loadFromCloud();
 
         console.log('⚡ CRM загружена');
-        console.log('📌 СТОЛБЦЫ ОПТИМИЗИРОВАНЫ:');
-        console.log('   → ОЦЕНКИ (бывший email)');
-        console.log('   → КОММЕНТАРИЙ (новое поле)');
-        console.log('   → УБРАН "След. контакт"');
-        console.log('   → Строки компактнее');
-        console.log('📌 СОРТИРОВКА по всем столбцам');
+        console.log('📌 СТОЛБЦЫ ПОМЕНЯЛИ МЕСТАМИ:');
+        console.log('   → Комментарий теперь перед Оценкой');
         console.log('✅ СТАТУС меняется через выпадающий список');
     </script>
 </body>
