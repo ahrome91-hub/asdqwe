@@ -874,20 +874,18 @@
         // comment → ОЦЕНКИ (rating)
         // email → КОММЕНТАРИЙ (comment)
         // УБРАН next_contact
-        var columns = [
-            { key: 'client', label: 'Клиент', type: 'text' },
-            { key: 'phone', label: 'Телефон', type: 'text' },
-            { key: 'amount', label: 'Сумма', type: 'number' },
-            { key: 'date', label: 'Дата КП', type: 'date' },
-            { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано',
-                    'Черновик'
-                ] },
-            { key: 'agreed', label: 'Согласен', type: 'checkbox' },
-            { key: 'rating', label: 'Оценки', type: 'text' },
-            { key: 'comment', label: 'Комментарий', type: 'text' },
-            { key: 'category', label: 'Категория', type: 'text' },
-            { key: 'pinned', label: '📌', type: 'checkbox' }
-        ];
+    var columns = [
+    { key: 'client', label: 'Клиент', type: 'text' },
+    { key: 'phone', label: 'Телефон', type: 'text' },
+    { key: 'amount', label: 'Сумма', type: 'number' },
+    { key: 'date', label: 'Дата КП', type: 'date' },
+    { key: 'status', label: 'Статус', type: 'select', options: ['В работе', 'Отказ', 'Отправлено', 'Согласовано', 'Черновик'] },
+    { key: 'agreed', label: 'Согласен', type: 'checkbox' },
+    { key: 'rating', label: '⭐ Оценка', type: 'text' },
+    { key: 'comment', label: '📝 Комментарий', type: 'text' },
+    { key: 'category', label: 'Категория', type: 'text' },
+    { key: 'pinned', label: '📌', type: 'checkbox' }
+];
 
         // НОВЫЙ ПОРЯДОК ВИДИМОСТИ
         columns.forEach(function(col) { visibleColumns[col.key] = true; });
