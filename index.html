@@ -871,7 +871,7 @@
         var showArchived = false;
 
         // ================================================================
-        // ⭐ КОЛОНКИ — ПОМЕНЯЛИ МЕСТАМИ ⭐
+        // ⭐ КОЛОНКИ: rating — ОЦЕНКА, comment — КОММЕНТАРИЙ ⭐
         // ================================================================
         var columns = [
             { key: 'client', label: 'Клиент', type: 'text' },
@@ -882,10 +882,8 @@
                     'Черновик'
                 ] },
             { key: 'agreed', label: 'Согласен', type: 'checkbox' },
-            // ⬇️ ПОМЕНЯЛИ МЕСТАМИ ⬇️
-            { key: 'rating', label: '📝 Комментарий', type: 'text' },
-            { key: 'comment', label: '⭐ Оценка', type: 'text' },
-            // ⬆️ ПОМЕНЯЛИ МЕСТАМИ ⬆️
+            { key: 'rating', label: '⭐ Оценка', type: 'text' },
+            { key: 'comment', label: '📝 Комментарий', type: 'text' },
             { key: 'category', label: 'Категория', type: 'text' },
             { key: 'pinned', label: '📌', type: 'checkbox' }
         ];
@@ -930,9 +928,19 @@
                 if (loaded && Array.isArray(loaded) && loaded.length > 0) {
                     data = loaded;
                     data.forEach(function(row) {
-                        if (row.email !== undefined) {
+                        // email переименовываем в comment (если есть)
+                        if (row.email !== undefined && row.email !== '') {
                             if (!row.comment) row.comment = row.email;
                             delete row.email;
+                        }
+                        // Если comment содержит оценку, переносим в rating
+                        if (row.comment && typeof row.comment === 'string') {
+                            var ratingMatch = row.comment.match(/\d+\.?\d*\s*[★☆]/);
+                            if (ratingMatch) {
+                                if (!row.rating) row.rating = ratingMatch[0].trim();
+                                // Убираем оценку из комментария
+                                row.comment = row.comment.replace(/\d+\.?\d*\s*[★☆]/, '').trim();
+                            }
                         }
                         if (row.rating === undefined) row.rating = '';
                         if (row.comment === undefined) row.comment = '';
@@ -993,9 +1001,16 @@
                 if (stored) {
                     data = JSON.parse(stored);
                     data.forEach(function(row) {
-                        if (row.email !== undefined) {
+                        if (row.email !== undefined && row.email !== '') {
                             if (!row.comment) row.comment = row.email;
                             delete row.email;
+                        }
+                        if (row.comment && typeof row.comment === 'string') {
+                            var ratingMatch = row.comment.match(/\d+\.?\d*\s*[★☆]/);
+                            if (ratingMatch) {
+                                if (!row.rating) row.rating = ratingMatch[0].trim();
+                                row.comment = row.comment.replace(/\d+\.?\d*\s*[★☆]/, '').trim();
+                            }
                         }
                         if (row.rating === undefined) row.rating = '';
                         if (row.comment === undefined) row.comment = '';
@@ -1631,7 +1646,6 @@
         function resetData() {
             if (data.length && !confirm('Сбросить всё к примеру?')) return;
 
-            // ⭐ ТОТ ЖЕ ПОРЯДОК СТОЛБЦОВ В RESET ⭐
             columns = [
                 { key: 'client', label: 'Клиент', type: 'text' },
                 { key: 'phone', label: 'Телефон', type: 'text' },
@@ -1641,8 +1655,8 @@
                         'Согласовано', 'Черновик'
                     ] },
                 { key: 'agreed', label: 'Согласен', type: 'checkbox' },
-                { key: 'comment', label: '📝 Комментарий', type: 'text' },
                 { key: 'rating', label: '⭐ Оценка', type: 'text' },
+                { key: 'comment', label: '📝 Комментарий', type: 'text' },
                 { key: 'category', label: 'Категория', type: 'text' },
                 { key: 'pinned', label: '📌', type: 'checkbox' }
             ];
@@ -1708,9 +1722,16 @@
                     if (Array.isArray(parsed) && parsed.length) {
                         parsed.forEach(function(row) {
                             row.id = nextId++;
-                            if (row.email !== undefined) {
+                            if (row.email !== undefined && row.email !== '') {
                                 if (!row.comment) row.comment = row.email;
                                 delete row.email;
+                            }
+                            if (row.comment && typeof row.comment === 'string') {
+                                var ratingMatch = row.comment.match(/\d+\.?\d*\s*[★☆]/);
+                                if (ratingMatch) {
+                                    if (!row.rating) row.rating = ratingMatch[0].trim();
+                                    row.comment = row.comment.replace(/\d+\.?\d*\s*[★☆]/, '').trim();
+                                }
                             }
                             if (row.rating === undefined) row.rating = '';
                             if (row.comment === undefined) row.comment = '';
@@ -1860,8 +1881,8 @@
         loadFromCloud();
 
         console.log('⚡ CRM загружена');
-        console.log('📌 СТОЛБЦЫ ПОМЕНЯЛИ МЕСТАМИ:');
-        console.log('   → Комментарий теперь перед Оценкой');
+        console.log('📌 СТОЛБЦЫ: rating — ⭐ Оценка, comment — 📝 Комментарий');
+        console.log('📌 Данные из поля comment автоматически распределены');
         console.log('✅ СТАТУС меняется через выпадающий список');
     </script>
 </body>
